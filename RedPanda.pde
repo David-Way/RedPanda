@@ -3,13 +3,17 @@ import SimpleOpenNI.*;
 
 SimpleOpenNI kinect;
 ControlP5 cp5;
+Group g1 = null;
 //login text fields
 Textfield userNameTextField;
 Textfield passwordTextField;
 //login stored user name and password
 String loginUserName = "";
 String loginPassword = "";
-
+LoginScreen loginScreen  = new LoginScreen(this);
+MenuScreen menuScreen  = new MenuScreen(this);  
+ProgramsScreen programsScreen = new ProgramsScreen(this);
+//create screens
 User user;
 
 //integer for swithching scenes/rooms
@@ -18,31 +22,26 @@ int currentScene;
 void setup() {
   size(1200, 600);
   textAlign(CENTER, CENTER);
-
-  //create and draw the logn screen  
-  LoginScreen loginScreen = new LoginScreen(this);
-  loginScreen.drawScreen();
-  
-  //create but DONT draw (yet) the menu screen
-  MenuScreen menuScreen = new MenuScreen(this);
-  
-  currentScene = 0; //go to login scene
+  cp5 = new ControlP5(this);
+   g1 = cp5.addGroup("g1")
+        .setPosition(0,0)
+                ;
+  //create and draw the login screen  
+loginScreen.loadImages();
+menuScreen.loadImages();
+programsScreen.loadImages();
+loginScreen.drawScreen();
+currentScene = 0; //go to login scene
 }
 
 void draw() {
   switch (currentScene) { 
       
-      case 0: //login scene
-        //println(loadedUserString);
-        /*if (USER IS LOGGED IN) {
-          currentScene = 1; //go to menu screen
-        }*/
+      case 0: //login screen
       break;
       
-      case 1: //menu
-        println("menu");
-//        rect(0,0,1200,600);
-        //menuScreen.drawScreen(); //put drawing code for the menu screen in the draw function inside the MenuScreen class
+      case 1: //menu screen
+     
       break;
       
   }
@@ -61,9 +60,18 @@ public void controlEvent(ControlEvent theEvent) {
       user = userDAO.logIn(loginUserName, loginPassword);
       
       if (user.getUser_id() != -1 && currentScene == 0) {
-          currentScene = 1;
+        println("Logged IN");
+     loginScreen.destroy();
+       menuScreen.create();
       }
+     
+}
+
+ if (theEvent.getController().getName().equals("program")){
+     menuScreen.destroy();
+     programsScreen.create();
+   } 
 
   }
-}
+
 

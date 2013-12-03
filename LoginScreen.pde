@@ -8,8 +8,10 @@ class LoginScreen {
   //constructor takes reference to the main class, sets it  to context. Use "context" instead of "this" when drawing
   public LoginScreen (RedPanda c) { 
     this.context = c;
-    
-      //load images  for login button
+  }
+  
+  public void loadImages(){
+    //load images  for login button
       this.login_images[0] = loadImage("images/login_button_a.png");
       this.login_images[1] = loadImage("images/login_button_b.png");
       this.login_images[2] = loadImage("images/login_button_b.png");
@@ -44,9 +46,10 @@ class LoginScreen {
         fill(255);
         text(subTitle, width/2, 268);  
       
-        cp5 = new ControlP5(context);
         PFont font = createFont("courier", 24);
-      
+   
+
+        
         cp5.addTextfield("userName")
           .setLabelVisible(true)
             .setCaptionLabel("USERNAME")
@@ -63,6 +66,7 @@ class LoginScreen {
                               //.keepFocus(selectedTextField[0])
                               //.setText(loginUserName)
                                 .setAutoClear(false)
+                                .setGroup(g1)
                                   .setId(1);
       
         cp5.addTextfield("password")
@@ -83,6 +87,7 @@ class LoginScreen {
                               //.keepFocus(selectedTextField[1])
                               .setText(loginPassword)
                                 .setAutoClear(false)
+                                .setGroup(g1)
                                   .setId(2);
       
         
@@ -91,9 +96,18 @@ class LoginScreen {
               .setPosition(width/2 - 110, 424)
                 .setImages(login_images)
                  .updateSize()
+                 .setGroup(g1)
                   .setId(3);
       
         
       }
-  }
+
+      
+void destroy(){
+println("called");
+g1.remove();
+println("removed");
+}
+  
+}
 

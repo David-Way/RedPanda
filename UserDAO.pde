@@ -37,7 +37,7 @@ public class UserDAO {
         }
         
         if (resultArray.length > 6) {
-            String u_error = resultArray[6];
+            //String u_error = resultArray[6];
             //println(u_error);       
         }
         

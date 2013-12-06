@@ -24,20 +24,20 @@ void setup() {
   textAlign(CENTER, CENTER);
   cp5 = new ControlP5(this);
    g1 = cp5.addGroup("g1")
-        .setPosition(0,0)
-                ;
+        .setPosition(0,0);
   //create and draw the login screen  
-loginScreen.loadImages();
-menuScreen.loadImages();
-programsScreen.loadImages();
-loginScreen.drawScreen();
-currentScene = 0; //go to login scene
+   loginScreen.loadImages();
+   menuScreen.loadImages();
+   programsScreen.loadImages();
+   loginScreen.drawScreen();
+   currentScene = 0; //go to login scene
 }
 
 void draw() {
   switch (currentScene) { 
       
       case 0: //login screen
+          loginScreen.drawFade(); //fades out error messeges
       break;
       
       case 1: //menu screen
@@ -59,19 +59,21 @@ public void controlEvent(ControlEvent theEvent) {
       UserDAO userDAO = new UserDAO();
       user = userDAO.logIn(loginUserName, loginPassword);
       
-      if (user.getUser_id() != -1 && currentScene == 0) {
-        println("Logged IN");
-     loginScreen.destroy();
-       menuScreen.create();
+      if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theye in the loggin screen 
+         println("Logged IN");
+         loginScreen.destroy();
+         menuScreen.create();
+      } else { //user is not logged in 
+          loginScreen.displayError("Incorrect login details");
       }
      
-}
+  }
 
- if (theEvent.getController().getName().equals("program")){
+  if (theEvent.getController().getName().equals("program")){
      menuScreen.destroy();
      programsScreen.create();
-   } 
+  } 
 
-  }
+}
 
 

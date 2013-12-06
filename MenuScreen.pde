@@ -6,16 +6,16 @@ class MenuScreen {
   private PImage[] profile = new PImage[3];
   private PImage[] progress = new PImage[3];
   private PImage[] comments = new PImage[3];
-   private PImage[] logout = new PImage[3];
+  private PImage[] logout = new PImage[3];
   private PImage loginBackgroundImage;
   
   public MenuScreen(RedPanda c) {
-    this.context = c;
+      this.context = c;
   }
   
   void loadImages(){
     
-         //load images  for login button
+      //load images  for login button
        this.program[0]  = loadImage("images/program.png");
     this. program[1]  =loadImage("images/programover.png");
       this.program[2]  =loadImage("images/program.png");
@@ -37,56 +37,49 @@ class MenuScreen {
   
   public void create() {
     
-     //draw background image
-       image(loginBackgroundImage, 0, 0, 1200, 600);
+      //draw background image
+      image(loginBackgroundImage, 0, 0, 1200, 600);
         
-  g1 = cp5.addGroup("g1")
-.setPosition(0,0)
-                ;
+      g1 = cp5.addGroup("g1")
+      .setPosition(0,0);
 
   
-  cp5.addButton("program")
-     .setPosition(10,10)
-     .setImages(program)
-     .updateSize()
-     .setGroup(g1)
-     ;
-  
-  cp5.addButton("profile")
-     .setPosition(465,10)
-     .setImages(profile)
-     .updateSize()
-     .setGroup(g1)
-     ;
-     
-
-  cp5.addButton("progress")
-     .setPosition(10,238)
-     .setImages(progress)
-     .updateSize()
-     .setGroup(g1)
-     ;
-  
-  
-  cp5.addButton("comments")
-     .setPosition(465,238)
-     .setImages(comments)
-     .updateSize()
-     .setGroup(g1)
-     ;
-     
-
-  cp5.addButton("logout")
-     .setPosition(1054,10)
-     .setImages(logout)
-    .updateSize()
-     .setGroup(g1)
-     ;
- 
+    cp5.addButton("program")
+       .setPosition(10,10)
+       .setImages(program)
+       .updateSize()
+       .setGroup(g1);
     
+    cp5.addButton("profile")
+       .setPosition(465,10)
+       .setImages(profile)
+       .updateSize()
+       .setGroup(g1) ;
+       
+  
+    cp5.addButton("progress")
+       .setPosition(10,238)
+       .setImages(progress)
+       .updateSize()
+       .setGroup(g1);
+    
+    
+    cp5.addButton("comments")
+       .setPosition(465,238)
+       .setImages(comments)
+       .updateSize()
+       .setGroup(g1);
+       
+  
+    cp5.addButton("logout")
+       .setPosition(1054,10)
+       .setImages(logout)
+      .updateSize()
+       .setGroup(g1);
+       
   }
   
  void destroy(){
-g1.remove();
+      g1.remove();
   }
 }

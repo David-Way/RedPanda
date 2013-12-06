@@ -85,6 +85,6 @@ cp5.addButton("exerciseOne")
   }
   
  void destroy(){
-cp5.getGroup("g1").remove();
+   cp5.getGroup("g1").remove();
   }
 }

@@ -1,7 +1,9 @@
 import controlP5.*;
 import SimpleOpenNI.*;
 
+//initialise kinect
 SimpleOpenNI kinect;
+
 ControlP5 cp5;
 Group g1 = null;
 //login text fields
@@ -10,11 +12,13 @@ Textfield passwordTextField;
 //login stored user name and password
 String loginUserName = "";
 String loginPassword = "";
+//create screens
 LoginScreen loginScreen  = new LoginScreen(this);
 MenuScreen menuScreen  = new MenuScreen(this);  
 ProgramsScreen programsScreen = new ProgramsScreen(this);
-//create screens
+//main objects
 User user;
+Programme programme;
 
 //integer for swithching scenes/rooms
 int currentScene;
@@ -59,8 +63,12 @@ public void controlEvent(ControlEvent theEvent) {
       UserDAO userDAO = new UserDAO();
       user = userDAO.logIn(loginUserName, loginPassword);
       
-      if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theye in the loggin screen 
+      if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theyre in the loggin screen 
          println("Logged IN");
+         //get exercise programme
+         //ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
+         //programme = programmeDAO.getProgramme();
+         
          loginScreen.destroy();
          menuScreen.create();
       } else { //user is not logged in 

@@ -91,7 +91,7 @@ class LoginScreen {
 
 	public void displayError(String s) {
             fill(51, 196, 242);
-            textSize(14);
+            textSize(20);
             text(s, width / 2 - 109, 475, 218, 48);  // Text wraps within text box
 	}
 

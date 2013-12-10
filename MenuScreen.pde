@@ -36,7 +36,7 @@ class MenuScreen {
   }
   
   public void create() {
-    
+      cp5.setAutoDraw(false);
       //draw background image
       image(loginBackgroundImage, 0, 0, 1200, 600);
         
@@ -77,6 +77,15 @@ class MenuScreen {
       .updateSize()
        .setGroup(g1);
        
+       
+
+    
+  }
+  
+  void drawUI() {
+        cp5.draw();
+        fill(0,255,0);
+        rect(122,255,800,500);
   }
   
  void destroy(){

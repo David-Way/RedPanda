@@ -296,9 +296,21 @@ void menuBackComments() {
 }
 
 void makeLogout() {
-        if (currentScene == 1) {
+        //depending on where you log out from delete the relavant screen
+        if (currentScene == 1) { //menu  screen
                 deleteMenuScreen = true;
-        }        
+        } else if (currentScene == 2) { //programmes screen
+                deleteProgramsScreen = true;
+        } else if (currentScene == 3) { //profile screen
+                deleteProfileScreen = true;
+        } else if (currentScene == 4) { //progress screen
+                deleteProgressScreen = true;
+        }  else if (currentScene == 5) { //comments screen
+                deleteCommentsScreen = true;
+        }  else if (currentScene == 6) { //exercise screen
+                deleteExerciseScreen = true;
+        }  
+        //draw the login screen again
         loginScreen.drawScreen();
         currentScene = 0;
 }

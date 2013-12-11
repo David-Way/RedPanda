@@ -1,85 +1,188 @@
 class MenuScreen {
-  
-  private RedPanda context;
-  
-  private PImage[] program = new PImage[3];
-  private PImage[] profile = new PImage[3];
-  private PImage[] progress = new PImage[3];
-  private PImage[] comments = new PImage[3];
-  private PImage[] logout = new PImage[3];
-  private PImage loginBackgroundImage;
-  
-  public MenuScreen(RedPanda c) {
-      this.context = c;
-  }
-  
-  void loadImages(){
-    
-      //load images  for login button
-       this.program[0]  = loadImage("images/program.png");
-    this. program[1]  =loadImage("images/programover.png");
-      this.program[2]  =loadImage("images/program.png");
-      this.profile[0] = loadImage("images/profile.png");
-     this.profile[1] =loadImage("images/profileover.png");
-      this.profile[2] =loadImage("images/profile.png");
-      this.progress[0] = loadImage("images/progress.png");
-      this.progress[1] = loadImage("images/progressover.png");
-      this.progress[2] = loadImage("images/progress.png");
-      this.comments[0] = loadImage("images/comments.png");
-      this.comments[1] =loadImage("images/commentsover.png");
-      this.comments[2] =loadImage("images/comments.png");
-      this.logout[0] = loadImage("images/logout.png");
-      this.logout[1] =loadImage("images/logoutover.png");
-      this.logout[2] =loadImage("images/logout.png");
-      //load background image
-      this.loginBackgroundImage = loadImage("images/background.png"); 
-  }
-  
-  public void create() {
-    
-      //draw background image
-      image(loginBackgroundImage, 0, 0, 1200, 600);
-        
-      g1 = cp5.addGroup("g1")
-      .setPosition(0,0);
 
-  
-    cp5.addButton("program")
-       .setPosition(10,10)
-       .setImages(program)
-       .updateSize()
-       .setGroup(g1);
-    
-    cp5.addButton("profile")
-       .setPosition(465,10)
-       .setImages(profile)
-       .updateSize()
-       .setGroup(g1) ;
-       
-  
-    cp5.addButton("progress")
-       .setPosition(10,238)
-       .setImages(progress)
-       .updateSize()
-       .setGroup(g1);
-    
-    
-    cp5.addButton("comments")
-       .setPosition(465,238)
-       .setImages(comments)
-       .updateSize()
-       .setGroup(g1);
-       
-  
-    cp5.addButton("logout")
-       .setPosition(1054,10)
-       .setImages(logout)
-      .updateSize()
-       .setGroup(g1);
-       
-  }
-  
- void destroy(){
-      g1.remove();
-  }
+        private RedPanda context;
+
+        private PImage[] program = new PImage[3];
+        private PImage[] profile = new PImage[3];
+        private PImage[] progress = new PImage[3];
+        private PImage[] comments = new PImage[3];
+        private PImage[] logout = new PImage[3];
+        private Button []buttons;
+        private Group menuGroup;
+        boolean start = false;
+        int timer;
+
+
+
+        public MenuScreen(RedPanda c) {
+                this.context = c;
+        }
+
+        void loadImages() {
+
+                //load images  for login button
+                this.program[0]  = loadImage("images/program.png");
+                this.program[1]  =loadImage("images/programover.png");
+                this.program[2]  =loadImage("images/program.png");
+                this.profile[0] = loadImage("images/profile.png");
+                this.profile[1] =loadImage("images/profileover.png");
+                this.profile[2] =loadImage("images/profile.png");
+                this.progress[0] = loadImage("images/progress.png");
+                this.progress[1] = loadImage("images/progressover.png");
+                this.progress[2] = loadImage("images/progress.png");
+                this.comments[0] = loadImage("images/comments.png");
+                this.comments[1] =loadImage("images/commentsover.png");
+                this.comments[2] =loadImage("images/comments.png");
+                this.logout[0] = loadImage("images/logout.png");
+                this.logout[1] =loadImage("images/logoutover.png");
+                this.logout[2] =loadImage("images/logout.png");
+        }
+
+        public void create() {
+
+                cp5.setAutoDraw(false);
+
+                menuGroup = cp5.addGroup("menuGroup")
+                        .setPosition(0, 0)
+                                ;
+
+                buttons = new Button[5];
+
+
+                buttons[0] = cp5.addButton("program")
+                        .setPosition(10, 10)
+                                .setImages(program)
+                                        .updateSize()
+                                                .setGroup(menuGroup);
+
+                buttons[1] = cp5.addButton("profile")
+                        .setPosition(465, 10)
+                                .setImages(profile)
+                                        .updateSize()
+                                                .setGroup(menuGroup) ;
+
+
+                buttons[2] = cp5.addButton("progress")
+                        .setPosition(10, 238)
+                                .setImages(progress)
+                                        .updateSize()
+                                                .setGroup(menuGroup);
+
+
+                buttons[3] = cp5.addButton("comments")
+                        .setPosition(465, 238)
+                                .setImages(comments)
+                                        .updateSize()
+                                                .setGroup(menuGroup);
+
+
+                buttons[4] = cp5.addButton("logout")
+                        .setPosition(1054, 10)
+                                .setImages(logout)
+                                        .updateSize()
+                                                .setGroup(menuGroup);
+        }
+
+        void drawUI() {
+                cp5.draw();
+        }
+
+
+        void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
+
+                PVector leftHand = convertedLeftJoint;
+                PVector rightHand = convertedRightJoint;
+                // CHECK FOR PROGRAM BUTTON
+                //LEft hand check (leftHand.x > 10 && leftHand.x < 459 && leftHand.y > 10 && leftHand.y < 232) || 
+                if (rightHand.x > 10 && rightHand.x < 459 && rightHand.y > 10 && rightHand.y < 232)
+                {
+                        if (start == false) {
+                                println("true");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                makeProgram();
+                        }
+                }//CHECK FOR PROFILE BUTTON
+                //(leftHand.x > 465 && leftHand.x < 684 && leftHand.y > 10 && leftHand.y < 232) || 
+                else if (rightHand.x > 465 && rightHand.x < 684 && rightHand.y > 10 && rightHand.y < 232)
+                {
+                        if (start == false) {
+                                println("true");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                makeProfile();
+                        }
+                }//CHECK FOR PROGRESS BUTTON
+                //(leftHand.x > 10 && leftHand.x < 459 && leftHand.y > 238 && leftHand.y < 456) || 
+                else if (rightHand.x > 10 && rightHand.x < 459 && rightHand.y > 238 && rightHand.y < 456)
+                {
+                        if (start == false) {
+                                println("true");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                makeProgress();
+                        }
+                }//CHECK FOR COMMENTS BUTTON
+                //(leftHand.x > 465 && leftHand.x < 684 && leftHand.y > 238 && leftHand.y < 456) || (
+                else if (rightHand.x > 465 && rightHand.x < 684 && rightHand.y > 238 && rightHand.y < 456)
+                {
+                        if (start == false) {
+                                println("true");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                makeComments();
+                        }
+                }//CHECK FOR LOGOUT BUTTON
+                //(leftHand.x >1054 && leftHand.x < 1090 && leftHand.y > 10 && leftHand.y < 57) || (
+                else if (rightHand.x > 1054 && rightHand.x < 1090 && rightHand.y > 10 && rightHand.y < 57)
+                {
+                        if (start == false) {
+                                println("true");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                makeLogout();
+                        }
+                }
+                else {
+                        start = false;
+                        //println("false");
+                }
+        }
+
+
+        public int checkTimer() {
+                int totalTime = 7000;
+                int checkInt = 0;
+                if (start) {
+                        int passedTime = millis() - timer;
+                        if (passedTime > totalTime) {
+                                println("Buttons timed");
+                                checkInt = 1;
+                        }
+                        else {
+                                checkInt = -1;
+                        }
+                }
+                return checkInt;
+        }
+
+
+        void destroy() {
+                for ( int i = 0 ; i < buttons.length; i++ ) {
+                        buttons[i].remove();
+                        buttons[i] = null;
+                }
+                cp5.getGroup("menuGroup").remove();
+        }
 }
+

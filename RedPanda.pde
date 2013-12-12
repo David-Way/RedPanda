@@ -169,9 +169,13 @@ public void controlEvent(ControlEvent theEvent) {
                 if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theyre in the loggin screen
                         println("Logged IN");
                         //get exercise programme
-                        //ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
-                        //programme = programmeDAO.getProgramme();
-
+                        ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
+                        programme = programmeDAO.getProgramme();
+                        //println("create date: " + programme.getCreate_date());
+                        //get the exercise objects and add them to the programme object.
+                        //ExerciseDAO exerciseDAO = new ExerciseDAO(programme.getProgramme_id());
+                        //programme.setExercises(exerciseDAO.getExercisesByProgrammeID);
+                        
                         //loginScreen.destroy();
                         deleteLoginScreen = true;
                         menuScreen.create();

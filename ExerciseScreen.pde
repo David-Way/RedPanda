@@ -6,6 +6,8 @@ class ExerciseScreen {
         private PImage[] logout = new PImage[3];
         private Button []buttons;
         private Group exerciseGroup;
+        boolean start = false;
+        int timer;
 
         public ExerciseScreen(RedPanda c) {
                 this.context = c;
@@ -44,6 +46,52 @@ class ExerciseScreen {
                                         .updateSize()
                                                 .setGroup(exerciseGroup)
                                                         ;
+        }
+
+        void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
+
+                PVector leftHand = convertedLeftJoint;
+                PVector rightHand = convertedRightJoint;
+
+                if (leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5)
+                {
+                        if (start == false) {
+                                println("Menu back called");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                menuBackExercises();
+                        }
+                }else if(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
+                 {
+                 if(start == false){
+                 println("Over logout");
+                 start = true;
+                 timer = millis();
+                 }if(checkTimer() == 1){
+                         println("Log out called");
+                 makeLogout();
+                 }
+                 }else {
+                        start = false;
+                        println("Over Nothing");
+                }
+        }
+
+        public int checkTimer() {
+                int totalTime = 5000;
+                int checkInt = 0;
+                if (start) {
+                        int passedTime = millis() - timer;
+                        if (passedTime > totalTime) {
+                                checkInt = 1;
+                        }
+                        else {
+                                checkInt = -1;
+                        }
+                }
+                return checkInt;
         }
 
 

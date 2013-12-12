@@ -115,7 +115,7 @@ void draw() {
                 menuScreen.drawUI();
                 profileScreen.drawUI();
                 pushMatrix();
-                scale(2.6);
+                scale(2.5);
                 trackUser();
                 popMatrix();
                 break;
@@ -344,9 +344,8 @@ void drawLeftJoint(int userId, int jointID) {
         //if (confidence > 0.5){
         //   return;
         //}
-
         kinect.convertRealWorldToProjective(leftJoint, convertedLeftJoint);
-        image(leftHandIcon, convertedLeftJoint.x, convertedLeftJoint.y, 40, 40);
+        image(leftHandIcon, convertedLeftJoint.x, convertedLeftJoint.y, 20, 20);
 }
 
 void drawRightJoint(int userId, int jointID) {
@@ -355,9 +354,8 @@ void drawRightJoint(int userId, int jointID) {
         //if (confidence > 0.5){
         //    return;
         //}
-
         kinect.convertRealWorldToProjective(rightJoint, convertedRightJoint);
-        image(rightHandIcon, convertedRightJoint.x, convertedRightJoint.y, 40, 40);
+        image(rightHandIcon, convertedRightJoint.x, convertedRightJoint.y, 20, 20);
 }
 ////////////////////////////////////////////////////////////////////////////
 //SKELETON DRAWING

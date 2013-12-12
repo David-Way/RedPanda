@@ -96,65 +96,75 @@ class ProgramsScreen {
                 PVector leftHand = convertedLeftJoint;
                 PVector rightHand = convertedRightJoint;
                 // CHECK FOR MENUBACK BUTTON
-                //(leftHand.x > 10 && leftHand.x < 106 && leftHand.y > 10 && leftHand.y < 57) || (
-                if (rightHand.x > 10 && rightHand.x < 106 && rightHand.y > 10 && rightHand.y < 57)
+                //(leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5) || (
+                //rightHand.x > 10/2.5 && rightHand.x < 106/2.5 && rightHand.y > 10/2.5 && rightHand.y < 57/2.5
+                if (leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over MenuBack");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                 println("Menu Back called");
                                 menuBackPrograms();
                         }
                 }//CHECK FOR EXERCISE ONE BUTTON
-                //(leftHand.x > 10 && leftHand.x < 232 && leftHand.y > 70 && leftHand.y < 288) || (
-                else if (rightHand.x > 10 && rightHand.x < 232 && rightHand.y > 70 && rightHand.y < 288)
+                //(leftHand.x > 10/2.5 && leftHand.x < 232/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
+                //rightHand.x > 10/2.5 && rightHand.x < 232/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
+                else if (leftHand.x > 10/2.5 && leftHand.x < 232/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over Exercise One");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                println("Exercise One called");
                                 makeExerciseOne();
                         }
                 }//CHECK FOR EXCERCISE TWO BUTTON
-                //(leftHand.x > 242 && leftHand.x < 464 && leftHand.y > 70 && leftHand.y < 288) || (
-                /*else if(rightHand.x > 242 && rightHand.x < 464 && rightHand.y > 70 && rightHand.y < 288)
+                //(leftHand.x > 242/2.5 && leftHand.x < 464/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
+                //rightHand.x > 242/2.5 && rightHand.x < 464/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
+                else if(leftHand.x > 242/2.5 && leftHand.x < 464/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5)
                  {
                  if(start == false){
-                 println("true");
+                 println("Over Exercise Two");
                  start = true;
                  timer = millis();
                  }if(checkTimer() == 1){
-                 makeExerciseOne();
+                     println("Exercise Two called");
+                    makeExerciseOne();
                  }
                  }//CHECK FOR EXERCISE THREE BUTTON
-                 //(leftHand.x > 482 && leftHand.x < 504 && leftHand.y > 70 && leftHand.y < 288) || (
-                 else if(rightHand.x > 482 && rightHand.x < 504 && rightHand.y > 70 && rightHand.y < 288)
+                 //(leftHand.x > 482/2.5 && leftHand.x < 504/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
+                 //rightHand.x > 482/2.5 && rightHand.x < 504/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
+                 else if(leftHand.x > 482/2.5 && leftHand.x < 504/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5)
                  {
                  if(start == false){
-                 println("true");
+                 println("Over Exercise Three");
                  start = true;
                  timer = millis();
                  }if(checkTimer() == 1){
-                 makeExerciseOne();
+                    println("Exercise Three called");
+                    makeExerciseOne();
                  }
                  }//CHECK FOR LOGOUT BUTTON
-                 //(leftHand.x > 1054 && leftHand.x < 1090 && leftHand.y > 10 && leftHand.y < 57) || (
-                 else if(rightHand.x > 1054 && rightHand.x < 1090 && rightHand.y > 10 && rightHand.y < 57)
+                 //(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5) || (
+                 //rightHand.x > 1054/2.5 && rightHand.x < 1090/2.5 && rightHand.y > 10/2.5 && rightHand.y < 57/2.5
+                 else if(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
                  {
                  if(start == false){
-                 println("true");
+                 println("Over Logout");
                  start = true;
                  timer = millis();
                  }if(checkTimer() == 1){
-                 makeLogout();
+                    println("Logout called");
+                    makeLogout();
                  }
-                 }*/                else {
+                 }else {
                         start = false;
-                        println("false");
+                        println("Over Nothing");
                 }
         }
 
@@ -166,7 +176,6 @@ class ProgramsScreen {
                 if (start) {
                         int passedTime = millis() - timer;
                         if (passedTime > totalTime) {
-                                println("Buttons timed");
                                 checkInt = 1;
                         }
                         else {

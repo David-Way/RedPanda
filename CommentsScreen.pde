@@ -6,6 +6,8 @@ class CommentsScreen {
         private PImage[] logout = new PImage[3];
         private Button []buttons;
         private Group commentsGroup;
+        boolean start = false;
+        int timer;
 
         public CommentsScreen(RedPanda c) {
                 this.context = c;
@@ -44,6 +46,55 @@ class CommentsScreen {
                                         .updateSize()
                                                 .setGroup(commentsGroup)
                                                         ;
+        }
+
+
+        void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
+
+                PVector leftHand = convertedLeftJoint;
+                PVector rightHand = convertedRightJoint;
+
+                if (leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5)
+                {
+                        if (start == false) {
+                                println("Over Menu Back");
+                                start = true;
+                                timer = millis();
+                        }
+                        if (checkTimer() == 1) {
+                                 println("Menu Back Called");
+                                menuBackComments();
+                        }
+                }else if(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
+                 {
+                 if(start == false){
+                 println("Over Log out");
+                 start = true;
+                 timer = millis();
+                 }if(checkTimer() == 1){
+                         println("Logout called");
+                 makeLogout();
+                 }
+                 }else {
+                        start = false;
+                        println("Over Nothing");
+                }
+        }
+
+        public int checkTimer() {
+                println("timer called");
+                int totalTime = 5000;
+                int checkInt = 0;
+                if (start) {
+                        int passedTime = millis() - timer;
+                        if (passedTime > totalTime) {
+                                checkInt = 1;
+                        }
+                        else {
+                                checkInt = -1;
+                        }
+                }
+                return checkInt;
         }
 
 

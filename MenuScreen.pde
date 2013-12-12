@@ -94,68 +94,78 @@ class MenuScreen {
                 PVector rightHand = convertedRightJoint;
                 // CHECK FOR PROGRAM BUTTON
                 //LEft hand check (leftHand.x > 10 && leftHand.x < 459 && leftHand.y > 10 && leftHand.y < 232) || 
-                if (rightHand.x > 10 && rightHand.x < 459 && rightHand.y > 10 && rightHand.y < 232)
+                //rightHand.x > 10/2 && rightHand.x < 459/2 && rightHand.y > 10/2 && rightHand.y < 232/2
+                if (leftHand.x > 10/2.5 && leftHand.x < 459/2.5 && leftHand.y > 10/2.5 && leftHand.y < 232/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over Program");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                println("Program called");
                                 makeProgram();
                         }
                 }//CHECK FOR PROFILE BUTTON
                 //(leftHand.x > 465 && leftHand.x < 684 && leftHand.y > 10 && leftHand.y < 232) || 
-                else if (rightHand.x > 465 && rightHand.x < 684 && rightHand.y > 10 && rightHand.y < 232)
+                //rightHand.x > 465/2 && rightHand.x < 684/2 && rightHand.y > 10/2 && rightHand.y < 232/2
+                else if (leftHand.x > 465/2.5 && leftHand.x < 684/2.5 && leftHand.y > 10/2.5 && leftHand.y < 232/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over Profile");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                 println("Profile Called");
                                 makeProfile();
                         }
                 }//CHECK FOR PROGRESS BUTTON
                 //(leftHand.x > 10 && leftHand.x < 459 && leftHand.y > 238 && leftHand.y < 456) || 
-                else if (rightHand.x > 10 && rightHand.x < 459 && rightHand.y > 238 && rightHand.y < 456)
+                //rightHand.x > 10/2 && rightHand.x < 459/2 && rightHand.y > 238/2 && rightHand.y < 456/2
+                else if (leftHand.x > 10/2.5 && leftHand.x < 459/2 && leftHand.y > 238/2.5 && leftHand.y < 456/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over Progress");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                println("Progress called");
                                 makeProgress();
                         }
                 }//CHECK FOR COMMENTS BUTTON
                 //(leftHand.x > 465 && leftHand.x < 684 && leftHand.y > 238 && leftHand.y < 456) || (
-                else if (rightHand.x > 465 && rightHand.x < 684 && rightHand.y > 238 && rightHand.y < 456)
+                //rightHand.x > 465/2 && rightHand.x < 684/2 && rightHand.y > 238/2 && rightHand.y < 456/2
+                else if (leftHand.x > 465/2.5 && leftHand.x < 684/2.5 && leftHand.y > 238/2.5 && leftHand.y < 456/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over Comments");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                 println("Comemnts called");
                                 makeComments();
                         }
                 }//CHECK FOR LOGOUT BUTTON
                 //(leftHand.x >1054 && leftHand.x < 1090 && leftHand.y > 10 && leftHand.y < 57) || (
-                else if (rightHand.x > 1054 && rightHand.x < 1090 && rightHand.y > 10 && rightHand.y < 57)
+                //rightHand.x > 1054/2 && rightHand.x < 1090/2 && rightHand.y > 10/2 && rightHand.y < 57/2
+                else if (leftHand.x >1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
                 {
                         if (start == false) {
-                                println("true");
+                                println("Over Logout");
                                 start = true;
                                 timer = millis();
                         }
                         if (checkTimer() == 1) {
+                                 println("Logout Called");
                                 makeLogout();
                         }
                 }
                 else {
                         start = false;
-                        //println("false");
+                        println("Over Nothing");
                 }
         }
 
@@ -166,7 +176,6 @@ class MenuScreen {
                 if (start) {
                         int passedTime = millis() - timer;
                         if (passedTime > totalTime) {
-                                println("Buttons timed");
                                 checkInt = 1;
                         }
                         else {

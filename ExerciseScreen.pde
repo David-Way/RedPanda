@@ -15,16 +15,16 @@ class ExerciseScreen {
 
         void loadImages() {
                 //load images  for login button
-                this.menuBack[0]  = loadImage("images/menu.png");
-                this.menuBack[1]  = loadImage("images/menuover.png");
-                this.menuBack[2]  = loadImage("images/menuover.png");
-                this.logout[0] = loadImage("images/logout.png");
-                this.logout[1] =loadImage("images/logoutover.png");
-                this.logout[2] =loadImage("images/logoutover.png");
+                this.menuBack[0]  = loadImage("images/menu.jpg");
+                this.menuBack[1]  = loadImage("images/menuOver.jpg");
+                this.menuBack[2]  = loadImage("images/menu.jpg");
+                this.logout[0] = loadImage("images/logout.jpg");
+                this.logout[1] =loadImage("images/logoutOver.jpg");
+                this.logout[2] =loadImage("images/logout.jpg");
         }
 
         public void create() {
-
+                start = false;
                 cp5.setAutoDraw(false);
 
                 exerciseGroup = cp5.addGroup("exerciseGroup")
@@ -41,7 +41,7 @@ class ExerciseScreen {
                                                         ;
 
                 buttons[1] = cp5.addButton("logoutExcercises")
-                        .setPosition(1054, 10)
+                       .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
                                                 .setGroup(exerciseGroup)
@@ -53,28 +53,31 @@ class ExerciseScreen {
                 PVector leftHand = convertedLeftJoint;
                 PVector rightHand = convertedRightJoint;
 
-                if (leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5)
+                if (leftHand.x > (10/2.5) && leftHand.x < (222/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
                 {
                         if (start == false) {
                                 println("Menu back called");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
-                                menuBackExercises();
+                                menuBack();
                         }
-                }else if(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
-                 {
-                 if(start == false){
-                 println("Over logout");
-                 start = true;
-                 timer = millis();
-                 }if(checkTimer() == 1){
-                         println("Log out called");
-                 makeLogout();
-                 }
+                }else if(leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
+                {
+                        if(start == false){
+                                println("Over logout");
+                                start = true;
+                                timer = millis();
+                                loaderOn();
+                        }if(checkTimer() == 1){
+                            println("Log out called");
+                            makeLogout();
+                        }
                  }else {
                         start = false;
+                        loaderOff();
                         println("Over Nothing");
                 }
         }

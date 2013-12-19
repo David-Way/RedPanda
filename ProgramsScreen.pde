@@ -19,25 +19,25 @@ class ProgramsScreen {
         void loadImages() {
 
                 //load images  for login button
-                this.menuBack[0]  = loadImage("images/menu.png");
-                this.menuBack[1]  = loadImage("images/menuover.png");
-                this.menuBack[2]  = loadImage("images/menuover.png");
-                this.exerciseOne[0]  = loadImage("images/exercise1.png");
-                this.exerciseOne[1]  =loadImage("images/exercise1over.png");
-                this.exerciseOne[2]  =loadImage("images/exercise1over.png");
-                this.exerciseTwo[0] = loadImage("images/exercise2.png");
-                this.exerciseTwo[1] =loadImage("images/exercise2over.png");
-                this.exerciseTwo[2] =loadImage("images/exercise2over.png");
-                this.exerciseThree[0] = loadImage("images/exercise3.png");
-                this.exerciseThree[1] = loadImage("images/exercise3over.png");
-                this.exerciseThree[2] = loadImage("images/exercise3over.png");
-                this.logout[0] = loadImage("images/logout.png");
-                this.logout[1] =loadImage("images/logoutover.png");
-                this.logout[2] =loadImage("images/logoutover.png");
+                this.menuBack[0]  = loadImage("images/menu.jpg");
+                this.menuBack[1]  = loadImage("images/menuOver.jpg");
+                this.menuBack[2]  = loadImage("images/menu.jpg");
+                this.exerciseOne[0]  = loadImage("images/exercise1.jpg");
+                this.exerciseOne[1]  =loadImage("images/exercise1Over.jpg");
+                this.exerciseOne[2]  =loadImage("images/exercise1.jpg");
+                this.exerciseTwo[0] = loadImage("images/exercise2.jpg");
+                this.exerciseTwo[1] =loadImage("images/exercise2Over.jpg");
+                this.exerciseTwo[2] =loadImage("images/exercise2.jpg");
+                this.exerciseThree[0] = loadImage("images/exercise3.jpg");
+                this.exerciseThree[1] = loadImage("images/exercise3Over.jpg");
+                this.exerciseThree[2] = loadImage("images/exercise3.jpg");
+                this.logout[0] = loadImage("images/logout.jpg");
+                this.logout[1] =loadImage("images/logoutOver.jpg");
+                this.logout[2] =loadImage("images/logout.jpg");
         }
 
         public void create() {
-
+                start = false;
                 cp5.setAutoDraw(false);
 
 
@@ -55,14 +55,14 @@ class ProgramsScreen {
                                                         ;
 
                 buttons[1] = cp5.addButton("exerciseOne")
-                        .setPosition(10, 70)
+                        .setPosition(10, 120)
                                 .setImages(exerciseOne)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
                                                         ;
 
                 buttons[2] = cp5.addButton("exerciseTwo")
-                        .setPosition(242, 70)
+                        .setPosition(242, 120)
                                 .setImages(exerciseTwo)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
@@ -70,7 +70,7 @@ class ProgramsScreen {
 
 
                 buttons[3] = cp5.addButton("exerciseThree")
-                        .setPosition(482, 70)
+                        .setPosition(482, 120)
                                 .setImages(exerciseThree)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
@@ -78,8 +78,8 @@ class ProgramsScreen {
 
 
 
-                buttons[4] = cp5.addButton("logout")
-                        .setPosition(1054, 10)
+                buttons[4] = cp5.addButton("logoutPrograms")
+                        .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
@@ -98,26 +98,28 @@ class ProgramsScreen {
                 // CHECK FOR MENUBACK BUTTON
                 //(leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5) || (
                 //rightHand.x > 10/2.5 && rightHand.x < 106/2.5 && rightHand.y > 10/2.5 && rightHand.y < 57/2.5
-                if (leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5)
+                if (leftHand.x > (10/2.5) && leftHand.x < (222/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
                 {
                         if (start == false) {
                                 println("Over MenuBack");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                  println("Menu Back called");
-                                menuBackPrograms();
+                                menuBack();
                         }
                 }//CHECK FOR EXERCISE ONE BUTTON
                 //(leftHand.x > 10/2.5 && leftHand.x < 232/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
                 //rightHand.x > 10/2.5 && rightHand.x < 232/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
-                else if (leftHand.x > 10/2.5 && leftHand.x < 232/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5)
+                else if (leftHand.x > (10/2.5) && leftHand.x < (232/2.5) && leftHand.y > (120/2.5) && leftHand.y < (338/2.5))
                 {
                         if (start == false) {
                                 println("Over Exercise One");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                 println("Exercise One called");
@@ -126,44 +128,48 @@ class ProgramsScreen {
                 }//CHECK FOR EXCERCISE TWO BUTTON
                 //(leftHand.x > 242/2.5 && leftHand.x < 464/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
                 //rightHand.x > 242/2.5 && rightHand.x < 464/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
-                else if(leftHand.x > 242/2.5 && leftHand.x < 464/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5)
+                else if(leftHand.x > (242/2.5) && leftHand.x < (464/2.5) && leftHand.y > (120/2.5) && leftHand.y < (338/2.5))
                  {
-                 if(start == false){
-                 println("Over Exercise Two");
-                 start = true;
-                 timer = millis();
-                 }if(checkTimer() == 1){
-                     println("Exercise Two called");
-                    makeExerciseOne();
-                 }
+                        if(start == false){
+                                println("Over Exercise Two");
+                                start = true;
+                                timer = millis();
+                                loaderOn();
+                        }if(checkTimer() == 1){
+                                println("Exercise Two called");
+                                makeExerciseOne();
+                        }
                  }//CHECK FOR EXERCISE THREE BUTTON
                  //(leftHand.x > 482/2.5 && leftHand.x < 504/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
                  //rightHand.x > 482/2.5 && rightHand.x < 504/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
-                 else if(leftHand.x > 482/2.5 && leftHand.x < 504/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5)
+                 else if(leftHand.x > (482/2.5) && leftHand.x < (504/2.5) && leftHand.y > (120/2.5) && leftHand.y < (338/2.5))
                  {
-                 if(start == false){
-                 println("Over Exercise Three");
-                 start = true;
-                 timer = millis();
-                 }if(checkTimer() == 1){
-                    println("Exercise Three called");
-                    makeExerciseOne();
-                 }
+                        if(start == false){
+                                println("Over Exercise Three");
+                                start = true;
+                                timer = millis();
+                                loaderOn();
+                         }if(checkTimer() == 1){
+                                println("Exercise Three called");
+                                makeExerciseOne();
+                        }
                  }//CHECK FOR LOGOUT BUTTON
                  //(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5) || (
                  //rightHand.x > 1054/2.5 && rightHand.x < 1090/2.5 && rightHand.y > 10/2.5 && rightHand.y < 57/2.5
-                 else if(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
+                 else if(leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
                  {
-                 if(start == false){
-                 println("Over Logout");
-                 start = true;
-                 timer = millis();
-                 }if(checkTimer() == 1){
-                    println("Logout called");
-                    makeLogout();
-                 }
+                        if(start == false){
+                                println("Over Logout");
+                                start = true;
+                                timer = millis();
+                                loaderOn();
+                        }if(checkTimer() == 1){
+                                println("Logout called");
+                                makeLogout();
+                        }
                  }else {
                         start = false;
+                        loaderOff();
                         println("Over Nothing");
                 }
         }

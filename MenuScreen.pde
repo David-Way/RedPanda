@@ -2,7 +2,7 @@ class MenuScreen {
 
         private RedPanda context;
 
-        private PImage[] program = new PImage[3];
+        private PImage[] programme = new PImage[3];
         private PImage[] profile = new PImage[3];
         private PImage[] progress = new PImage[3];
         private PImage[] comments = new PImage[3];
@@ -21,21 +21,21 @@ class MenuScreen {
         void loadImages() {
 
                 //load images  for login button
-                this.program[0]  = loadImage("images/program.png");
-                this.program[1]  =loadImage("images/programover.png");
-                this.program[2]  =loadImage("images/program.png");
-                this.profile[0] = loadImage("images/profile.png");
-                this.profile[1] =loadImage("images/profileover.png");
-                this.profile[2] =loadImage("images/profile.png");
-                this.progress[0] = loadImage("images/progress.png");
-                this.progress[1] = loadImage("images/progressover.png");
-                this.progress[2] = loadImage("images/progress.png");
-                this.comments[0] = loadImage("images/comments.png");
-                this.comments[1] =loadImage("images/commentsover.png");
-                this.comments[2] =loadImage("images/comments.png");
-                this.logout[0] = loadImage("images/logout.png");
-                this.logout[1] =loadImage("images/logoutover.png");
-                this.logout[2] =loadImage("images/logout.png");
+                this.programme[0]  = loadImage("images/programme.jpg");
+                this.programme[1]  =loadImage("images/programmeOver.jpg");
+                this.programme[2]  =loadImage("images/programme.jpg");
+                this.profile[0] = loadImage("images/profile.jpg");
+                this.profile[1] =loadImage("images/profileOver.jpg");
+                this.profile[2] =loadImage("images/profile.jpg");
+                this.progress[0] = loadImage("images/progress.jpg");
+                this.progress[1] = loadImage("images/progressOver.jpg");
+                this.progress[2] = loadImage("images/progress.jpg");
+                this.comments[0] = loadImage("images/comments.jpg");
+                this.comments[1] =loadImage("images/commentsOver.jpg");
+                this.comments[2] =loadImage("images/comments.jpg");
+                this.logout[0] = loadImage("images/logout.jpg");
+                this.logout[1] =loadImage("images/logoutOver.jpg");
+                this.logout[2] =loadImage("images/logout.jpg");
         }
 
         public void create() {
@@ -49,9 +49,9 @@ class MenuScreen {
                 buttons = new Button[5];
 
 
-                buttons[0] = cp5.addButton("program")
+                buttons[0] = cp5.addButton("programme")
                         .setPosition(10, 10)
-                                .setImages(program)
+                                .setImages(programme)
                                         .updateSize()
                                                 .setGroup(menuGroup);
 
@@ -77,7 +77,7 @@ class MenuScreen {
 
 
                 buttons[4] = cp5.addButton("logout")
-                        .setPosition(1054, 10)
+                        .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
                                                 .setGroup(menuGroup);
@@ -95,26 +95,28 @@ class MenuScreen {
                 // CHECK FOR PROGRAM BUTTON
                 //LEft hand check (leftHand.x > 10 && leftHand.x < 459 && leftHand.y > 10 && leftHand.y < 232) || 
                 //rightHand.x > 10/2 && rightHand.x < 459/2 && rightHand.y > 10/2 && rightHand.y < 232/2
-                if (leftHand.x > 10/2.5 && leftHand.x < 459/2.5 && leftHand.y > 10/2.5 && leftHand.y < 232/2.5)
+                if (leftHand.x > (10/2.5) && leftHand.x < (459/2.5) && leftHand.y > (10/2.5) && leftHand.y < (232/2.5))
                 {
                         if (start == false) {
-                                println("Over Program");
+                                println("Over Programme");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                 println("Program called");
-                                makeProgram();
+                                makeProgramme();
                         }
                 }//CHECK FOR PROFILE BUTTON
                 //(leftHand.x > 465 && leftHand.x < 684 && leftHand.y > 10 && leftHand.y < 232) || 
                 //rightHand.x > 465/2 && rightHand.x < 684/2 && rightHand.y > 10/2 && rightHand.y < 232/2
-                else if (leftHand.x > 465/2.5 && leftHand.x < 684/2.5 && leftHand.y > 10/2.5 && leftHand.y < 232/2.5)
+                else if (leftHand.x > (465/2.5) && leftHand.x < (684/2.5) && leftHand.y > (10/2.5) && leftHand.y < (232/2.5))
                 {
                         if (start == false) {
                                 println("Over Profile");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                  println("Profile Called");
@@ -123,12 +125,13 @@ class MenuScreen {
                 }//CHECK FOR PROGRESS BUTTON
                 //(leftHand.x > 10 && leftHand.x < 459 && leftHand.y > 238 && leftHand.y < 456) || 
                 //rightHand.x > 10/2 && rightHand.x < 459/2 && rightHand.y > 238/2 && rightHand.y < 456/2
-                else if (leftHand.x > 10/2.5 && leftHand.x < 459/2 && leftHand.y > 238/2.5 && leftHand.y < 456/2.5)
+                else if (leftHand.x > (10/2.5) && leftHand.x < (459/2) && leftHand.y > (238/2.5) && leftHand.y < (456/2.5))
                 {
                         if (start == false) {
                                 println("Over Progress");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                 println("Progress called");
@@ -137,12 +140,13 @@ class MenuScreen {
                 }//CHECK FOR COMMENTS BUTTON
                 //(leftHand.x > 465 && leftHand.x < 684 && leftHand.y > 238 && leftHand.y < 456) || (
                 //rightHand.x > 465/2 && rightHand.x < 684/2 && rightHand.y > 238/2 && rightHand.y < 456/2
-                else if (leftHand.x > 465/2.5 && leftHand.x < 684/2.5 && leftHand.y > 238/2.5 && leftHand.y < 456/2.5)
+                else if (leftHand.x > (465/2.5) && leftHand.x < (684/2.5) && leftHand.y > (238/2.5) && leftHand.y < (456/2.5))
                 {
                         if (start == false) {
                                 println("Over Comments");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                  println("Comemnts called");
@@ -151,12 +155,13 @@ class MenuScreen {
                 }//CHECK FOR LOGOUT BUTTON
                 //(leftHand.x >1054 && leftHand.x < 1090 && leftHand.y > 10 && leftHand.y < 57) || (
                 //rightHand.x > 1054/2 && rightHand.x < 1090/2 && rightHand.y > 10/2 && rightHand.y < 57/2
-                else if (leftHand.x >1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5)
+                else if (leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
                 {
                         if (start == false) {
                                 println("Over Logout");
                                 start = true;
                                 timer = millis();
+                                loaderOn();
                         }
                         if (checkTimer() == 1) {
                                  println("Logout Called");
@@ -165,6 +170,7 @@ class MenuScreen {
                 }
                 else {
                         start = false;
+                        loaderOff();
                         println("Over Nothing");
                 }
         }

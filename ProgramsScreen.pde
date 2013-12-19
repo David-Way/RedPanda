@@ -43,6 +43,7 @@ class ProgramsScreen {
 
                 programmesGroup = cp5.addGroup("programmesGroup")
                         .setPosition(0, 0)
+                                .hideBar()
                                 ;
 
                 buttons = new Button[5];

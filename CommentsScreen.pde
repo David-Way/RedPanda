@@ -29,6 +29,7 @@ class CommentsScreen {
 
                 commentsGroup = cp5.addGroup("commentsGroup")
                         .setPosition(0, 0)
+                                .hideBar()
                                 ;
 
                 buttons = new Button[2];

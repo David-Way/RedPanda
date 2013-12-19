@@ -29,6 +29,7 @@ class ProgressScreen {
 
                 progressGroup = cp5.addGroup("progressGroup")
                         .setPosition(0, 0)
+                                .hideBar()
                                 ;
 
                 buttons = new Button[2];

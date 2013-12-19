@@ -29,6 +29,7 @@ class ExerciseScreen {
 
                 exerciseGroup = cp5.addGroup("exerciseGroup")
                         .setPosition(0, 0)
+                                .hideBar()
                                 ;
 
                 buttons = new Button[2];

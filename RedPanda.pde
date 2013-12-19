@@ -81,7 +81,8 @@ void setup() {
         progressScreen.loadImages();
         commentsScreen.loadImages();
         exerciseScreen.loadImages();
-        loginScreen.drawScreen();
+        loginScreen.create();
+        //loginScreen.drawUI();
         currentScene = 0; //go to login scene
 }
 
@@ -89,8 +90,9 @@ void draw() {
         switch (currentScene) {
 
         case 0: //login screen
-                checkForScreensToDelete();   
-                loginScreen.drawFade(); //fades out error messeges                
+                checkForScreensToDelete();
+                loginScreen.drawFade(); //fades out error messeges   
+                loginScreen.drawUI();             
                 break;
 
         case 1: //menu screen
@@ -124,6 +126,8 @@ void draw() {
                 scale(2.5);
                 trackUser();
                 popMatrix();
+                menuScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
+                profileScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
 
         case 4: //progress screen
@@ -232,13 +236,15 @@ public void controlEvent(ControlEvent theEvent) {
 //////////////////////////////////////////////////////////////////////////
 //BUTTON FUNCTIONS
 void makeProgramme() {
+        if (cp5.getGroup("profileGroup") != null){
+            deleteProfileScreen = true;
+        }
         menuScreen.destroy(); 
         programsScreen.create();
         currentScene = 2;
 }
 
 void makeExerciseOne() {
-        //programsScreen.destroy();
         deleteProgramsScreen = true;
         exerciseScreen.create();
         currentScene = 6;
@@ -256,12 +262,18 @@ void makeProfileClose() {
 }
 
 void makeProgress() {
+        if (cp5.getGroup("profileGroup") != null){
+            deleteProfileScreen = true;
+        }
         deleteMenuScreen = true;
         progressScreen.create();
         currentScene = 4;
 }
 
 void makeComments() {
+        if (cp5.getGroup("profileGroup") != null){
+            deleteProfileScreen = true;
+        }
         deleteMenuScreen = true;
         commentsScreen.create();
         currentScene = 5;
@@ -302,7 +314,9 @@ void makeLogout() {
                 deleteExerciseScreen = true;
         }  
         //draw the login screen again
-        loginScreen.drawScreen();
+        background(backgroundImage);
+        loginScreen.create();
+        //loginScreen.drawUI();   
         currentScene = 0;
 }
 

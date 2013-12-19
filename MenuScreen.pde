@@ -44,6 +44,7 @@ class MenuScreen {
 
                 menuGroup = cp5.addGroup("menuGroup")
                         .setPosition(0, 0)
+                                .hideBar()
                                 ;
 
                 buttons = new Button[5];

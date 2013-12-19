@@ -18,13 +18,15 @@ class LoginScreen {
                 // load images for login button
                 this.login_images[0] = loadImage("images/login_button_a.png");
                 this.login_images[1] = loadImage("images/login_button_b.png");
-                this.login_images[2] = loadImage("images/login_button_b.png");
+                this.login_images[2] = loadImage("images/login_button_a.png");
 
                 // load background image
                 this.loginBackgroundImage = loadImage("images/background.png");
         }
 
-        public void drawScreen() {
+        public void create() {
+
+                cp5.setAutoDraw(false);
 
                 // draw background image
                 image(loginBackgroundImage, 0, 0, 1200, 600);
@@ -54,12 +56,14 @@ class LoginScreen {
                 PFont font = createFont("courier", 24);
                 loginGroup = cp5.addGroup("loginGroup")
                         .setPosition(0, 0)
+                               .hideBar()
                                 ;
 
                 textfields = new Textfield[2];
                 buttons = new Button[1];
 
-                textfields[0] = cp5.addTextfield("userName").setLabelVisible(true)
+                textfields[0] = cp5.addTextfield("userName")
+                        .setLabelVisible(true)
                         .setCaptionLabel("USERNAME")
                                 .setColorCaptionLabel(color(51, 196, 242))
                                         .setColor(color(255, 255, 255))
@@ -72,7 +76,8 @@ class LoginScreen {
                                                                                         // .setFocus(selectedTextField[0])
                                                                                         // .keepFocus(selectedTextField[0])
                                                                                         // .setText(loginUserName)
-                                                                                        .setAutoClear(false).setGroup(loginGroup).setId(1);
+                                                                                        //.setAutoClear(false)
+                                                                                                .setGroup(loginGroup).setId(1);
 
                 textfields[1] = cp5.addTextfield("password")
                         .setLabelVisible(true)
@@ -86,16 +91,20 @@ class LoginScreen {
                                                                                 .setPosition(width / 2 - 109, 359)
                                                                                         .setSize(218, 48)
                                                                                                 .setFont(font)
-                                                                                                        .setAutoClear(false)
                                                                                                                 // .setPasswordMode(true)
                                                                                                                 // .setFocus(selectedTextField[1])
                                                                                                                 // .keepFocus(selectedTextField[1])
-                                                                                                                .setText(loginPassword).setAutoClear(false).setGroup(loginGroup)
+                                                                                                                //.setText(loginPassword)
+                                                                                                                .setGroup(loginGroup)
                                                                                                                         .setId(2);
 
                 buttons[0] = cp5.addButton("log in").setColorBackground(color(8, 187, 209))
                         .setPosition(width / 2 - 110, 424).setImages(login_images)
                                 .updateSize().setGroup(loginGroup).setId(3);
+        }
+
+        void drawUI() {
+                cp5.draw();
         }
 
         public void displayError(String s) {

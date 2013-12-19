@@ -7,6 +7,8 @@ class ProfileScreen {
         private Group profileGroup;
         private Button []buttons;
         private Textlabel [] textlabels;
+        boolean start = false;
+        int timer;
 
         public ProfileScreen(RedPanda c) {
                 this.context = c;
@@ -22,26 +24,28 @@ class ProfileScreen {
         }
 
         public void create() {
-
+                start = false;
                 cp5.setAutoDraw(false);
 
 
                 profileGroup = cp5.addGroup("profileGroup")
-                        .setPosition(700, 30)
+                        .setPosition(690, 40)
                                 .setSize(260, 400)
                                         .setBackgroundColor(color(51, 196, 242))
+                                             .hideBar()
                                                 ;
 
                 buttons = new Button[1];
                 textlabels = new Textlabel[7];
 
                 buttons[0] = cp5.addButton("profileClose")
-                        .setPosition(240, -10)
+                        .setPosition(220, -20)
                                 .setImages(close)
                                         .updateSize()
                                                 .setGroup(profileGroup)
                                                         ;
-                       textlabels[0] = cp5.addTextlabel("name")
+
+                textlabels[0] = cp5.addTextlabel("name")
                     .setText("Name : John Doe")
                     .setPosition(10,10)
                     .setColorValue(0xffffffff)
@@ -98,6 +102,44 @@ class ProfileScreen {
                     ;
         }
 
+        void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
+
+                PVector leftHand = convertedLeftJoint;
+                PVector rightHand = convertedRightJoint;
+
+                if (leftHand.x > (910/2.5) && leftHand.x < (970/2.5) && leftHand.y > (20/2.5) && leftHand.y < (80/2.5))
+                {
+                        if (start == false) {
+                                println("Close Profile Called");
+                                start = true;
+                                timer = millis();
+                                loaderOn();
+                        }
+                        if (checkTimer() == 1) {
+                                makeProfileClose();
+                        }
+                }else {
+                        start = false;
+                        loaderOff();
+                        println("Over Nothing");
+                }
+        }
+
+        public int checkTimer() {
+                int totalTime = 5000;
+                int checkInt = 0;
+                if (start) {
+                        int passedTime = millis() - timer;
+                        if (passedTime > totalTime) {
+                                checkInt = 1;
+                        }
+                        else {
+                                checkInt = -1;
+                        }
+                }
+                return checkInt;
+        }
+
         void drawUI() {
                 cp5.draw();
         }
@@ -108,7 +150,7 @@ class ProfileScreen {
                         buttons[i] = null;
                 }
                 cp5.getGroup("profileGroup").remove();
-                //profileGroup.remove();
+
         }
 }
 

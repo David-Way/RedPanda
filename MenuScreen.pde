@@ -39,7 +39,7 @@ class MenuScreen {
         }
 
         public void create() {
-
+                start = false;
                 cp5.setAutoDraw(false);
 
                 menuGroup = cp5.addGroup("menuGroup")

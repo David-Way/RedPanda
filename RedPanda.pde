@@ -280,9 +280,8 @@ void menuBack() {
                 deleteExerciseScreen = true;
         }  
         //draw the lmenu screen again
-        currentScene = 1;
         menuScreen.create();
-        deleteMenuScreen = false;
+        currentScene = 1;
         
 }
 

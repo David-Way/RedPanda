@@ -46,7 +46,7 @@ class ProfileScreen {
                                                         ;
 
                 textlabels[0] = cp5.addTextlabel("name")
-                    .setText("Name : John Doe")
+                    .setText("Name : " + user.getLast_name() + ", " + user.getFirst_name())
                     .setPosition(10,10)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -54,7 +54,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[1] = cp5.addTextlabel("age")
-                    .setText("Age : 30")
+                    .setText("DOB : " + user.getDob())
                     .setPosition(10,30)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -62,7 +62,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[2] = cp5.addTextlabel("gender")
-                    .setText("Gender : Male")
+                    .setText("Gender : " + user.getSex() )
                     .setPosition(10,50)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -70,7 +70,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[3] = cp5.addTextlabel("height")
-                    .setText("Height : 188cm")
+                    .setText("Height : " + user.getUser_height() + "cm")
                     .setPosition(10,70)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -78,7 +78,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[4] = cp5.addTextlabel("weight")
-                    .setText("Weight : 88kg")
+                    .setText("Weight : " + user.getWeight() + "kg")
                     .setPosition(10,90)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -86,7 +86,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[5] = cp5.addTextlabel("injury")
-                    .setText("Injury type : Shoulder strain")
+                    .setText("Injury type : " + user.getInjury_type())
                     .setPosition(10,110)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))

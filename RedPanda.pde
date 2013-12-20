@@ -179,7 +179,7 @@ public void controlEvent(ControlEvent theEvent) {
                 //create a new user connection object and try log in with the given details
                 UserDAO userDAO = new UserDAO();
                 user = userDAO.logIn(loginUserName, loginPassword);
-
+                //println("dob: " +user.getDob() +  " -injury type: " + user.getInjury_type());
                 if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theyre in the loggin screen
                         println("Logged IN");
                         //get exercise programme

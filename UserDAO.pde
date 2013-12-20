@@ -8,6 +8,11 @@ public class UserDAO {
         int u_therapist_id = -1;
         String u_first_name ="";
         String u_last_name = "";
+        String u_dob = "";
+        String u_height = "";
+        String u_weight = "";
+        String u_sex = "";
+        String u_injury_type = "";
         String u_error ="";
 
         public UserDAO () {
@@ -32,6 +37,11 @@ public class UserDAO {
                         //println(u_first_name);
                         u_last_name = resultArray[5];
                         //println(u_last_name);
+                        u_dob = resultArray[6];
+                        u_height = resultArray[7];
+                        u_weight = resultArray[8];
+                        u_sex = resultArray[9];
+                        u_injury_type = resultArray[10];
                         u_error = "";
                 }
 
@@ -40,7 +50,7 @@ public class UserDAO {
                         //println(u_error);
                 }
 
-                User u = new User(u_user_id, u_username, u_password, u_therapist_id, u_first_name, u_last_name, u_error);
+                User u = new User(u_user_id, u_username, u_password, u_therapist_id, u_first_name, u_last_name, u_dob, u_height, u_weight, u_sex, u_injury_type,  u_error);
                 //println("fname = " +u.getFirst_name());
                 return u;
         }

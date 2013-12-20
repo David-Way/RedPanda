@@ -6,23 +6,73 @@ public class User {
         private int therapist_id;
         private String first_name;
         private String last_name;
+        private String dob;
+        private String user_height;
+        private String weight;
+        private String sex;
+        private String injury_type;
         private String error = null;
 
         public User () {
         }
 
-        public User (int id, String un, String pw, int tid, String fn, String ln, String er) {
+        public User (int id, String un, String pw, int tid, String fn, String ln, String db, String uh, String wt, String sx, String it, String er) {
                 this.user_id = id;
                 this.user_name = un;
                 this.password = pw;
                 this.therapist_id = tid;
                 this.first_name = fn;
                 this.last_name = ln;
+                this.dob = db;
+                this.user_height = uh; 
+                this.weight = wt;
+                this.sex = sx;
+                this.injury_type = it;
                 this.error = er;
         }
 
         public int getUser_id() {
                 return user_id;
+        }
+
+        public String getDob() {
+                return dob;
+        }
+
+        public void setDob(String dob) {
+                this.dob = dob;
+        }
+
+        public String getUser_height() {
+                return user_height;
+        }
+
+        public void setUser_height(String user_height) {
+                this.user_height = user_height;
+        }
+
+        public String getWeight() {
+                return weight;
+        }
+
+        public void setWeight(String weight) {
+                this.weight = weight;
+        }
+
+        public String getSex() {
+                return sex;
+        }
+
+        public void setSex(String sex) {
+                this.sex = sex;
+        }
+
+        public String getInjury_type() {
+                return injury_type;
+        }
+
+        public void setInjury_type(String injury_type) {
+                this.injury_type = injury_type;
         }
 
         public void setUser_id(int user_id) {

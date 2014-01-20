@@ -14,6 +14,7 @@ public class User {
         private String error = null;
 
         public User () {
+                this.user_id = -1;
         }
 
         public User (int id, String un, String pw, int tid, String fn, String ln, String db, String uh, String wt, String sx, String it, String er) {

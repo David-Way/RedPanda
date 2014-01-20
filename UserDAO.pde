@@ -14,45 +14,50 @@ public class UserDAO {
         String u_sex = "";
         String u_injury_type = "";
         String u_error ="";
-
+        private final String USER_AGENT = "Mozilla/5.0";
+        
         public UserDAO () {
         }
+        
+        public User logIn(String un, String pw) {
+                String url = "http://davidway.me/kinect/api/user.php/user_table/"+ un+"/" + pw;
+                User user = new User();
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet(url);
 
-        public User logIn(String userName, String password) {
-                //returns an array of strings, first string is a json object of user
-                //{"user_id":"2","user_name":"patient","password":"patient","therapist_id":"1","first_name":"John","last_name":"Bloggs","errors":null}
-                resultArray = loadStrings("http://davidway.me/kinect/login.php?user_name="+userName+"&password="+password);
-                //JSONObject json = loadJSONObject("http://davidway.me/kinect/login.php?user_name="+userName+"&password="+password); 
-                //println(resultArray);
-                if (!resultArray[0].equals("")) {
-                        u_user_id = Integer.parseInt(resultArray[0]);
-                        //println(u_user_id);
-                        u_username = resultArray[1];
-                        //println(u_username);
-                        u_password  = resultArray[2];
-                        //println(u_password);
-                        u_therapist_id = Integer.parseInt(resultArray[3]);
-                        //println(u_therapist_id);
-                        u_first_name = resultArray[4];
-                        //println(u_first_name);
-                        u_last_name = resultArray[5];
-                        //println(u_last_name);
-                        u_dob = resultArray[6];
-                        u_height = resultArray[7];
-                        u_weight = resultArray[8];
-                        u_sex = resultArray[9];
-                        u_injury_type = resultArray[10];
-                        u_error = "";
+                // add request header
+                request.addHeader("User-Agent", USER_AGENT);
+                HttpResponse response = null;
+                try {
+                        response = client.execute(request);
+
+                        System.out.println("\nSending 'GET' request to URL : " + url);
+                        System.out.println("Response Code : " + 
+                                response.getStatusLine().getStatusCode());
+
+                        BufferedReader rd = new BufferedReader(
+                        new InputStreamReader(response.getEntity().getContent()));
+
+                        StringBuffer result = new StringBuffer();
+                        String line = "";
+                        while ( (line = rd.readLine ()) != null) {
+                                result.append(line);
+                        }
+                        
+                        
+                               Gson gson = new Gson();
+                               user = gson.fromJson(result.toString(), User.class);                        
+                        
+                        
+                        System.out.println("old " + result.toString());
+                        System.out.println("new" + user.getFirst_name());
+                } 
+                catch (Exception e) {
+                        System.out.println(e.getMessage());
                 }
-
-                if (resultArray.length > 6) {
-                        //String u_error = resultArray[6];
-                        //println(u_error);
-                }
-
-                User u = new User(u_user_id, u_username, u_password, u_therapist_id, u_first_name, u_last_name, u_dob, u_height, u_weight, u_sex, u_injury_type,  u_error);
-                //println("fname = " +u.getFirst_name());
-                return u;
+                
+                return user;
         }
+        
 }
 

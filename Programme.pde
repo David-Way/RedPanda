@@ -5,7 +5,7 @@ class Programme {
         String create_date = "";
         String end_date = "";
         int version = -1;
-        Exercise[] exercises = new Exercise[3];
+        ArrayList<Exercise> exercises = new ArrayList<Exercise>();
 
         public Programme() {
         }
@@ -60,11 +60,11 @@ class Programme {
                 this.version = version;
         }
 
-        public Exercise[] getExercises() {
+        public ArrayList<Exercise> getExercises() {
                 return exercises;
         }
 
-        public void setExercises(Exercise[] exercises) {
+        public void setExercises(ArrayList<Exercise> exercises) {
                 this.exercises = exercises;
         }
 }

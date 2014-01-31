@@ -30,7 +30,7 @@ class CommentsScreen {
                 commentsGroup = cp5.addGroup("commentsGroup")
                         .setPosition(0, 0)
                                 .hideBar()
-                                ;
+                                        ;
 
                 buttons = new Button[2];
 
@@ -64,21 +64,24 @@ class CommentsScreen {
                                 loaderOn();
                         }
                         if (checkTimer() == 1) {
-                                 println("Menu Back Called");
+                                println("Menu Back Called");
                                 menuBack();
                         }
-                }else if(leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
-                 {
-                        if(start == false){
+                }
+                else if (leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
+                {
+                        if (start == false) {
                                 println("Over Log out");
                                 start = true;
                                 timer = millis();
                                 loaderOn();
-                        }if(checkTimer() == 1){
+                        }
+                        if (checkTimer() == 1) {
                                 println("Logout called");
                                 makeLogout();
                         }
-                 }else {
+                }
+                else {
                         start = false;
                         loaderOff();
                         println("Over Nothing");

@@ -187,10 +187,16 @@ public void controlEvent(ControlEvent theEvent) {
                         programme = programmeDAO.getProgramme();
                         //println("create date: " + programme.getCreate_date());
                         //get the exercise objects and add them to the programme object.
-                        //ExerciseDAO exerciseDAO = new ExerciseDAO(programme.getProgramme_id());
-                        //programme.setExercises(exerciseDAO.getExercisesByProgrammeID);
-                        
-                        //loginScreen.destroy();
+                        try {
+                                ExerciseDAO exerciseDAO = new ExerciseDAO();
+                                ArrayList<Exercise> e = exerciseDAO.getExercises(programme.getProgramme_id());
+                                programme.setExercises(e);    
+                                //System.out.println(">/>" + programme.getExercises().get(0).getName());                            
+                        } 
+                        catch (Exception e) {
+                                System.out.println("exercises not retrieved/set");
+                        }
+
                         deleteLoginScreen = true;
                         menuScreen.create();
                         currentScene = 1;
@@ -225,7 +231,7 @@ public void controlEvent(ControlEvent theEvent) {
         }
 
         if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments")) {
-               menuBack();
+                menuBack();
         }
 
         if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise")) {
@@ -236,8 +242,8 @@ public void controlEvent(ControlEvent theEvent) {
 //////////////////////////////////////////////////////////////////////////
 //BUTTON FUNCTIONS
 void makeProgramme() {
-        if (cp5.getGroup("profileGroup") != null){
-            deleteProfileScreen = true;
+        if (cp5.getGroup("profileGroup") != null) {
+                deleteProfileScreen = true;
         }
         menuScreen.destroy(); 
         programsScreen.create();
@@ -262,8 +268,8 @@ void makeProfileClose() {
 }
 
 void makeProgress() {
-        if (cp5.getGroup("profileGroup") != null){
-            deleteProfileScreen = true;
+        if (cp5.getGroup("profileGroup") != null) {
+                deleteProfileScreen = true;
         }
         deleteMenuScreen = true;
         progressScreen.create();
@@ -271,8 +277,8 @@ void makeProgress() {
 }
 
 void makeComments() {
-        if (cp5.getGroup("profileGroup") != null){
-            deleteProfileScreen = true;
+        if (cp5.getGroup("profileGroup") != null) {
+                deleteProfileScreen = true;
         }
         deleteMenuScreen = true;
         commentsScreen.create();
@@ -284,33 +290,40 @@ void menuBack() {
         //depending on where you go back from from delete the relavant screen
         if (currentScene == 2) { //programmes screen
                 deleteProgramsScreen = true;
-        }else if (currentScene == 4) { //progress screen
+        }
+        else if (currentScene == 4) { //progress screen
                 deleteProgressScreen = true;
-        }else if (currentScene == 5) { //comments screen
+        }
+        else if (currentScene == 5) { //comments screen
                 deleteCommentsScreen = true;
-        }else if (currentScene == 6) { //exercise screen
+        }
+        else if (currentScene == 6) { //exercise screen
                 deleteExerciseScreen = true;
         }  
         //draw the lmenu screen again
         currentScene = 1;
         menuScreen.create();
         deleteMenuScreen = false;
-        
 }
 
 void makeLogout() {
         //depending on where you log out from delete the relavant screen
         if (currentScene == 1) { //menu  screen
                 deleteMenuScreen = true;
-        } else if (currentScene == 2) { //programmes screen
+        } 
+        else if (currentScene == 2) { //programmes screen
                 deleteProgramsScreen = true;
-        } else if (currentScene == 3) { //profile screen
+        } 
+        else if (currentScene == 3) { //profile screen
                 deleteProfileScreen = true;
-        } else if (currentScene == 4) { //progress screen
+        } 
+        else if (currentScene == 4) { //progress screen
                 deleteProgressScreen = true;
-        }  else if (currentScene == 5) { //comments screen
+        }  
+        else if (currentScene == 5) { //comments screen
                 deleteCommentsScreen = true;
-        }  else if (currentScene == 6) { //exercise screen
+        }  
+        else if (currentScene == 6) { //exercise screen
                 deleteExerciseScreen = true;
         }  
         //draw the login screen again
@@ -324,22 +337,28 @@ void checkForScreensToDelete() {
         if (deleteLoginScreen == true) {
                 loginScreen.destroy();
                 deleteLoginScreen = false;
-        } else if (deleteMenuScreen == true){
+        } 
+        else if (deleteMenuScreen == true) {
                 menuScreen.destroy();
                 deleteMenuScreen = false;
-        } else if (deleteProfileScreen == true) {
+        } 
+        else if (deleteProfileScreen == true) {
                 profileScreen.destroy();
                 deleteProfileScreen = false;
-        } else if (deleteProgramsScreen == true) {
+        } 
+        else if (deleteProgramsScreen == true) {
                 programsScreen.destroy();
                 deleteProgramsScreen = false;
-        } else if (deleteProgressScreen == true) {
+        } 
+        else if (deleteProgressScreen == true) {
                 progressScreen.destroy();
                 deleteProgressScreen = false;
-        } else if (deleteExerciseScreen == true) {
+        } 
+        else if (deleteExerciseScreen == true) {
                 exerciseScreen.destroy();
                 deleteExerciseScreen = false;
-        } else if (deleteCommentsScreen == true) {
+        } 
+        else if (deleteCommentsScreen == true) {
                 commentsScreen.destroy();
                 deleteCommentsScreen = false;
         }
@@ -373,35 +392,37 @@ void drawLeftJoint(int userId, int jointID) {
         PVector leftJoint = new PVector();
         float confidence = kinect.getJointPositionSkeleton(userId, jointID, leftJoint);
         kinect.convertRealWorldToProjective(leftJoint, convertedLeftJoint);
-        if(loading == true){
-        loadingIcon.play();
-        image(loadingIcon, convertedLeftJoint.x-10, convertedLeftJoint.y-10, 20, 20);    
-        }else{
-        loadingIcon.pause();
-        image(leftHandIcon, convertedLeftJoint.x-10, convertedLeftJoint.y-10, 20, 20);
+        if (loading == true) {
+                loadingIcon.play();
+                image(loadingIcon, convertedLeftJoint.x-10, convertedLeftJoint.y-10, 20, 20);
+        }
+        else {
+                loadingIcon.pause();
+                image(leftHandIcon, convertedLeftJoint.x-10, convertedLeftJoint.y-10, 20, 20);
         }
 }
 
 void drawRightJoint(int userId, int jointID) {
         PVector rightJoint = new PVector();
         float confidence = kinect.getJointPositionSkeleton(userId, jointID, rightJoint);
-         kinect.convertRealWorldToProjective(rightJoint, convertedRightJoint);
-        if(loading == true){
-        loadingIcon.play();
-        image(loadingIcon, convertedRightJoint.x-10, convertedRightJoint.y-10, 20, 20);  
-        }else{
-        loadingIcon.pause();
-        image(rightHandIcon, convertedRightJoint.x-10, convertedRightJoint.y-10, 20, 20);
+        kinect.convertRealWorldToProjective(rightJoint, convertedRightJoint);
+        if (loading == true) {
+                loadingIcon.play();
+                image(loadingIcon, convertedRightJoint.x-10, convertedRightJoint.y-10, 20, 20);
+        }
+        else {
+                loadingIcon.pause();
+                image(rightHandIcon, convertedRightJoint.x-10, convertedRightJoint.y-10, 20, 20);
         }
 }
 
 
-void loaderOn(){
-   loading = true;
+void loaderOn() {
+        loading = true;
 }
 
-void loaderOff(){
-    loading = false;
+void loaderOff() {
+        loading = false;
 }
 ////////////////////////////////////////////////////////////////////////////
 //SKELETON DRAWING
@@ -453,22 +474,22 @@ void drawSkeleton(int userId) {
 }
 
 //////////////////////////////////////////////////////////////////////////
-        //USER TRACKING functions
-        void onNewUser(SimpleOpenNI curContext, int userId)
-        {
-            println("onNewUser - userId: " + userId);
-            println("\tstart tracking skeleton");
-            
-            curContext.startTrackingSkeleton(userId);
-        }
-        
-        void onLostUser(SimpleOpenNI curContext, int userId)
-        {
-            println("onLostUser - userId: " + userId);
-        }
-        
-        void onVisibleUser(SimpleOpenNI curContext, int userId)
-        {
-            //println("onVisibleUser - userId: " + userId);
-        }
+//USER TRACKING functions
+void onNewUser(SimpleOpenNI curContext, int userId)
+{
+        println("onNewUser - userId: " + userId);
+        println("\tstart tracking skeleton");
+
+        curContext.startTrackingSkeleton(userId);
+}
+
+void onLostUser(SimpleOpenNI curContext, int userId)
+{
+        println("onLostUser - userId: " + userId);
+}
+
+void onVisibleUser(SimpleOpenNI curContext, int userId)
+{
+        //println("onVisibleUser - userId: " + userId);
+}
 

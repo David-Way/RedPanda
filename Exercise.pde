@@ -3,10 +3,10 @@ class Exercise {
         private int exercise_id = -1;
         private String name = "default name";
         private String description = "default description";
-        private int level = -1;
+        private String level = "default level";
         private int repetitions = -1;
 
-        public Exercise (int e_id, String n, String d, int l, int r) {
+        public Exercise (int e_id, String n, String d, String l, int r) {
                 this.exercise_id = e_id;
                 this.name = n;
                 this.description = d;
@@ -38,11 +38,11 @@ class Exercise {
                 this.description = description;
         }
 
-        public int getLevel() {
+        public String getLevel() {
                 return level;
         }
 
-        public void setLevel(int level) {
+        public void setLevel(String level) {
                 this.level = level;
         }
 

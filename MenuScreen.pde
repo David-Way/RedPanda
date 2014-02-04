@@ -8,6 +8,8 @@ class MenuScreen {
         private PImage[] comments = new PImage[3];
         private PImage[] logout = new PImage[3];
         private Button []buttons;
+        private Textlabel [] textlabels;
+
         private Group menuGroup;
         boolean start = false;
         int timer;
@@ -38,7 +40,7 @@ class MenuScreen {
                 this.logout[2] =loadImage("images/logout.jpg");
         }
 
-        public void create() {
+        public void create(User user, Record record) {
 
                 cp5.setAutoDraw(false);
 
@@ -82,6 +84,21 @@ class MenuScreen {
                                 .setImages(logout)
                                         .updateSize()
                                                 .setGroup(menuGroup);
+
+                textlabels = new Textlabel[1];
+
+
+                textlabels[0] = cp5.addTextlabel("message")
+                    .setText("Welcome " + user.getUser_name() + "Last log in was : " + record.getDateDone() + " .")
+                    .setPosition(10, 438)
+                    .setWidth(465)
+                    .setHeight(40)
+                    .setColorValue(0xffffffff)
+                    .setFont(createFont("Arial",18))
+                    .setGroup(menuGroup)
+                    .setMultiline(true)
+                    ;
+
         }
 
         void drawUI() {
@@ -197,6 +214,10 @@ class MenuScreen {
                 for ( int i = 0 ; i < buttons.length; i++ ) {
                         buttons[i].remove();
                         buttons[i] = null;
+                }
+                for ( int i = 0 ; i < textlabels.length ; i++ ) {
+                        textlabels[i].remove();
+                        textlabels[i] = null;
                 }
                 cp5.getGroup("menuGroup").remove();
         }

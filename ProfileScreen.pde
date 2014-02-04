@@ -149,6 +149,10 @@ class ProfileScreen {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
+                for ( int i = 0 ; i < textlabels.length ; i++ ) {
+                        textlabels[i].remove();
+                        textlabels[i] = null;
+                }
                 cp5.getGroup("profileGroup").remove();
 
         }

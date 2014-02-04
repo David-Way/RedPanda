@@ -2,6 +2,27 @@ import controlP5.*;
 import SimpleOpenNI.*;
 import gifAnimation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.client.HttpClient;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+
 //initialise kinect
 SimpleOpenNI kinect;
 
@@ -22,10 +43,12 @@ ProgramsScreen programsScreen = new ProgramsScreen(this);
 ProfileScreen profileScreen = new ProfileScreen(this);
 ProgressScreen progressScreen = new ProgressScreen(this);
 CommentsScreen commentsScreen = new CommentsScreen(this);
-ExerciseScreen exerciseScreen = new ExerciseScreen(this);
+ExerciseScreenOne exerciseScreenOne = new ExerciseScreenOne(this);
 //main objects
 User user;
 Programme programme;
+Record record;
+Message message;
 
 //integer for swithching scenes/rooms
 int currentScene;
@@ -52,7 +75,8 @@ boolean deleteExerciseScreen = false;
 boolean deleteCommentsScreen = false;
 
 void setup() {
-        size(1200, 600);
+        size(1200, 600, P3D);
+        frameRate(30);
         textAlign(CENTER, CENTER);
         rightHandIcon = loadImage("images/righthand.png");
         leftHandIcon = loadImage("images/lefthand.png");
@@ -69,7 +93,7 @@ void setup() {
         profileScreen.loadImages();
         progressScreen.loadImages();
         commentsScreen.loadImages();
-        exerciseScreen.loadImages();
+        exerciseScreenOne.loadImages();
         //loginScreen.create();
         //loginScreen.drawUI();
         //errorScreen.create();
@@ -169,10 +193,16 @@ void draw() {
         case 6: //exercise screen? or screens?
                 checkForScreensToDelete(); 
                 background(backgroundImage);
-                exerciseScreen.drawUI();
-                trackUser();
-                trackSkeleton();
-                exerciseScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
+                exerciseScreenOne.drawUI();
+                //exerciseScreenOne.trackUser();
+                pushMatrix();
+                lights();
+                noStroke();
+                translate(width/2, height/2, 0);
+                rotateX(radians(180));
+                exerciseScreenOne.trackSkeleton(kinect);
+                popMatrix();
+                exerciseScreenOne.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
         }
 }
@@ -211,7 +241,9 @@ public void controlEvent(ControlEvent theEvent) {
                                 System.out.println("exercises not retrieved/set");
                         }
                         deleteLoginScreen = true;
-                        menuScreen.create();
+                        RecordDAO recordDAO = new RecordDAO();
+                        record = recordDAO.getRecords(user.getUser_id(), 2);
+                        menuScreen.create(user, record);
                         currentScene = 1;
                 } 
                 else { //user is not logged in
@@ -265,7 +297,7 @@ void makeProgramme() {
 
 void makeExerciseOne() {
         deleteProgramsScreen = true;
-        exerciseScreen.create();
+        exerciseScreenOne.create();
         currentScene = 6;
 }
 
@@ -276,7 +308,7 @@ void makeProfile() {
 
 void makeProfileClose() {
         deleteProfileScreen = true;
-        menuScreen.create();
+        menuScreen.create(user, record);
         currentScene = 1;
 }
 
@@ -315,7 +347,7 @@ void menuBack() {
         }  
         //draw the lmenu screen again
         currentScene = 1;
-        menuScreen.create();
+        menuScreen.create(user, record);
         deleteMenuScreen = false;
 }
 
@@ -372,7 +404,7 @@ void checkForScreensToDelete() {
                 deleteProgressScreen = false;
         } 
         else if (deleteExerciseScreen == true) {
-                exerciseScreen.destroy();
+                exerciseScreenOne.destroy();
                 deleteExerciseScreen = false;
         } 
         else if (deleteCommentsScreen == true) {
@@ -442,54 +474,6 @@ void loaderOn() {
 
 void loaderOff() {
         loading = false;
-}
-////////////////////////////////////////////////////////////////////////////
-//SKELETON DRAWING
-void trackSkeleton() {
-
-        // update the cam
-        kinect.update();
-
-        IntVector userList = new IntVector();
-        kinect.getUsers(userList);
-        if (userList.size() > 0) {
-                int userId = userList.get(0);
-
-                if (kinect.isTrackingSkeleton(userId)) {
-
-                        strokeWeight(5);
-                        stroke(255, 0, 0);
-                        println("tracking user");
-                        drawSkeleton(userId);
-                }
-        }
-}
-
-
-// draw the skeleton with the selected joints
-void drawSkeleton(int userId) {
-        println("drawing skeleton");
-
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
-
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND);
-
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_RIGHT_ELBOW);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_HAND);
-
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, SimpleOpenNI.SKEL_TORSO);
-
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_LEFT_HIP);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_HIP, SimpleOpenNI.SKEL_LEFT_KNEE);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_FOOT);
-
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
-        kinect.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
 }
 
 //////////////////////////////////////////////////////////////////////////

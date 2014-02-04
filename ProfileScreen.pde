@@ -70,7 +70,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[3] = cp5.addTextlabel("height")
-                    .setText("Height : " + user.getUser_height() + "cm")
+                    .setText("Height : " + user.getHeight() + "cm")
                     .setPosition(10,70)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))

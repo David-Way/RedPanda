@@ -15,6 +15,7 @@ Textfield passwordTextField;
 String loginUserName = "";
 String loginPassword = "";
 //create screens
+ErrorScreen errorScreen = new ErrorScreen(this);
 LoginScreen loginScreen  = new LoginScreen(this);
 MenuScreen menuScreen  = new MenuScreen(this);
 ProgramsScreen programsScreen = new ProgramsScreen(this);
@@ -41,6 +42,7 @@ PVector convertedRightJoint = new PVector();
 PImage backgroundImage;
 
 //boolean deleteScreen = false;
+boolean deleteErrorScreen = false;
 boolean deleteLoginScreen = false;
 boolean deleteMenuScreen = false;
 boolean deleteProfileScreen = false;
@@ -60,20 +62,7 @@ void setup() {
         backgroundImage = loadImage("images/background.png");
         cp5 = new ControlP5(this);
 
-        kinect = new SimpleOpenNI(this);
-        if (kinect.isInit() == false)
-        {
-                println("Can't init SimpleOpenNI, maybe the camera is not connected!");
-                exit();
-                return;
-        }
-
-        // enable depthMap generation
-        kinect.enableDepth();
-
-        // enable skeleton generation for all joints
-        kinect.enableUser();
-        //create and draw the login screen
+        errorScreen.loadImages();
         loginScreen.loadImages();
         menuScreen.loadImages();
         programsScreen.loadImages();
@@ -81,13 +70,38 @@ void setup() {
         progressScreen.loadImages();
         commentsScreen.loadImages();
         exerciseScreen.loadImages();
-        loginScreen.create();
+        //loginScreen.create();
         //loginScreen.drawUI();
-        currentScene = 0; //go to login scene
+        //errorScreen.create();
+        currentScene = -1; //go to login scene
+
+        kinect = new SimpleOpenNI(this);
+        // enable depthMap generation
+        kinect.enableDepth();
+
+        // enable skeleton generation for all joints
+        kinect.enableUser();
+        //create and draw the login screen
+
+        System.out.println("connected");
+        //deleteLoginScreen = true;
 }
 
 void draw() {
+
         switch (currentScene) {
+        case -1: //error screen
+                if (kinect.isInit() == false) {
+                        println("Can't init SimpleOpenNI, maybe the camera is not connected!");
+                        //exit();
+                        //return;
+                        errorScreen.drawUI();
+                } else {
+                        currentScene = 0;
+                        deleteErrorScreen = true;
+                        loginScreen.create();
+                }
+                break;
 
         case 0: //login screen
                 checkForScreensToDelete();
@@ -191,12 +205,11 @@ public void controlEvent(ControlEvent theEvent) {
                                 ExerciseDAO exerciseDAO = new ExerciseDAO();
                                 ArrayList<Exercise> e = exerciseDAO.getExercises(programme.getProgramme_id());
                                 programme.setExercises(e);    
-                                //System.out.println(">/>" + programme.getExercises().get(0).getName());                            
+                                //System.out.println(">/>" + programme.getExercises().get(0).getName());
                         } 
                         catch (Exception e) {
                                 System.out.println("exercises not retrieved/set");
                         }
-
                         deleteLoginScreen = true;
                         menuScreen.create();
                         currentScene = 1;
@@ -334,7 +347,11 @@ void makeLogout() {
 }
 
 void checkForScreensToDelete() {
-        if (deleteLoginScreen == true) {
+        if (deleteErrorScreen == true) {
+                errorScreen.destroy();
+                deleteErrorScreen = false;
+        } 
+        else if (deleteLoginScreen == true) {
                 loginScreen.destroy();
                 deleteLoginScreen = false;
         } 
@@ -369,21 +386,23 @@ void checkForScreensToDelete() {
 //HAND TRACKING///////////////////////////////////////////////////////////
 
 void trackUser() {
-
         // update the cam
-        kinect.update();
+        //kinect.update();
+        if (kinect.enableUser() == true) { 
+                kinect.update();
 
-        IntVector userList = new IntVector();
-        kinect.getUsers(userList);
-        if (userList.size() > 0) {
-                int userId = userList.get(0);
+                IntVector userList = new IntVector();
+                kinect.getUsers(userList);
+                if (userList.size() > 0) {
+                        int userId = userList.get(0);
 
-                if (kinect.isTrackingSkeleton(userId)) {
+                        if (kinect.isTrackingSkeleton(userId)) {
 
-                        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
-                        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
-                        drawLeftJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
-                        drawRightJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+                                kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
+                                kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
+                                drawLeftJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
+                                drawRightJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+                        }
                 }
         }
 }
@@ -440,7 +459,7 @@ void trackSkeleton() {
 
                         strokeWeight(5);
                         stroke(255, 0, 0);
-                        println("tracoking user");
+                        println("tracking user");
                         drawSkeleton(userId);
                 }
         }

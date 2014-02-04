@@ -7,7 +7,7 @@ public class User {
         private String first_name;
         private String last_name;
         private String dob;
-        private String user_height;
+        private String height;
         private String weight;
         private String sex;
         private String injury_type;
@@ -25,7 +25,7 @@ public class User {
                 this.first_name = fn;
                 this.last_name = ln;
                 this.dob = db;
-                this.user_height = uh; 
+                this.height = uh; 
                 this.weight = wt;
                 this.sex = sx;
                 this.injury_type = it;
@@ -44,12 +44,12 @@ public class User {
                 this.dob = dob;
         }
 
-        public String getUser_height() {
-                return user_height;
+        public String getHeight() {
+                return height;
         }
 
-        public void setUser_height(String user_height) {
-                this.user_height = user_height;
+        public void setHeight(String height) {
+                this.height = height;
         }
 
         public String getWeight() {

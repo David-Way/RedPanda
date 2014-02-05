@@ -34,9 +34,9 @@ class LoginScreen {
                 // insert version number top left of screen
                 textSize(14);
                 fill(color(211, 217, 203));
-                text("version 0.01", 45 + 1, 10 + 1);
+                text("version 1.01", 45 + 1, 10 + 1);
                 fill(255);
-                text("version 0.01", 45, 10);
+                text("version 1.01", 45, 10);
 
                 // set and draw title text with drop shadow
                 String title = "Red Panda";
@@ -75,7 +75,7 @@ class LoginScreen {
                                                                                 .setFont(font)
                                                                                         // .setFocus(selectedTextField[0])
                                                                                         // .keepFocus(selectedTextField[0])
-                                                                                        // .setText(loginUserName)
+                                                                                        .setText("patient")
                                                                                         //.setAutoClear(false)
                                                                                                 .setGroup(loginGroup).setId(1);
 
@@ -94,7 +94,7 @@ class LoginScreen {
                                                                                                                 // .setPasswordMode(true)
                                                                                                                 // .setFocus(selectedTextField[1])
                                                                                                                 // .keepFocus(selectedTextField[1])
-                                                                                                                //.setText(loginPassword)
+                                                                                                                .setText("patient")
                                                                                                                 .setGroup(loginGroup)
                                                                                                                         .setId(2);
 

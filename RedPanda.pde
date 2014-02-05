@@ -1,3 +1,5 @@
+import processing.opengl.*;
+
 import controlP5.*;
 import SimpleOpenNI.*;
 import gifAnimation.*;
@@ -75,8 +77,9 @@ boolean deleteExerciseScreen = false;
 boolean deleteCommentsScreen = false;
 
 void setup() {
-        size(1200, 600, P3D);
+        size(1200, 600, OPENGL);
         frameRate(30);
+        //textMode(SHAPE);
         textAlign(CENTER, CENTER);
         rightHandIcon = loadImage("images/righthand.png");
         leftHandIcon = loadImage("images/lefthand.png");
@@ -317,7 +320,7 @@ void makeProgress() {
                 deleteProfileScreen = true;
         }
         deleteMenuScreen = true;
-        progressScreen.create();
+        progressScreen.create(programme);
         currentScene = 4;
 }
 

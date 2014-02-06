@@ -6,7 +6,32 @@ class ExerciseScreenOne {
         private PImage[] logout = new PImage[3];
         private Button []buttons;
         private Group exerciseGroup;
+        Timer debouncingTimer;
+        //reps for exercise
+        int MAX_REPS = 5;
+        float MIN_DIST = 100;
+        int exercise_id = 1;
+        int reps = 0;
+        int timeLeft = 0;
+        //Start point of exercise
+        PVector startPoint = new PVector();
+        PVector startPos = new PVector(); 
+        PVector currentPos = new PVector();
+        //Array of hightestpoint per rep
+        PVector highestPoint[] = new PVector[MAX_REPS];
+        
+        
+        boolean startExercise = false;
+        int timerCountDown;
         boolean start = false;
+        boolean firstTime = true;
+        boolean finished = false;
+        Message message;
+        Record record;
+        User user;
+        int trackingUserId;
+        int userId;
+        float lastTime;
         int timer;
 
         public ExerciseScreenOne(RedPanda c) {
@@ -23,7 +48,28 @@ class ExerciseScreenOne {
                 this.logout[2] =loadImage("images/logout.jpg");
         }
 
-        public void create() {
+        public void create(User user) {
+                userId = user.getUser_id();
+                startPoint = null;
+                for( int i = 0 ; i < MAX_REPS ; i++ ) {
+                highestPoint[i] = new PVector();
+                }
+                debouncingTimer = new Timer(0.1f,true,false);
+
+               RecordDAO recordDAO = new RecordDAO();
+               record = recordDAO.getLastDoneRecord(user.getUser_id(), 2);
+                if(record.getRecord_id() != -1){
+                    PVector pos = new PVector(10, 100);
+                    message = new Message(200, 200, pos, "Exercise last done on : " + record.getDateDone());
+                    message.create();
+                }else{
+                    PVector pos = new PVector(10, 100);
+                    message = new Message(200, 200, pos, "You haven't attempted this exercise yet");
+                    message.create();
+                }
+
+                lastTime = (float)millis()/1000.f;
+
                 start = false;
                 cp5.setAutoDraw(false);
 
@@ -49,7 +95,155 @@ class ExerciseScreenOne {
                                                         ;
         }
 
-        void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
+public void startExercise(){
+    message.drawUI();
+
+    IntVector userList = new IntVector();
+    kinect.getUsers(userList);
+        
+        if (userList.size() > 0) {
+                trackingUserId = userList.get(0);
+            if(kinect.isTrackingSkeleton(trackingUserId)){
+                
+                if(startPoint == null){
+                    text(timeLeft, 40, 40, 0);
+                
+                    if(startExercise == false){
+                        println("destroy message");
+                        message.destroy();
+                        PVector pos = new PVector(10, 100);
+                        message = new Message(200, 200, pos, "On 5, raise you right hand away from your body as high as you comfortably can : " + timeLeft);
+                        message.create();
+                        startExercise = true;
+                        timerCountDown = millis();
+                    }
+                
+                    if(checkExerciseTimer()){
+                        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, startPos);
+                        message.destroy();
+                        startPoint = startPos;
+                    }
+                }
+                
+                 
+                if(startPoint != null){
+                    pushMatrix();
+                    translate(width/2, height/2, 0);
+                    rotateX(radians(180));  
+                    pushMatrix();
+                    fill(255,255,0);
+                    translate(startPoint.x, startPoint.y, startPoint.z);
+                    sphere(40);
+                    popMatrix();
+                    popMatrix();
+                    setPoints();
+                }
+                
+        }
+    }
+}
+
+
+public boolean checkExerciseTimer() {
+                int totalTime = 5000;
+                boolean check = false;
+                if (startExercise) {
+                        int passedTime = millis() - timerCountDown;
+                        timeLeft = passedTime/1000;
+                        if (passedTime > totalTime) {
+                                check = true;
+                        }
+                        else {
+                               check = false;
+                        }
+
+                }return check;
+}
+
+
+float distance = 0.f;
+public void setPoints() {
+    pushMatrix();
+    translate(width/2, height/2, 0);
+    rotateX(radians(180));
+    //draw
+    if(currentPos != new PVector()){
+    pushMatrix();
+        fill(0,255,0);
+        translate(currentPos.x, currentPos.y, currentPos.z);
+        sphere(40);
+    popMatrix();
+    }
+    for( int i = 0 ; i < reps ; i++ ) {
+        pushMatrix();
+            fill(255*((float)i/(float)MAX_REPS),0,255*(1.f-((float)i/(float)MAX_REPS)));
+            translate(highestPoint[i].x, highestPoint[i].y, highestPoint[i].z);
+            sphere(40);
+        popMatrix();
+    }
+    popMatrix();
+    //update
+    if( finished ) {
+        stopExercise();
+        return;
+    }
+    pushMatrix();
+    translate(width/2, height/2, 0);
+    rotateX(radians(180));
+    float curTime = (float)millis()/1000.f;
+    if( firstTime ) {
+        debouncingTimer.reset();
+    }
+    if( debouncingTimer.update(curTime - lastTime) ) {
+        currentPos = new PVector();
+        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
+    }
+    if( firstTime ) {
+        firstTime = false;
+        highestPoint[reps].set(currentPos);
+        println( "starting first point "+startPoint+", current "+currentPos);
+    }
+   
+    if( currentPos.y > highestPoint[reps].y && PVector.dist(startPoint,currentPos) > MIN_DIST ) {
+        highestPoint[reps].set(currentPos);
+        distance = 0.33f * PVector.dist(highestPoint[reps],startPoint);
+        //println( "high point set "+highestPoint[reps]+", dist: "+distance);
+    }
+    if( PVector.dist(startPoint,currentPos) < distance ) {
+        println( "rep "+reps+"! high ["+reps+"] point reached at "+highestPoint[reps]);
+        reps++;
+        if( reps >= MAX_REPS ) {
+            finished = true;
+        } else {
+            highestPoint[reps].set(currentPos);
+            distance = 0.f;
+        } 
+    }
+    lastTime = curTime;
+    popMatrix();
+}
+
+public void stopExercise(){
+    PVector pos = new PVector(10, 100);
+    message = new Message(200, 200, pos, "Exercise completed. Well done");
+    message.create();
+    message.drawUI();
+    addToRecords();
+}
+
+public void addToRecords(){
+    message.destroy();
+    float average = 0;
+    for( int i = 0 ; i < reps ; i++ ) {
+       average  = average +  highestPoint[i].y;
+    }
+    int score  = (int) average / reps;
+    String date = String.valueOf(year()) + String.valueOf(month()) + String.valueOf(day());
+    println(score);
+    Record newRecord = new Record(0, userId, 2, 20140502, 20000, score, reps, "Error");
+}
+
+void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
 
                 PVector leftHand = convertedLeftJoint;
                 PVector rightHand = convertedRightJoint;
@@ -79,7 +273,7 @@ class ExerciseScreenOne {
                  }else {
                         start = false;
                         loaderOff();
-                        println("Over Nothing");
+                        //println("Over Nothing");
                 }
         }
 
@@ -124,14 +318,10 @@ void trackSkeleton(SimpleOpenNI kinect) {
         IntVector userList = new IntVector();
         kinect.getUsers(userList);
         if (userList.size() > 0) {
-            int userId = userList.get(0);
+            int trackingUserId = userList.get(0);
 
-                if (kinect.isTrackingSkeleton(userId)) {
-                        pushStyle();
-                        strokeWeight(5);
-                        stroke(255, 0, 0);
-                        drawSkeleton(userId);
-                        popStyle();
+                if (kinect.isTrackingSkeleton(trackingUserId)) {
+                        drawSkeleton(trackingUserId);
 
                 }
         }
@@ -139,20 +329,19 @@ void trackSkeleton(SimpleOpenNI kinect) {
 
 
 // draw the skeleton with the selected joints
-void drawSkeleton(int userId) {
+void drawSkeleton(int trackingUserId) {
         pushMatrix();
-        println("Skeleton");
-        //rotateX(radians(-180));
-        //translate(-320,-240, 0);
-        scale(0.8f);
-
+        lights();
+        noStroke();
+        translate(width/2, height/2, 0);
+        rotateX(radians(180));
         PVector p1 = new PVector();
         PVector p2 = new PVector();
         float radius;
 
-       println("left arm");
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, p1);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, p2);
+       //println("left arm");
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_SHOULDER, p1);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_ELBOW, p2);
         Limb testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         Joint joint = new Joint(p1, radius);
@@ -161,15 +350,15 @@ void drawSkeleton(int userId) {
         joint.draw();
 
         p1.set(p2);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_HAND, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p2, radius);
         joint.draw();
 
-        println("right arm");
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, p1);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, p2);
+        //println("right arm");
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, p1);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_ELBOW, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p1, radius);
@@ -177,63 +366,64 @@ void drawSkeleton(int userId) {
         joint = new Joint(p2, radius);
         joint.draw();
         p1.set(p2);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HAND, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p2, radius);
         joint.draw();
 
-        println("left leg");
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HIP, p1);
+        //println("left leg");
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_HIP, p1);
         joint = new Joint(p1, radius);
         joint.draw();
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_KNEE, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_KNEE, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p2, radius);
         joint.draw();
         p1.set(p2);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_FOOT, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_FOOT, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p2, radius);
         joint.draw();
         
 
-        println("right leg");
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HIP, p1);
+        //println("right leg");
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HIP, p1);
         joint = new Joint(p1, radius);
         joint.draw();
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_KNEE, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p2, radius);
         joint.draw();
         p1.set(p2);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_FOOT, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_FOOT, p2);
         testLimb = new Limb(p1,p2,0.3f,0.3f);
         radius = testLimb.draw();
         joint = new Joint(p2, radius);
         joint.draw();
 
-        println("torso");
+        //println("torso");
         PVector p3 = new PVector();
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, p1);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HIP, p2);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HIP, p3);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_NECK, p1);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_HIP, p2);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HIP, p3);
         // fiddle with offset here
         testLimb = new Limb(p1,new PVector((p2.x+p3.x)/2.f,(p2.y+p3.y)/2.f,(p2.z+p3.z)/2.f), 0.7f, 0.7f );
         testLimb.draw();
 
-        println("head");
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, p1);
-        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_HEAD, p2);
+        //println("head");
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_NECK, p1);
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_HEAD, p2);
         //p1.add(0,100,0);
         p2.add(0,100,0);
         testLimb = new Limb(p1,p2,0.7f,0.5f);
         radius = testLimb.draw();
         joint = new Joint(p1, radius);
         joint.draw();
+        kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HAND, p2);
         popMatrix();
        
 }

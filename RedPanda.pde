@@ -77,7 +77,7 @@ boolean deleteExerciseScreen = false;
 boolean deleteCommentsScreen = false;
 
 void setup() {
-        size(1200, 600, OPENGL);
+        size(1200, 600, P3D);
         frameRate(30);
         //textMode(SHAPE);
         textAlign(CENTER, CENTER);
@@ -198,13 +198,8 @@ void draw() {
                 background(backgroundImage);
                 exerciseScreenOne.drawUI();
                 //exerciseScreenOne.trackUser();
-                pushMatrix();
-                lights();
-                noStroke();
-                translate(width/2, height/2, 0);
-                rotateX(radians(180));
                 exerciseScreenOne.trackSkeleton(kinect);
-                popMatrix();
+                exerciseScreenOne.startExercise();
                 exerciseScreenOne.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
         }
@@ -245,7 +240,7 @@ public void controlEvent(ControlEvent theEvent) {
                         }
                         deleteLoginScreen = true;
                         RecordDAO recordDAO = new RecordDAO();
-                        record = recordDAO.getRecords(user.getUser_id(), 2);
+                        record = recordDAO.getRecord(user.getUser_id());
                         menuScreen.create(user, record);
                         currentScene = 1;
                 } 
@@ -300,7 +295,7 @@ void makeProgramme() {
 
 void makeExerciseOne() {
         deleteProgramsScreen = true;
-        exerciseScreenOne.create();
+        exerciseScreenOne.create(user);
         currentScene = 6;
 }
 

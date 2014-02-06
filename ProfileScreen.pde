@@ -142,7 +142,7 @@ class ProfileScreen {
 
         void drawUI() {
                 pushStyle();
-                textMode(SCREEN);
+                //textMode(SCREEN);
                 cp5.draw();
                 popStyle();
         }

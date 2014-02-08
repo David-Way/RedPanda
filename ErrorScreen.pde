@@ -17,6 +17,8 @@ class ErrorScreen {
 
         public void drawUI() {
                 background(255);
+                println(dataPath(""));
+                println(sketchPath("xml-exercises"));
                 image(kinectImage, width/2 - 330, height/2 - 128);
                 textSize(32);
                 text("Camera Not Connected!", width/2, height/2 + 100);

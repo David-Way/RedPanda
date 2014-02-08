@@ -46,6 +46,8 @@ ProfileScreen profileScreen = new ProfileScreen(this);
 ProgressScreen progressScreen = new ProgressScreen(this);
 CommentsScreen commentsScreen = new CommentsScreen(this);
 ExerciseScreenOne exerciseScreenOne = new ExerciseScreenOne(this);
+XMLExerciseClassOptimised xmlExercise;
+
 //main objects
 User user;
 Programme programme;
@@ -202,7 +204,15 @@ void draw() {
                 exerciseScreenOne.startExercise();
                 exerciseScreenOne.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
+                
+        case 7://xml exercise
+               checkForScreensToDelete();
+               
+        break;
+        
         }
+        
+        
 }
 
 
@@ -229,13 +239,14 @@ public void controlEvent(ControlEvent theEvent) {
                         programme = programmeDAO.getProgramme();
                         //println("create date: " + programme.getCreate_date());
                         //get the exercise objects and add them to the programme object.
+                         ArrayList<Exercise> e = new ArrayList<Exercise>();
                         try {
                                 ExerciseDAO exerciseDAO = new ExerciseDAO();
-                                ArrayList<Exercise> e = exerciseDAO.getExercises(programme.getProgramme_id());
+                                e = exerciseDAO.getExercises(programme.getProgramme_id());
                                 programme.setExercises(e);    
                                 //System.out.println(">/>" + programme.getExercises().get(0).getName());
                         } 
-                        catch (Exception e) {
+                        catch (Exception ex) {
                                 System.out.println("exercises not retrieved/set");
                         }
                         deleteLoginScreen = true;
@@ -243,6 +254,8 @@ public void controlEvent(ControlEvent theEvent) {
                         record = recordDAO.getRecord(user.getUser_id());
                         menuScreen.create(user, record);
                         currentScene = 1;
+                        
+                        xmlExercise = new XMLExerciseClassOptimised(this, kinect, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, "default", e.get(1).getRepetitions());
                 } 
                 else { //user is not logged in
                         loginScreen.displayError("Incorrect login details");

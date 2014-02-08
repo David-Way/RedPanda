@@ -10,7 +10,7 @@ class ExerciseScreenOne {
         //reps for exercise
         int MAX_REPS = 5;
         float MIN_DIST = 100;
-        int exercise_id = 1;
+        int exerciseId;
         int reps = 0;
         int timeLeft = 0;
         //Start point of exercise
@@ -18,7 +18,7 @@ class ExerciseScreenOne {
         PVector startPos = new PVector(); 
         PVector currentPos = new PVector();
         //Array of hightestpoint per rep
-        PVector highestPoint[] = new PVector[MAX_REPS];
+        PVector  highestPoint[];
         
         
         boolean startExercise = false;
@@ -26,8 +26,10 @@ class ExerciseScreenOne {
         boolean start = false;
         boolean firstTime = true;
         boolean finished = false;
+        boolean enterData = true;
         Message message;
         Record record;
+        RecordDAO recordDAO;
         User user;
         int trackingUserId;
         int userId;
@@ -39,6 +41,7 @@ class ExerciseScreenOne {
         }
 
         void loadImages() {
+
                 //load images  for login button
                 this.menuBack[0]  = loadImage("images/menu.jpg");
                 this.menuBack[1]  = loadImage("images/menuOver.jpg");
@@ -48,28 +51,34 @@ class ExerciseScreenOne {
                 this.logout[2] =loadImage("images/logout.jpg");
         }
 
-        public void create(User user) {
+        public void create(User user, Exercise e) {
+                exerciseId = e.getExercise_id();
                 userId = user.getUser_id();
+                MAX_REPS = e.getRepetitions();
+                highestPoint = new PVector[MAX_REPS];
                 startPoint = null;
                 for( int i = 0 ; i < MAX_REPS ; i++ ) {
                 highestPoint[i] = new PVector();
                 }
                 debouncingTimer = new Timer(0.1f,true,false);
 
-               RecordDAO recordDAO = new RecordDAO();
-               record = recordDAO.getLastDoneRecord(user.getUser_id(), 2);
+               recordDAO = new RecordDAO();
+               record = recordDAO.getLastForExercise(userId, exerciseId);
                 if(record.getRecord_id() != -1){
+                    String date = String.valueOf(record.getDateDone());
+                    int Year=int(date.substring(0,4));
+                    int Month=int(date.substring(4,6));
+                    int Day=int(date.substring(6,8));
                     PVector pos = new PVector(10, 100);
-                    message = new Message(200, 200, pos, "Exercise last done on : " + record.getDateDone());
+                    message = new Message(200, 200, pos, "Exercise last done on : " + Day +" / " + Month + " / "+ Year);
                     message.create();
                 }else{
                     PVector pos = new PVector(10, 100);
-                    message = new Message(200, 200, pos, "You haven't attempted this exercise yet");
+                    message = new Message(200, 200, pos, "You have not attempted this exercise yet");
                     message.create();
                 }
 
                 lastTime = (float)millis()/1000.f;
-
                 start = false;
                 cp5.setAutoDraw(false);
 
@@ -238,9 +247,17 @@ public void addToRecords(){
        average  = average +  highestPoint[i].y;
     }
     int score  = (int) average / reps;
-    String date = String.valueOf(year()) + String.valueOf(month()) + String.valueOf(day());
-    println(score);
-    Record newRecord = new Record(0, userId, 2, 20140502, 20000, score, reps, "Error");
+    DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+    Date currentDate = new Date();
+    int date = int(dateFormat.format(currentDate));
+    //String str_date = String.valueOf(year()) + String.valueOf(month()) + String.valueOf(day());
+    //int date = int(str_date);
+    if(enterData){
+    Record newRecord = new Record(0, userId, exerciseId, date, 20000, reps , score, "Error");
+    recordDAO.setRecord(newRecord);
+    enterData = false;
+    }
+
 }
 
 void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {

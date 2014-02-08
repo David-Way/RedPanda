@@ -41,7 +41,11 @@ class MenuScreen {
         }
 
         public void create(User user, Record record) {
-
+                String date = String.valueOf(record.getDateDone());
+                //Date date = new Date();
+                int Year=int(date.substring(0,4));
+                int Month=int(date.substring(4,6));
+                int Day=int(date.substring(6,8));
                 cp5.setAutoDraw(false);
 
                 menuGroup = cp5.addGroup("menuGroup")
@@ -89,14 +93,13 @@ class MenuScreen {
 
 
                 textlabels[0] = cp5.addTextlabel("message")
-                    .setText("Welcome " + user.getUser_name() + "Last log in was : " + record.getDateDone() + " .")
-                    .setPosition(10, 438)
+                    .setText("Welcome " + user.getUser_name() + ". You last completed an exercise on : " + Year + " / " + " / " + Month + " / " + Day)
+                    .setPosition(10, 538)
                     .setWidth(465)
                     .setHeight(40)
-                    .setColorValue(0xffffffff)
+                    .setColorValue(color(51, 196, 242))
                     .setFont(createFont("Arial",18))
                     .setGroup(menuGroup)
-                    .setMultiline(true)
                     ;
 
         }

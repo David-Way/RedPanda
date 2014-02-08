@@ -117,7 +117,6 @@ void setup() {
 }
 
 void draw() {
-
         switch (currentScene) {
         case -1: //error screen
                 if (kinect.isInit() == false) {
@@ -251,7 +250,7 @@ public void controlEvent(ControlEvent theEvent) {
                         }
                         deleteLoginScreen = true;
                         RecordDAO recordDAO = new RecordDAO();
-                        record = recordDAO.getRecord(user.getUser_id());
+                        record = recordDAO.getLastDone(user.getUser_id());
                         menuScreen.create(user, record);
                         currentScene = 1;
                         
@@ -308,7 +307,9 @@ void makeProgramme() {
 
 void makeExerciseOne() {
         deleteProgramsScreen = true;
-        exerciseScreenOne.create(user);
+        ArrayList<Exercise> e = new ArrayList<Exercise>();
+        e = programme.getExercises();
+        exerciseScreenOne.create(user, e.get(0));
         currentScene = 6;
 }
 

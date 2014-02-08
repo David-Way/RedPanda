@@ -79,7 +79,7 @@ class ExerciseDAO {
                                                 //exercises.add(gson.fromJson(result.toString(), Exercise.class));
                                                 
                                                 jsonArray = null;
-				                jsonArray = new JSONArray(result.toString());
+				                                jsonArray = new JSONArray(result.toString());
                                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                                 
                                                 int e_id = jsonObject.getInt("exercise_id");

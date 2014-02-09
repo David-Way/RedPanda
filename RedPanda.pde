@@ -28,6 +28,7 @@ import java.lang.reflect.TypeVariable;
 //initialise kinect
 SimpleOpenNI kinect;
 
+//initialise UI objects for the cp5 library
 ControlP5 cp5;
 Group g1;
 Group g2;
@@ -46,7 +47,7 @@ ProfileScreen profileScreen = new ProfileScreen(this);
 ProgressScreen progressScreen = new ProgressScreen(this);
 CommentsScreen commentsScreen = new CommentsScreen(this);
 ExerciseScreenOne exerciseScreenOne = new ExerciseScreenOne(this);
-XMLExerciseClassOptimised xmlExercise;
+XMLExerciseClassOptimised xmlExercise = new XMLExerciseClassOptimised(this);
 
 //main objects
 User user;
@@ -58,7 +59,6 @@ Message message;
 int currentScene;
 //user tracking variables
 boolean loading = false;
-//PImage[] animation;
 Gif loadingIcon;
 PImage leftHandIcon;
 PImage rightHandIcon;
@@ -68,7 +68,7 @@ PVector convertedLeftJoint = new PVector();
 PVector convertedRightJoint = new PVector();
 PImage backgroundImage;
 
-//boolean deleteScreen = false;
+//variables for removing screens on next frame
 boolean deleteErrorScreen = false;
 boolean deleteLoginScreen = false;
 boolean deleteMenuScreen = false;
@@ -79,10 +79,12 @@ boolean deleteExerciseScreen = false;
 boolean deleteCommentsScreen = false;
 
 void setup() {
+        //basic sketch setup functions
         size(1200, 600, P3D);
         frameRate(30);
         //textMode(SHAPE);
         textAlign(CENTER, CENTER);
+        //hand tracking image loading
         rightHandIcon = loadImage("images/righthand.png");
         leftHandIcon = loadImage("images/lefthand.png");
         loadingIcon = new Gif(this, "images/loading.gif");
@@ -90,7 +92,8 @@ void setup() {
         //load background image
         backgroundImage = loadImage("images/background.png");
         cp5 = new ControlP5(this);
-
+        
+        //load screen assets
         errorScreen.loadImages();
         loginScreen.loadImages();
         menuScreen.loadImages();
@@ -99,19 +102,18 @@ void setup() {
         progressScreen.loadImages();
         commentsScreen.loadImages();
         exerciseScreenOne.loadImages();
+        xmlExercise.loadImages();
         //loginScreen.create();
         //loginScreen.drawUI();
         //errorScreen.create();
         currentScene = -1; //go to login scene
-
+        //initialise the kinect using SimpleOpenNI library 
         kinect = new SimpleOpenNI(this);
         // enable depthMap generation
         kinect.enableDepth();
-
         // enable skeleton generation for all joints
         kinect.enableUser();
         //create and draw the login screen
-
         System.out.println("connected");
         //deleteLoginScreen = true;
 }
@@ -124,7 +126,8 @@ void draw() {
                         //exit();
                         //return;
                         errorScreen.drawUI();
-                } else {
+                } 
+                else {
                         currentScene = 0;
                         deleteErrorScreen = true;
                         loginScreen.create();
@@ -133,7 +136,7 @@ void draw() {
 
         case 0: //login screen
                 checkForScreensToDelete();
-                loginScreen.drawFade(); //fades out error messeges   
+                loginScreen.drawFade(); //fades out error messages   
                 loginScreen.drawUI();             
                 break;
 
@@ -195,23 +198,20 @@ void draw() {
                 break;
 
         case 6: //exercise screen? or screens?
-                checkForScreensToDelete(); 
+                checkForScreensToDelete();
                 background(backgroundImage);
-                exerciseScreenOne.drawUI();
+                exerciseScreenOne.drawUI(); 
                 //exerciseScreenOne.trackUser();
                 exerciseScreenOne.trackSkeleton(kinect);
                 exerciseScreenOne.startExercise();
                 exerciseScreenOne.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
-                
+
         case 7://xml exercise
-               checkForScreensToDelete();
-               
-        break;
-        
+                checkForScreensToDelete();
+                xmlExercise.drawUI(false); //parameter true to draw debug HUD
+                break;
         }
-        
-        
 }
 
 
@@ -238,7 +238,7 @@ public void controlEvent(ControlEvent theEvent) {
                         programme = programmeDAO.getProgramme();
                         //println("create date: " + programme.getCreate_date());
                         //get the exercise objects and add them to the programme object.
-                         ArrayList<Exercise> e = new ArrayList<Exercise>();
+                        ArrayList<Exercise> e = new ArrayList<Exercise>();
                         try {
                                 ExerciseDAO exerciseDAO = new ExerciseDAO();
                                 e = exerciseDAO.getExercises(programme.getProgramme_id());
@@ -253,8 +253,6 @@ public void controlEvent(ControlEvent theEvent) {
                         record = recordDAO.getLastDone(user.getUser_id());
                         menuScreen.create(user, record);
                         currentScene = 1;
-                        
-                        xmlExercise = new XMLExerciseClassOptimised(this, kinect, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, "default", e.get(1).getRepetitions());
                 } 
                 else { //user is not logged in
                         loginScreen.displayError("Incorrect login details");
@@ -267,6 +265,10 @@ public void controlEvent(ControlEvent theEvent) {
 
         if (theEvent.getController().getName().equals("exerciseOne")) {
                 makeExerciseOne();
+        }
+
+        if (theEvent.getController().getName().equals("exerciseTwo")) {
+                makeExerciseTwo();
         }
 
         if (theEvent.getController().getName().equals("profile")) {
@@ -294,6 +296,26 @@ public void controlEvent(ControlEvent theEvent) {
         }
 }
 
+void keyPressed() {
+
+        if (key == 'r') {
+                if (currentScene == 7) { //if during exercise 2
+                        xmlExercise.toggleRecording();
+                        System.out.println("r");
+                }
+        } 
+        else if (key == 's') {
+                if (currentScene == 7) { //if during exercise 2
+                        xmlExercise.savePressed();
+                }
+        } 
+        else if (key == 'l') {
+                if (currentScene == 7) { //if during exercise 2
+                        xmlExercise.loadPressed();
+                }
+        }
+}
+
 //////////////////////////////////////////////////////////////////////////
 //BUTTON FUNCTIONS
 void makeProgramme() {
@@ -311,6 +333,16 @@ void makeExerciseOne() {
         e = programme.getExercises();
         exerciseScreenOne.create(user, e.get(0));
         currentScene = 6;
+}
+
+void makeExerciseTwo() {
+        deleteProgramsScreen = true;
+        ArrayList<Exercise> e = new ArrayList<Exercise>();
+        e = programme.getExercises();
+        //load second exercise data
+        xmlExercise.create(kinect, user, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, e.get(1));
+        xmlExercise.readXML("default");
+        currentScene = 7;
 }
 
 void makeProfile() {

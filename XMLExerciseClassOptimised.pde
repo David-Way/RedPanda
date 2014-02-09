@@ -37,23 +37,34 @@ import peasy.*;
 
 class XMLExerciseClassOptimised {
         PeasyCam cam;
+        RedPanda parent;
         SimpleOpenNI context;
+        User user;
+        Exercise e;
         int [] jointID;
         int userID;
         ArrayList<ArrayList<PVector>> framesGroup = new ArrayList<ArrayList<PVector>>(3);
         ArrayList<PVector> framesOne;
         ArrayList<PVector> framesTwo;
         ArrayList<PVector> framesThree;
+
+        private PImage[] menuBack = new PImage[3];
+        private PImage[] logout = new PImage[3];
+        private Button []buttons;
+        private Group exerciseGroup;
+
+        long startTime;
         Message message;
         String exerciseName;
         float c = (float)0.0;
         float offByDistance = (float)0.0;
         int currentFrame = 0;
         int numberOfFrames = 0;
-        int numberOfReps = 10;
+        int numberOfReps = 5;
         int currentRep = 0;
         boolean paused = false;
-        boolean recording = true;
+        boolean recording = false;
+        boolean exerciseComplete = false;
         Gif target;
         //set colours for user avatar
         color userColourRed = color(255, 0, 0);
@@ -62,35 +73,73 @@ class XMLExerciseClassOptimised {
         color userColourGrey = color(155, 155, 155);
         color currentUserColour = userColourGrey;
 
-        XMLExerciseClassOptimised(RedPanda parent, SimpleOpenNI tempContext, int tempJointIDOne, int tempJointIDTwo, int tempJointIDThree, String exerciseName, int numberOfReps) {
-                //initilise required variables 
-                context = tempContext; 
-                jointID = new int[3]; //holds the selected joints                 
-                jointID[0] = tempJointIDOne; //store the chosen joint parameters
-                jointID[1] = tempJointIDTwo;
-                jointID[2] = tempJointIDThree;
-                //create arrays to store each joints point data for each frame
-                framesOne = new ArrayList<PVector>(); 
-                framesTwo = new ArrayList<PVector>();
-                framesThree = new ArrayList<PVector>();
-                //framesCenter = new ArrayList<PVector>();
-                framesGroup.add(framesOne); //add these arrays to a group array
-                framesGroup.add(framesTwo);
-                framesGroup.add(framesThree);
+        PVector messagePosition = new PVector(10, 100);
 
-                this.exerciseName = exerciseName;
-                this.numberOfReps = numberOfReps;
-                target = new Gif(parent, "images/target.gif");
-                //readXML("exerciseName" + ".xml");
+        XMLExerciseClassOptimised(RedPanda parent) {
+                this.parent = parent;
+                this.jointID = new int[3]; //holds the selected joints  
+
+                //readXML("default");
 
                 //create camera , arguments set point to look at and distance from that point
                 //cam = new PeasyCam(parent, (double)0, (double)0, (double)0, (double)1000);
         }
 
+        void create(SimpleOpenNI tempContext, User user, int tempJointIDOne, int tempJointIDTwo, int tempJointIDThree, Exercise ex) {
+                target = new Gif(parent, "images/target.gif");
+                //initilise required variables 
+                this.context = tempContext; 
+                this.user = user;
+
+                this.jointID[0] = tempJointIDOne; //store the chosen joint parameters
+                this.jointID[1] = tempJointIDTwo;
+                this.jointID[2] = tempJointIDThree;
+                //create arrays to store each joints point data for each frame
+                this.framesOne = new ArrayList<PVector>(); 
+                this.framesTwo = new ArrayList<PVector>();
+                this.framesThree = new ArrayList<PVector>();
+                //framesCenter = new ArrayList<PVector>();
+                this.framesGroup.add(framesOne); //add these arrays to a group array
+                this.framesGroup.add(framesTwo);
+                this.framesGroup.add(framesThree);
+
+                this.e = ex;
+                this.exerciseName = e.getName();
+                this.numberOfReps = e.getRepetitions();
+
+                cp5.setAutoDraw(false);
+
+                exerciseGroup = cp5.addGroup("exerciseGroup")
+                        .setPosition(0, 0)
+                                .hideBar()
+                                        ;
+
+                buttons = new Button[2];
+
+                buttons[0] = cp5.addButton("menuBackExercises")
+                        .setPosition(10, 10)
+                                .setImages(menuBack)
+                                        .updateSize()
+                                                .setGroup(exerciseGroup)
+                                                        ;
+
+                buttons[1] = cp5.addButton("logoutExcercises")
+                        .setPosition(978, 10)
+                                .setImages(logout)
+                                        .updateSize()
+                                                .setGroup(exerciseGroup)
+                                                        ;
+
+                message = new Message(200, 200, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
+                message.create();
+                startTime  = System.currentTimeMillis();
+        }
 
         void drawUI(boolean drawHUD) {
                 background(255, 255, 255);
                 context.update();
+                message.drawUI();
+                //println(currentRep);
 
                 if (drawHUD) {
                         drawHeadsUpDisplay();
@@ -155,9 +204,10 @@ class XMLExerciseClassOptimised {
                 c1.sub(added1);
                 c2.sub(added2);
 
-                println(">" + c1.mag());
-                println(">>" + c2.mag());
-                println(result + " " + c1.mag() + " " + c2.mag());
+                //println(">" + c1.mag());
+                //println(">>" + c2.mag());
+                //println(result + " " + c1.mag() + " " + c2.mag());
+
                 if (c1.mag() < 220 && c2.mag() <220) {
                         result = true;
                 }
@@ -335,7 +385,7 @@ class XMLExerciseClassOptimised {
         // draw the skeleton with the selected joints
         void drawSkeleton(int userId) {
                 pushMatrix();
-                println("Skeleton");
+                //println("Skeleton");
                 //rotateX(radians(-180));
                 //translate(-320,-240, 0);
                 scale(0.8f);
@@ -344,7 +394,7 @@ class XMLExerciseClassOptimised {
                 PVector p2 = new PVector();
                 float radius;
 
-                println("left arm");
+                //println("left arm");
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, p1);
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, p2);
                 Limb2 testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
@@ -361,7 +411,7 @@ class XMLExerciseClassOptimised {
                 joint = new Joint(p2, radius);
                 joint.draw();
 
-                println("right arm");
+                //println("right arm");
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, p1);
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, p2);
                 testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
@@ -377,7 +427,7 @@ class XMLExerciseClassOptimised {
                 joint = new Joint(p2, radius);
                 joint.draw();
 
-                println("left leg");
+                //println("left leg");
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HIP, p1);
                 joint = new Joint(p1, radius);
                 joint.draw();
@@ -394,7 +444,7 @@ class XMLExerciseClassOptimised {
                 joint.draw();
 
 
-                println("right leg");
+                //println("right leg");
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HIP, p1);
                 joint = new Joint(p1, radius);
                 joint.draw();
@@ -410,7 +460,7 @@ class XMLExerciseClassOptimised {
                 joint = new Joint(p2, radius);
                 joint.draw();
 
-                println("torso");
+                //println("torso");
                 PVector p3 = new PVector();
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, p1);
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HIP, p2);
@@ -419,7 +469,7 @@ class XMLExerciseClassOptimised {
                 testLimb2 = new Limb2(p1, new PVector((p2.x+p3.x)/2.f, (p2.y+p3.y)/2.f, (p2.z+p3.z)/2.f), 0.7f, 0.7f, currentUserColour);
                 testLimb2.draw();
 
-                println("head");
+                //println("head");
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, p1);
                 kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_HEAD, p2);
                 //p1.add(0,100,0);
@@ -457,15 +507,28 @@ class XMLExerciseClassOptimised {
                         if (currentFrame == framesGroup.get(0).size()) { 
                                 currentFrame = 0;
                                 currentRep++;
-                                PVector pos = new PVector(10, 100);
-                                if (currentRep < numberOfReps) {                                    
-                                    message = new Message(200, 200, pos, "Rep number: " + currentRep);
-                                    message.create();
-                                } else {
-                                    message = new Message(200, 200, pos, "Complete!");
-                                    message.create();
+                                //PVector pos = new PVector(10, 100);
+                                if (currentRep < numberOfReps) {        
+                                        message.destroy();                            
+                                        message = new Message(200, 200, messagePosition, "Target Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%" + "\nTime: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
+                                        message.create();
+                                } 
+                                else if (!exerciseComplete) { //on exercise complete
+                                        long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
+                                        int score = (int)(numberOfReps*100/elapsedTime*10);
+                                        message.destroy();
+                                        message = new Message(200, 200, messagePosition, "Well Done."  + "\nTime to Complete: \n" + elapsedTime + " seconds" + "\nScore: " + score + " points");
+                                        message.create();
+
+                                        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                                        Date currentDate = new Date();
+                                        int date = int(dateFormat.format(currentDate));
+
+                                        RecordDAO dao = new RecordDAO();
+                                        dao.setRecord(new Record(0, user.getUser_id(), e.getExercise_id(), date, (int)elapsedTime, numberOfReps, score , "Error"));
+                                        exerciseComplete = true;
                                 }
-                       }
+                        }
                 }
         }
 
@@ -485,6 +548,17 @@ class XMLExerciseClassOptimised {
                 popMatrix();
         }
 
+        void loadImages() {
+
+                //load images  for login button
+                this.menuBack[0]  = loadImage("images/menu.jpg");
+                this.menuBack[1]  = loadImage("images/menuOver.jpg");
+                this.menuBack[2]  = loadImage("images/menu.jpg");
+                this.logout[0] = loadImage("images/logout.jpg");
+                this.logout[1] =loadImage("images/logoutOver.jpg");
+                this.logout[2] =loadImage("images/logout.jpg");
+        }
+
         void toggleRecording() {
                 recording = !recording;
                 System.out.println("recording state: " + recording);
@@ -495,7 +569,7 @@ class XMLExerciseClassOptimised {
         }
 
         void savePressed() {
-                writeXML("left-arm-three-joint.xml");
+                writeXML("left-arm-three-joint");
         }
 
         void readXML(String fileName) {
@@ -556,7 +630,7 @@ class XMLExerciseClassOptimised {
         public void writeXML(String fileName) {
                 try {
                         //String pathName =  "C:\\Users\\David\\Documents\\Processing\\movementRecorderClass\\" + "xml-exercises\\" + fileName;
-                        String pathName = sketchPath("xml-exercises") + "\\" + fileName;
+                        String pathName = sketchPath("xml-exercises") + "\\" + fileName + ".xml";
                         DocumentBuilderFactory documentFactory = DocumentBuilderFactory
                                 .newInstance();
                         DocumentBuilder documentBuilder = documentFactory

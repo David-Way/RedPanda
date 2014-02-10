@@ -35,7 +35,7 @@ class Message {
                     .setWidth(m_width - 10)
                     .setHeight(m_height - 10)
                     .setColorValue(0xffffffff)
-                    .setFont(createFont("Arial",18))
+                    .setFont(createFont("Arial", 24))
                     .setGroup(messageGroup)
                     .setMultiline(true)
                     ;

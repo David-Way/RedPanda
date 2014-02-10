@@ -12,10 +12,13 @@ class ProgressScreen {
         int timer;
         ProgressChart chart;
         Programme programme;
+        ArrayList<Exercise> exs;
+        ArrayList<ArrayList<Record>> records;
         int currentChartNumber = 0;
+        ArrayList<ArrayList<float[]>> charts = new ArrayList<ArrayList<float[]>>(); 
 
         public ProgressScreen(RedPanda c) {
-                this.context = c;                
+                this.context = c;
         }
 
         void loadImages() {
@@ -74,27 +77,51 @@ class ProgressScreen {
                                 .setImages(next)
                                         .updateSize()
                                                 .setGroup(progressGroup)
-                                                       ;
-                //programme = Programme.getInstance();
+                                                        ;
+                                                        
+                loadChartData();                   
                 createChart();
         }
 
-        void createChart() {
+        void loadChartData() {
+                exs = programme.getExercises();
+                records = new ArrayList<ArrayList<Record>>();
+                RecordDAO dao = new RecordDAO();
 
-                switch (currentChartNumber) {
-                case 0: 
-                        chart = new ProgressChart(context, new float[] {
-                                1900, 1910, 1920, 1930, 1940, 1950, 
-                                1960, 1970, 1980, 1990, 2000
-                        }
-                        , 
-                        new float[] { 
-                                6322, 6489, 6401, 7657, 9649, 9767, 
-                                12167, 15154, 18200, 23124, 28645
-                        }
-                        , "Date", "Score");
-                        break;
+                for (int i = 0; i < exs.size(); i ++) {
+                        records.add(dao.getRecords(user.getUser_id(), exs.get(i).getExercise_id()));
+                        //records.add(dao.getRecords(user.getUser_id(), i));
                 }
+        }
+
+        void createChart() {
+                ArrayList<Record> rs = records.get(currentChartNumber);
+
+                float[] dates = new float[rs.size()];
+                float[] score = new float[rs.size()];
+                for (int i = 0; i < rs.size(); i++) {                        
+                        float  dd = rs.get(i).getDateDone();
+                        float sc = rs.get(i).getScore();                        
+                        dates[i] = dd;
+                        score[i] = sc;
+                }  
+
+                chart = new ProgressChart(context, dates, score, "date", "score");
+                /*switch (currentChartNumber) {
+                 case 1: 
+                 
+                 chart = new ProgressChart(context, new float[] {
+                 1900, 1910, 1920, 1930, 1940, 1950, 
+                 1960, 1970, 1980, 1990, 2000
+                 }
+                 , 
+                 new float[] { 
+                 6322, 6489, 6401, 7657, 9649, 9767, 
+                 12167, 15154, 18200, 23124, 28645
+                 }
+                 , "Date", "Score");
+                 break;
+                 }*/
         }
 
         void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
@@ -151,16 +178,16 @@ class ProgressScreen {
 
         void drawUI() {
                 pushStyle();
-           
+
                 fill(255, 180);
                 rect(10, 95, 1180, 495);
-             
+
                 popStyle();
                 cp5.draw();
                 chart.drawUI();
                 drawInfo();
         }
-        
+
         public void drawInfo() {
                 pushStyle();
                 pushMatrix();
@@ -181,16 +208,32 @@ class ProgressScreen {
                 popStyle();
         }
 
-        public void controlEvent(ControlEvent theEvent) {
-                if (theEvent.getController().getName().equals("previousChart")) { //f the button was the log in button
-                        println("previous chart");
+        public void nextChartPressed() {
+                if (currentChartNumber < exs.size() -1) {
+                        currentChartNumber++;
+                } 
+                else {
+                        currentChartNumber = 0;
                 }
-
-                if (theEvent.getController().getName().equals("nextChart")) { //f the button was the log in button
-                        println("next chart");
-                }
+                loadChartData();                   
+                println(currentChartNumber);
+                createChart();
         }
 
+        public void previousChartPressed() {
+                if (currentChartNumber > 0) {
+                        currentChartNumber--;
+                } 
+                else {
+                        currentChartNumber = exs.size();
+                }
+                println(currentChartNumber);
+                loadChartData();                   
+
+                createChart();
+        }
+
+        
         void destroy() {
                 for ( int i = 0 ; i < buttons.length ; i++ ) {
                         buttons[i].remove();

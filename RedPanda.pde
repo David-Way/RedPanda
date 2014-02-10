@@ -80,7 +80,7 @@ boolean deleteCommentsScreen = false;
 
 void setup() {
         //basic sketch setup functions
-        size(1200, 600, P3D);
+        size(1200, 600, OPENGL);
         frameRate(30);
         //textMode(SHAPE);
         textAlign(CENTER, CENTER);
@@ -221,7 +221,7 @@ void draw() {
 
 public void controlEvent(ControlEvent theEvent) {
         //tells you what controller was called
-        println(theEvent.getController().getName());
+        println(">/>"+ theEvent.getController().getName());
 
         if (theEvent.getController().getName().equals("log in")) { //f the button was the log in button
                 //get the values from the username and password fields
@@ -293,6 +293,14 @@ public void controlEvent(ControlEvent theEvent) {
 
         if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise")) {
                 makeLogout();
+        }
+        
+        if (theEvent.getController().getName().equals("nextChart")) {
+                progressScreen.nextChartPressed();
+        }
+        
+        if (theEvent.getController().getName().equals("previousChart")) {
+                progressScreen.previousChartPressed();
         }
 }
 

@@ -36,8 +36,11 @@ class ProgressChart {
                 scatterplot.showXAxis(true); 
                 scatterplot.showYAxis(true); 
                 //scatterplot.setXFormat("$###,###");
+                //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                //scatterplot.setXFormat("0000");
                 scatterplot.setXAxisLabel(labelOne);
                 scatterplot.setYAxisLabel(labelTwo);
+                scatterplot.setMinY(6);
 
                 // Symbol styles
                 scatterplot.setLineWidth(1);
@@ -50,7 +53,8 @@ class ProgressChart {
                 fill(51, 196, 241);                
                 rect(764, 105, 319, 380);
 
-                scatterplot.draw(116, 105, 638, 380);               
+                //scatterplot.draw(116, 105, 638, 380);               
+                scatterplot.draw(116, 105, 800, 380);               
 
                 //drawInfo();
         }

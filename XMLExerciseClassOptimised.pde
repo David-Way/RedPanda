@@ -123,6 +123,7 @@ class XMLExerciseClassOptimised {
                                                 .setGroup(exerciseGroup)
                                                         ;
 
+
                 buttons[1] = cp5.addButton("logoutExcercises")
                         .setPosition(978, 10)
                                 .setImages(logout)
@@ -130,7 +131,7 @@ class XMLExerciseClassOptimised {
                                                 .setGroup(exerciseGroup)
                                                         ;
 
-                message = new Message(200, 200, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
+                message = new Message(280, 200, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
                 message.create();
                 startTime  = System.currentTimeMillis();
         }

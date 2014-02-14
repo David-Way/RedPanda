@@ -75,7 +75,8 @@ boolean deleteMenuScreen = false;
 boolean deleteProfileScreen = false;
 boolean deleteProgramsScreen = false;
 boolean deleteProgressScreen = false;
-boolean deleteExerciseScreen = false;
+boolean deleteExerciseScreenOne = false;
+boolean deleteExerciseScreenTwo = false;
 boolean deleteCommentsScreen = false;
 
 void setup() {
@@ -287,7 +288,7 @@ public void controlEvent(ControlEvent theEvent) {
                 makeComments();
         }
 
-        if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments")) {
+        if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises")  || theEvent.getController().getName().equals("menuBackExercises2") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments")) {
                 menuBack();
         }
 
@@ -395,7 +396,10 @@ void menuBack() {
                 deleteCommentsScreen = true;
         }
         else if (currentScene == 6) { //exercise screen
-                deleteExerciseScreen = true;
+                deleteExerciseScreenOne = true;
+        } 
+       else if (currentScene == 7) { //exercise screen
+                deleteExerciseScreenTwo = true;
         }  
         //draw the lmenu screen again
         currentScene = 1;
@@ -421,7 +425,7 @@ void makeLogout() {
                 deleteCommentsScreen = true;
         }  
         else if (currentScene == 6) { //exercise screen
-                deleteExerciseScreen = true;
+                deleteExerciseScreenOne = true;
         }  
         //draw the login screen again
         background(backgroundImage);
@@ -455,10 +459,15 @@ void checkForScreensToDelete() {
                 progressScreen.destroy();
                 deleteProgressScreen = false;
         } 
-        else if (deleteExerciseScreen == true) {
-                exerciseScreenOne.destroy();
-                deleteExerciseScreen = false;
+        else if (deleteExerciseScreenOne == true) {
+                println("delent exercise screen.." + currentScene);
+                exerciseScreenOne.destroy();             
+                deleteExerciseScreenOne = false;
         } 
+        else if (deleteExerciseScreenTwo == true) {
+                xmlExercise.destroy(); 
+                deleteExerciseScreenTwo = false;
+        }        
         else if (deleteCommentsScreen == true) {
                 commentsScreen.destroy();
                 deleteCommentsScreen = false;

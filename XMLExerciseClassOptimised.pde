@@ -51,7 +51,7 @@ class XMLExerciseClassOptimised {
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
         private Button []buttons;
-        private Group exerciseGroup;
+        private Group exerciseGroup2;
 
         long startTime;
         Message message;
@@ -109,26 +109,26 @@ class XMLExerciseClassOptimised {
 
                 cp5.setAutoDraw(false);
 
-                exerciseGroup = cp5.addGroup("exerciseGroup")
+                exerciseGroup2 = cp5.addGroup("exerciseGroup2")
                         .setPosition(0, 0)
                                 .hideBar()
                                         ;
 
                 buttons = new Button[2];
 
-                buttons[0] = cp5.addButton("menuBackExercises")
+                buttons[0] = cp5.addButton("menuBackExercises2")
                         .setPosition(10, 10)
                                 .setImages(menuBack)
                                         .updateSize()
-                                                .setGroup(exerciseGroup)
+                                                .setGroup(exerciseGroup2)
                                                         ;
 
 
-                buttons[1] = cp5.addButton("logoutExcercises")
+                buttons[1] = cp5.addButton("logoutExcercises2")
                         .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
-                                                .setGroup(exerciseGroup)
+                                                .setGroup(exerciseGroup2)
                                                         ;
 
                 message = new Message(280, 200, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
@@ -689,6 +689,16 @@ class XMLExerciseClassOptimised {
                 catch (TransformerException tfe) {  
                         tfe.printStackTrace();
                 }
+        }
+        
+        void destroy() {
+                println("destroying xml exercise");
+                for ( int i = 0 ; i < buttons.length ; i++ ) {
+                        buttons[i].remove();
+                        buttons[i] = null;
+                }
+                cp5.getGroup("exerciseGroup2").remove();
+                message.destroy();   
         }
 }
 

@@ -171,7 +171,7 @@ class ProgramsScreen {
                  }else {
                         start = false;
                         loaderOff();
-                        println("Over Nothing");
+                        //println("Over Nothing");
                 }
         }
 

@@ -7,6 +7,7 @@ class ExerciseScreenOne {
         private Button []buttons;
         private Group exerciseGroup;
         Gif countDownIcon;
+        Gif target;
         Timer debouncingTimer;
         //reps for exercise
         int MAX_REPS = 5;
@@ -14,6 +15,7 @@ class ExerciseScreenOne {
         int exerciseId;
         int reps = 0;
         int timeLeft = 0;
+        int score;
         //Start point of exercise
         PVector startPoint = new PVector();
         PVector startPos = new PVector(); 
@@ -37,6 +39,7 @@ class ExerciseScreenOne {
         float lastTime;
         int timer;
         long startTime;
+        int timeCompleted;
 
         public ExerciseScreenOne(RedPanda c) {
                 this.context = c;
@@ -55,6 +58,7 @@ class ExerciseScreenOne {
 
         public void create(User user, Exercise e) {
                 countDownIcon = new Gif(context, "images/countdown.gif");
+                target = new Gif(context, "images/target.gif");
                 exerciseId = e.getExercise_id();
                 userId = user.getUser_id();
                 MAX_REPS = e.getRepetitions();
@@ -73,13 +77,13 @@ class ExerciseScreenOne {
                         int Month=int(date.substring(4, 6));
                         int Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
-                        message = new Message(200, 200, pos, "Exercise last done on : " + Day +" / " + Month + " / "+ Year);
-                        message.create();
+                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on : " + Day +" / " + Month + " / "+ Year + "\nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message.create("g", "l");
                 }
                 else {
                         PVector pos = new PVector(10, 100);
-                        message = new Message(200, 200, pos, "You have not attempted this exercise yet");
-                        message.create();
+                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nYou have not attempted this exercise yet. \nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message.create("g", "l");
                 }
 
                 lastTime = (float)millis()/1000.f;
@@ -100,7 +104,7 @@ class ExerciseScreenOne {
                                                 .setGroup(exerciseGroup)
                                                         ;
 
-                buttons[1] = cp5.addButton("logoutExcercises")
+                buttons[1] = cp5.addButton("logoutExercise")
                         .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
@@ -121,10 +125,6 @@ class ExerciseScreenOne {
                                         text(timeLeft, 40, 40, 0);
 
                                         if (startExercise == false) {
-                                                message.destroy();
-                                                PVector pos = new PVector(10, 100);
-                                                message = new Message(200, 200, pos, "On 5, raise you right hand away from your body as high as you comfortably can.");
-                                                message.create();
                                                 startExercise = true;
                                                 timerCountDown = millis();
                                         }
@@ -142,9 +142,9 @@ class ExerciseScreenOne {
                                         translate(width/2, height/2, 0);
                                         rotateX(radians(180));  
                                         pushMatrix();
-                                        fill(255, 255, 0);
-                                        translate(startPoint.x, startPoint.y, startPoint.z);
-                                        sphere(40);
+                                        target.play();
+                                        translate(startPoint.x, startPoint.y, startPoint.z);            
+                                        image(target, -125, -125, 250, 250);
                                         popMatrix();
                                         popMatrix();
                                         setPoints();
@@ -181,8 +181,8 @@ class ExerciseScreenOne {
                 rotateX(radians(180));
                 message.destroy();
                 PVector pos = new PVector(10, 100);
-                message = new Message(200, 300, pos, "Target Repetitions: " + MAX_REPS + "\nCurrent Repetition: " + reps + "\nPercent Complete: " + (int)Math.round(100.0 / MAX_REPS * reps) + "%" + "\nTime: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
-                message.create();
+                message = new Message(280, 400, pos, "Target Repetitions: " + MAX_REPS + "\nCurrent Repetition: " + reps + "\nPercent Complete: " + (int)Math.round(100.0 / MAX_REPS * reps) + "%" + "\nTime: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
+                message.create("pg", "pl");
                 //draw
                 if (currentPos != new PVector()) {
                         pushMatrix();
@@ -193,11 +193,10 @@ class ExerciseScreenOne {
                 }
                 for ( int i = 0 ; i < reps ; i++ ) {
                         pushMatrix();
-                        fill(255*((float)i/(float)MAX_REPS), 0, 255*(1.f-((float)i/(float)MAX_REPS)));
-                        translate(highestPoint[i].x, highestPoint[i].y, highestPoint[i].z);
-                        sphere(40);
+                        translate(highestPoint[i].x, highestPoint[i].y, highestPoint[i].z);            
+                        image(target, -125, -125, 250, 250);
                         popMatrix();
-                }
+                       }
                 popMatrix();
                 //update
                 if ( finished ) {
@@ -212,23 +211,20 @@ class ExerciseScreenOne {
                         debouncingTimer.reset();
                 }
                 if ( debouncingTimer.update(curTime - lastTime) ) {
-                        //message.destroy();
                         currentPos = new PVector();
                         kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
                 }
                 if ( firstTime ) {
                         firstTime = false;
                         highestPoint[reps].set(currentPos);
-                        println( "starting first point "+startPoint+", current "+currentPos);
                 }
 
                 if ( currentPos.y > highestPoint[reps].y && PVector.dist(startPoint, currentPos) > MIN_DIST ) {
                         highestPoint[reps].set(currentPos);
                         distance = 0.33f * PVector.dist(highestPoint[reps], startPoint);
-                        //println( "high point set "+highestPoint[reps]+", dist: "+distance);
                 }
                 if ( PVector.dist(startPoint, currentPos) < distance ) {
-                        println( "rep "+reps+"! high ["+reps+"] point reached at "+highestPoint[reps]);
+                        println("Reps " + reps + highestPoint[reps].x + " : " + highestPoint[reps].y + " : " + highestPoint[reps].z);
                         reps++;
                         if ( reps >= MAX_REPS ) {
                                 finished = true;
@@ -243,24 +239,24 @@ class ExerciseScreenOne {
         }
 
         public void stopExercise() {
-                message.destroy();
-                PVector pos = new PVector(10, 100);
-                message = new Message(200, 200, pos, "Exercise completed. Well done");
-                message.create();
+                timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
+                float average = 0;
+                for ( int i = 0 ; i < reps ; i++ ) {
+                        average  = average +  highestPoint[i].y;
+                }
+                score  = (int) average / reps;
+                message.destroy();                                        
+                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\nTime to Complete: " + timeCompleted + " seconds" + "\nScore: " + score + " points");
+                message.create("eg", "el");
                 addToRecords();
         }
 
         public void addToRecords() {
-           float average = 0;
-                for ( int i = 0 ; i < reps ; i++ ) {
-                        average  = average +  highestPoint[i].y;
-                }
-                int score  = (int) average / reps;
                 DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                 Date currentDate = new Date();
                 int date = int(dateFormat.format(currentDate));
                 if (enterData) {
-                        Record newRecord = new Record(0, userId, exerciseId, date, 20000, reps, score, "Error");
+                        Record newRecord = new Record(0, userId, exerciseId, date, timeCompleted , reps, score, "Error");
                         recordDAO.setRecord(newRecord);
                         enterData = false;
                 }

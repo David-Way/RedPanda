@@ -49,7 +49,6 @@ CommentsScreen commentsScreen = new CommentsScreen(this);
 ExerciseScreenOne  exerciseScreenOne = new ExerciseScreenOne(this);
 XMLExerciseClassOptimised xmlExercise = new XMLExerciseClassOptimised(this);
 ExerciseScreenThree exerciseScreenThree = new ExerciseScreenThree(this);
-
 //main objects
 User user;
 Programme programme;
@@ -311,7 +310,7 @@ public void controlEvent(ControlEvent theEvent) {
                 menuBack();
         }
 
-        if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise") || theEvent.getController().getName().equals("logoutExercise3") ) {
+        if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise") || theEvent.getController().getName().equals("logoutExercise2") || theEvent.getController().getName().equals("logoutExercise3") ) {
                 makeLogout();
         }
         
@@ -378,6 +377,8 @@ void makeExerciseTwo() {
 }
 
 void makeExerciseThree() {
+        exerciseScreenThree = new ExerciseScreenThree(this);
+        exerciseScreenThree.loadImages();
         deleteProgramsScreen = true;
         ArrayList<Exercise> e = new ArrayList<Exercise>();
         e = programme.getExercises();
@@ -468,10 +469,12 @@ void makeLogout() {
                 deleteExerciseScreenThree = true;
         } 
         //draw the login screen again
-        background(backgroundImage);
-        loginScreen.create();
-        //loginScreen.drawUI();   
         currentScene = 0;
+        //background(backgroundImage);
+        loginScreen.create();
+        deleteLoginScreen = false;
+        //loginScreen.drawUI();   
+        
 }
 
 void checkForScreensToDelete() {

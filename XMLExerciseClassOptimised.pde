@@ -125,7 +125,7 @@ class XMLExerciseClassOptimised {
                                                         ;
 
 
-                buttons[1] = cp5.addButton("logoutExcercises2")
+                buttons[1] = cp5.addButton("logoutExercise2")
                         .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()

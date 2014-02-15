@@ -86,7 +86,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[5] = cp5.addTextlabel("injury")
-                    .setText("Injury type : " + user.getInjury_type())
+                    .setText("Injury type : \n" + user.getInjury_type())
                     .setPosition(10,110)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -94,7 +94,7 @@ class ProfileScreen {
                     ;
 
                 textlabels[6] = cp5.addTextlabel("programmeDesc")
-                    .setText("Programme : Shoulder Stretching")
+                    .setText("\nProgramme \n: Shoulder Stretching")
                     .setPosition(10,130)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))

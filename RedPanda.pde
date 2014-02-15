@@ -349,6 +349,8 @@ void makeExerciseTwo() {
         ArrayList<Exercise> e = new ArrayList<Exercise>();
         e = programme.getExercises();
         //load second exercise data
+        xmlExercise = new XMLExerciseClassOptimised(this);
+        xmlExercise.loadImages();
         xmlExercise.create(kinect, user, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, e.get(1));
         xmlExercise.readXML("default");
         currentScene = 7;

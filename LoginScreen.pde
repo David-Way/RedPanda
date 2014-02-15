@@ -4,6 +4,7 @@ class LoginScreen {
         // Array to strore login buttons images
         private PImage[] login_images = new PImage[3];
         private PImage loginBackgroundImage;
+        private PImage logoImage;
         private Textfield[] textfields;
         private Button[] buttons;
         private Group loginGroup;
@@ -20,8 +21,9 @@ class LoginScreen {
                 this.login_images[1] = loadImage("images/login_button_b.png");
                 this.login_images[2] = loadImage("images/login_button_a.png");
 
-                // load background image
+                // load background image & logo
                 this.loginBackgroundImage = loadImage("images/background.png");
+                this.logoImage = loadImage("images/logo.png");
         }
 
         public void create() {
@@ -37,21 +39,23 @@ class LoginScreen {
                 text("version 1.01", 45 + 1, 10 + 1);
                 fill(255);
                 text("version 1.01", 45, 10);
+                
+                image(logoImage, 506, 185, 180, 101);
 
                 // set and draw title text with drop shadow
                 String title = "Red Panda";
                 String subTitle = "Physio";
                 textSize(32);
                 fill(color(211, 217, 203));
-                text(title, (width / 2) + 2, 238 + 2);
+                //text(title, (width / 2) + 2, 238 + 2);
                 fill(255);
-                text(title, width / 2, 238);
+                //text(title, width / 2, 238);
                 // draw subtitle text with drop shadow
                 textSize(24);
                 fill(color(211, 217, 203));
-                text(subTitle, (width / 2) + 2, 268 + 2);
+                //text(subTitle, (width / 2) + 2, 268 + 2);
                 fill(255);
-                text(subTitle, width / 2, 268);
+                //text(subTitle, width / 2, 268);
 
                 PFont font = createFont("courier", 24);
                 loginGroup = cp5.addGroup("loginGroup")

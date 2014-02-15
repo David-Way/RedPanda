@@ -36,7 +36,7 @@ import org.w3c.dom.Element;
 import peasy.*;
 
 class XMLExerciseClassOptimised {
-        PeasyCam cam;
+        //PeasyCam cam;
         RedPanda parent;
         SimpleOpenNI context;
         User user;
@@ -55,6 +55,7 @@ class XMLExerciseClassOptimised {
 
         long startTime;
         Message message;
+        Message timerMessage;
         String exerciseName;
         float c = (float)0.0;
         float offByDistance = (float)0.0;
@@ -131,15 +132,26 @@ class XMLExerciseClassOptimised {
                                                 .setGroup(exerciseGroup2)
                                                         ;
 
-                message = new Message(280, 200, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
-                message.create();
+                message = new Message(280, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\n" + "The blue targets will lead you throught the exercise. Try to follow them." +"\n" + e.getDescription());
+                message.create("mgroup", "lname");
                 startTime  = System.currentTimeMillis();
+
+                timerMessage = new Message(240, 50, new PVector(950, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
+                timerMessage.create("a", "b");
+
+                exerciseComplete = false;
+                currentFrame = 0;
+                numberOfFrames = 0;
+                paused = false;
+                recording = false;
+                exerciseComplete = false;
         }
 
         void drawUI(boolean drawHUD) {
                 background(255, 255, 255);
                 context.update();
-                message.drawUI();
+                //message.drawUI();
+                timerMessage.drawUI();
                 //println(currentRep);
 
                 if (drawHUD) {
@@ -154,27 +166,31 @@ class XMLExerciseClassOptimised {
                 IntVector userList = new IntVector();
                 context.getUsers(userList);
 
-                if (userList.size() > 0) {
+                if (userList.size() > 0 && !exerciseComplete) {
                         int userId = userList.get(0);
                         setUser(userId);
                         if ( context.isTrackingSkeleton(userId)) {
-                                drawSkeleton(userId);
+                                drawSkeleton(userId); //draw the user
                                 // if we're recording tell the recorder to capture this frame
-                                if (recording) {
-                                        setUserColour(userColourRed);
-                                        if (numberOfFrames%30 == 0) {
+                                if (recording) { //if recordng 
+                                        setUserColour(userColourRed); //change the avatar colour to red
+                                        if (numberOfFrames%30 == 0) { //record every 30th frame, every 1 second
                                                 recordFrame();
                                         }
+                                        //increment the current frame number
                                         numberOfFrames++;
                                 } 
                                 else {
+                                        //the user should be grey
                                         setUserColour(userColourGrey);
-                                        //display exercise
+                                        //display exercise target
                                         drawExerciseSkeleton(userId);
-
+                                        timerMessage.destroy();
+                                        timerMessage = new Message(240, 50, new PVector(950, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
+                                        timerMessage.create("a", "b");
                                         //if user is close to points
                                         if (checkUserCompliance(userId)) {
-                                                nextFrame();
+                                                nextFrame(); //advance to the next target position
                                         }
                                 }
                         }
@@ -212,7 +228,6 @@ class XMLExerciseClassOptimised {
                 if (c1.mag() < 220 && c2.mag() <220) {
                         result = true;
                 }
-
                 return result;
         }
 
@@ -278,21 +293,21 @@ class XMLExerciseClassOptimised {
                 translate(anchorJoint.x, anchorJoint.y, anchorJoint.z);
                 //sphere(40);
                 target.play();
-                image(target, -50, -50, 100, 100);
+                //image(target, -75, -75, 275, 275);
 
 
                 pushMatrix();
                 translate(p1.x, p1.y, p1.z);
 
                 //sphere(50);
-                image(target, -50, -50, 100, 100);
+                image(target, -125, -125, 250, 250);
                 popMatrix();
 
                 pushMatrix();
                 translate(p2.x, p2.y, p2.z);
 
                 //sphere(50);
-                image(target, -50, -50, 100, 100);
+                image(target, -125, -125, 250, 250);
                 popMatrix();
 
 
@@ -511,22 +526,44 @@ class XMLExerciseClassOptimised {
                                 //PVector pos = new PVector(10, 100);
                                 if (currentRep < numberOfReps) {        
                                         message.destroy();                            
-                                        message = new Message(200, 200, messagePosition, "Target Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%" + "\nTime: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
-                                        message.create();
+                                        message = new Message(280, 100, messagePosition, "Target Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
+                                        message.create("mgroup", "lname");
                                 } 
                                 else if (!exerciseComplete) { //on exercise complete
                                         long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
                                         int score = (int)(numberOfReps*100/elapsedTime*10);
-                                        message.destroy();
-                                        message = new Message(200, 200, messagePosition, "Well Done."  + "\nTime to Complete: \n" + elapsedTime + " seconds" + "\nScore: " + score + " points");
-                                        message.create();
+                                        String scoreFeedback = "";
+                                        String timeFeedback = "";
 
+                                        if (score < 300) {
+                                                scoreFeedback = "Your score isnt bad, but there is room for improvement, keep at it!";
+                                        } 
+                                        else if (score >= 300 &&  score < 650) {
+                                                scoreFeedback = "Your score is very good. Nice work!";
+                                        } 
+                                        else {
+                                                scoreFeedback = "Excellent score, you're really improving.";
+                                        }
+
+                                        if (elapsedTime < 15) {
+                                                timeFeedback = "You completed the exercise very quickly.";
+                                        } 
+                                        else if (elapsedTime >= 15 &&  elapsedTime < 45) {
+                                                timeFeedback = "You finished the exercise at a good pace.";
+                                        } 
+                                        else {
+                                                timeFeedback = "You took a while to complete the exercise, try to finish a little faster next time if you can.";
+                                        }
+                                        message.destroy();                                        
+                                        message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\nTime to Complete: " + elapsedTime + " seconds" + "\nScore: " + score + " points \n" + scoreFeedback + "\n" + timeFeedback);
+                                        message.create("mgroup", "lname");
+                                        exerciseComplete = true;
                                         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                                         Date currentDate = new Date();
                                         int date = int(dateFormat.format(currentDate));
 
                                         RecordDAO dao = new RecordDAO();
-                                        dao.setRecord(new Record(0, user.getUser_id(), e.getExercise_id(), date, (int)elapsedTime, numberOfReps, score , "Error"));
+                                        dao.setRecord(new Record(0, user.getUser_id(), e.getExercise_id(), date, (int)elapsedTime, numberOfReps, score, "Error"));
                                         exerciseComplete = true;
                                 }
                         }
@@ -690,7 +727,7 @@ class XMLExerciseClassOptimised {
                         tfe.printStackTrace();
                 }
         }
-        
+
         void destroy() {
                 println("destroying xml exercise");
                 for ( int i = 0 ; i < buttons.length ; i++ ) {
@@ -698,7 +735,8 @@ class XMLExerciseClassOptimised {
                         buttons[i] = null;
                 }
                 cp5.getGroup("exerciseGroup2").remove();
-                message.destroy();   
+                message.destroy();
+                timerMessage.destroy();
         }
 }
 

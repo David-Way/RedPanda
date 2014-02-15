@@ -7,6 +7,7 @@ class Message {
     int m_height, m_width;
     PVector position;
     String m_string;
+    String groupName = "messageGroup";
 
     public Message(int _w, int _h, PVector _pos, String _s) {
        //bgCol = bgCol;
@@ -41,6 +42,33 @@ class Message {
                     ;
 
     }
+    
+    public void create(String gname, String lname) {
+        cp5.setAutoDraw(false);
+        groupName = gname;
+
+        messageGroup = cp5.addGroup(gname)
+                        .setPosition(position)
+                                .setSize(m_width, m_height)
+                                        .setBackgroundColor(color(bgCol))
+                                         .hideBar()
+                                        ;
+
+        textlabels = new Textlabel[1];
+
+
+        textlabels[0] = cp5.addTextlabel(lname)
+                    .setText(m_string)
+                    .setPosition(10,10)
+                    .setWidth(m_width - 10)
+                    .setHeight(m_height - 10)
+                    .setColorValue(0xffffffff)
+                    .setFont(createFont("Arial", 24))
+                    .setGroup(messageGroup)
+                    .setMultiline(true)
+                    ;
+
+    }
 
     void drawUI() {
          cp5.draw();
@@ -51,7 +79,7 @@ class Message {
                         textlabels[i].remove();
                         textlabels[i] = null;
                 }
-                cp5.getGroup("messageGroup").remove();
+                cp5.getGroup(groupName).remove();
         }
 
 }

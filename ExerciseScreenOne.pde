@@ -317,7 +317,8 @@ class ExerciseScreenOne {
 
 
         void drawUI() {
-                cp5.draw();
+                //cp5.draw();
+                message.drawUI();
         }
 
         void destroy() {

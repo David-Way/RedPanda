@@ -1,12 +1,11 @@
-class ExerciseScreenOne {
+class ExerciseScreenThree {
 
         private RedPanda context;
 
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
         private Button []buttons;
-        private Group exerciseGroup;
-        Gif countDownIcon;
+        private Group exerciseGroup3;
         Timer debouncingTimer;
         //reps for exercise
         int MAX_REPS = 5;
@@ -36,9 +35,8 @@ class ExerciseScreenOne {
         int userId;
         float lastTime;
         int timer;
-        long startTime;
 
-        public ExerciseScreenOne(RedPanda c) {
+        public ExerciseScreenThree(RedPanda c) {
                 this.context = c;
         }
 
@@ -54,7 +52,6 @@ class ExerciseScreenOne {
         }
 
         public void create(User user, Exercise e) {
-                countDownIcon = new Gif(context, "images/countdown.gif");
                 exerciseId = e.getExercise_id();
                 userId = user.getUser_id();
                 MAX_REPS = e.getRepetitions();
@@ -86,29 +83,30 @@ class ExerciseScreenOne {
                 start = false;
                 cp5.setAutoDraw(false);
 
-                exerciseGroup = cp5.addGroup("exerciseGroup")
+                exerciseGroup3 = cp5.addGroup("exerciseGroup3")
                         .setPosition(0, 0)
                                 .hideBar()
                                         ;
 
                 buttons = new Button[2];
 
-                buttons[0] = cp5.addButton("menuBackExercises")
+                buttons[0] = cp5.addButton("menuBackExercise3")
                         .setPosition(10, 10)
                                 .setImages(menuBack)
                                         .updateSize()
-                                                .setGroup(exerciseGroup)
+                                                .setGroup(exerciseGroup3)
                                                         ;
 
-                buttons[1] = cp5.addButton("logoutExcercises")
+                buttons[1] = cp5.addButton("logoutExcercise3")
                         .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
-                                                .setGroup(exerciseGroup)
+                                                .setGroup(exerciseGroup3)
                                                         ;
         }
 
         public void startExercise() {
+                message.drawUI();
 
                 IntVector userList = new IntVector();
                 kinect.getUsers(userList);
@@ -121,17 +119,21 @@ class ExerciseScreenOne {
                                         text(timeLeft, 40, 40, 0);
 
                                         if (startExercise == false) {
-                                                message.destroy();
+                                                println("destroy message");
+                                                if (message != null) {
+                                                        message.destroy();
+                                                }
+
                                                 PVector pos = new PVector(10, 100);
-                                                message = new Message(200, 200, pos, "On 5, raise you right hand away from your body as high as you comfortably can.");
+                                                message = new Message(200, 200, pos, "On 5, raise you right leg away from your body as high as you comfortably can : " + timeLeft);
                                                 message.create();
                                                 startExercise = true;
                                                 timerCountDown = millis();
                                         }
 
                                         if (checkExerciseTimer()) {
-                                                kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, startPos);
-                                                startTime = System.currentTimeMillis();
+                                                kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_FOOT, startPos);
+                                                message.destroy();
                                                 startPoint = startPos;
                                         }
                                 }
@@ -148,7 +150,6 @@ class ExerciseScreenOne {
                                         popMatrix();
                                         popMatrix();
                                         setPoints();
-
                                 }
                         }
                 }
@@ -159,8 +160,6 @@ class ExerciseScreenOne {
                 int totalTime = 5000;
                 boolean check = false;
                 if (startExercise) {
-                        countDownIcon.play();
-                        image(countDownIcon, 300, 200, 300, 300);
                         int passedTime = millis() - timerCountDown;
                         timeLeft = passedTime/1000;
                         if (passedTime > totalTime) {
@@ -179,10 +178,6 @@ class ExerciseScreenOne {
                 pushMatrix();
                 translate(width/2, height/2, 0);
                 rotateX(radians(180));
-                message.destroy();
-                PVector pos = new PVector(10, 100);
-                message = new Message(200, 300, pos, "Target Repetitions: " + MAX_REPS + "\nCurrent Repetition: " + reps + "\nPercent Complete: " + (int)Math.round(100.0 / MAX_REPS * reps) + "%" + "\nTime: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
-                message.create();
                 //draw
                 if (currentPos != new PVector()) {
                         pushMatrix();
@@ -212,9 +207,8 @@ class ExerciseScreenOne {
                         debouncingTimer.reset();
                 }
                 if ( debouncingTimer.update(curTime - lastTime) ) {
-                        //message.destroy();
                         currentPos = new PVector();
-                        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
+                        kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_FOOT, currentPos);
                 }
                 if ( firstTime ) {
                         firstTime = false;
@@ -243,15 +237,16 @@ class ExerciseScreenOne {
         }
 
         public void stopExercise() {
-                message.destroy();
                 PVector pos = new PVector(10, 100);
                 message = new Message(200, 200, pos, "Exercise completed. Well done");
                 message.create();
+                message.drawUI();
                 addToRecords();
         }
 
         public void addToRecords() {
-           float average = 0;
+                message.destroy();
+                float average = 0;
                 for ( int i = 0 ; i < reps ; i++ ) {
                         average  = average +  highestPoint[i].y;
                 }
@@ -259,6 +254,8 @@ class ExerciseScreenOne {
                 DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                 Date currentDate = new Date();
                 int date = int(dateFormat.format(currentDate));
+                //String str_date = String.valueOf(year()) + String.valueOf(month()) + String.valueOf(day());
+                //int date = int(str_date);
                 if (enterData) {
                         Record newRecord = new Record(0, userId, exerciseId, date, 20000, reps, score, "Error");
                         recordDAO.setRecord(newRecord);
@@ -329,9 +326,7 @@ class ExerciseScreenOne {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
-                
-                cp5.getGroup("exerciseGroup").remove();
-                message.destroy();
+                cp5.getGroup("exerciseGroup3").remove();
         }
 
 
@@ -450,7 +445,7 @@ class ExerciseScreenOne {
                 radius = testLimb.draw();
                 joint = new Joint(p1, radius);
                 joint.draw();
-                kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
+                kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_FOOT, currentPos);
                 popMatrix();
         }
 }

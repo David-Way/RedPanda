@@ -46,8 +46,9 @@ ProgramsScreen programsScreen = new ProgramsScreen(this);
 ProfileScreen profileScreen = new ProfileScreen(this);
 ProgressScreen progressScreen = new ProgressScreen(this);
 CommentsScreen commentsScreen = new CommentsScreen(this);
-ExerciseScreenOne exerciseScreenOne = new ExerciseScreenOne(this);
+ExerciseScreenOne  exerciseScreenOne = new ExerciseScreenOne(this);
 XMLExerciseClassOptimised xmlExercise = new XMLExerciseClassOptimised(this);
+ExerciseScreenThree exerciseScreenThree = new ExerciseScreenThree(this);
 
 //main objects
 User user;
@@ -67,6 +68,7 @@ PVector rightHand = new PVector();
 PVector convertedLeftJoint = new PVector();
 PVector convertedRightJoint = new PVector();
 PImage backgroundImage;
+PImage roomImage;
 
 //variables for removing screens on next frame
 boolean deleteErrorScreen = false;
@@ -77,11 +79,12 @@ boolean deleteProgramsScreen = false;
 boolean deleteProgressScreen = false;
 boolean deleteExerciseScreenOne = false;
 boolean deleteExerciseScreenTwo = false;
+boolean deleteExerciseScreenThree = false;
 boolean deleteCommentsScreen = false;
 
 void setup() {
         //basic sketch setup functions
-        size(1200, 600, OPENGL);
+        size(1200, 600, P3D);
         frameRate(30);
         //textMode(SHAPE);
         textAlign(CENTER, CENTER);
@@ -92,6 +95,7 @@ void setup() {
         //animation = Gif.getPImages(this, "images/loading.gif");
         //load background image
         backgroundImage = loadImage("images/background.png");
+        roomImage = loadImage("images/room.jpg");
         cp5 = new ControlP5(this);
         
         //load screen assets
@@ -104,6 +108,7 @@ void setup() {
         commentsScreen.loadImages();
         exerciseScreenOne.loadImages();
         xmlExercise.loadImages();
+        exerciseScreenThree.loadImages();
         //loginScreen.create();
         //loginScreen.drawUI();
         //errorScreen.create();
@@ -212,6 +217,16 @@ void draw() {
                 checkForScreensToDelete();
                 xmlExercise.drawUI(false); //parameter true to draw debug HUD
                 break;
+
+         case 8: //exercise screen? or screens?
+                checkForScreensToDelete();
+                background(backgroundImage);
+                exerciseScreenThree.drawUI(); 
+                //exerciseScreenThree.trackUser();
+                exerciseScreenThree.trackSkeleton(kinect);
+                exerciseScreenThree.startExercise();
+                exerciseScreenThree.checkBtn(convertedLeftJoint, convertedRightJoint);
+                break;
         }
 }
 
@@ -272,6 +287,10 @@ public void controlEvent(ControlEvent theEvent) {
                 makeExerciseTwo();
         }
 
+         if (theEvent.getController().getName().equals("exerciseThree")) {
+                makeExerciseThree();
+        }
+
         if (theEvent.getController().getName().equals("profile")) {
                 makeProfile();
         }
@@ -288,11 +307,11 @@ public void controlEvent(ControlEvent theEvent) {
                 makeComments();
         }
 
-        if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises")  || theEvent.getController().getName().equals("menuBackExercises2") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments")) {
+        if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises") || theEvent.getController().getName().equals("menuBackExercise3")  || theEvent.getController().getName().equals("menuBackExercises2") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments")) {
                 menuBack();
         }
 
-        if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise")) {
+        if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise") || theEvent.getController().getName().equals("logoutExercise3") ) {
                 makeLogout();
         }
         
@@ -337,6 +356,8 @@ void makeProgramme() {
 }
 
 void makeExerciseOne() {
+        exerciseScreenOne = new ExerciseScreenOne(this);
+        exerciseScreenOne.loadImages();
         deleteProgramsScreen = true;
         ArrayList<Exercise> e = new ArrayList<Exercise>();
         e = programme.getExercises();
@@ -354,6 +375,14 @@ void makeExerciseTwo() {
         xmlExercise.create(kinect, user, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, e.get(1));
         xmlExercise.readXML("default");
         currentScene = 7;
+}
+
+void makeExerciseThree() {
+        deleteProgramsScreen = true;
+        ArrayList<Exercise> e = new ArrayList<Exercise>();
+        e = programme.getExercises();
+        exerciseScreenThree.create(user, e.get(2));
+        currentScene = 8;
 }
 
 void makeProfile() {
@@ -402,6 +431,9 @@ void menuBack() {
         } 
        else if (currentScene == 7) { //exercise screen
                 deleteExerciseScreenTwo = true;
+        } 
+        else if (currentScene == 8) { //exercise screen
+                deleteExerciseScreenThree = true;
         }  
         //draw the lmenu screen again
         currentScene = 1;
@@ -428,7 +460,13 @@ void makeLogout() {
         }  
         else if (currentScene == 6) { //exercise screen
                 deleteExerciseScreenOne = true;
-        }  
+        }
+        else if (currentScene == 7) { //exercise screen
+                deleteExerciseScreenTwo = true;
+        } 
+        else if (currentScene == 8) { //exercise screen
+                deleteExerciseScreenThree = true;
+        } 
         //draw the login screen again
         background(backgroundImage);
         loginScreen.create();
@@ -462,13 +500,16 @@ void checkForScreensToDelete() {
                 deleteProgressScreen = false;
         } 
         else if (deleteExerciseScreenOne == true) {
-                println("delent exercise screen.." + currentScene);
                 exerciseScreenOne.destroy();             
                 deleteExerciseScreenOne = false;
         } 
         else if (deleteExerciseScreenTwo == true) {
                 xmlExercise.destroy(); 
                 deleteExerciseScreenTwo = false;
+        }
+        else if (deleteExerciseScreenThree == true) {
+                exerciseScreenThree.destroy(); 
+                deleteExerciseScreenThree = false;
         }        
         else if (deleteCommentsScreen == true) {
                 commentsScreen.destroy();

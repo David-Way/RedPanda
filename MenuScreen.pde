@@ -9,6 +9,7 @@ class MenuScreen {
         private PImage[] logout = new PImage[3];
         private Button []buttons;
         private Textlabel [] textlabels;
+        String welcomeMessage;
 
         private Group menuGroup;
         boolean start = false;
@@ -41,11 +42,16 @@ class MenuScreen {
         }
 
         public void create(User user, Record record) {
+                if (record.getRecord_id() != -1) {
                 String date = String.valueOf(record.getDateDone());
                 //Date date = new Date();
                 int Year=int(date.substring(0,4));
                 int Month=int(date.substring(4,6));
                 int Day=int(date.substring(6,8));
+                welcomeMessage = ("Welcome " + user.getUser_name() + ".\nYou last completed an exercise on : " + Year + " / " + Month + " / " + Day);
+                }else{
+                    welcomeMessage = ("Welcome " + user.getUser_name() + ". Lets get started");
+                }
                 cp5.setAutoDraw(false);
 
                 menuGroup = cp5.addGroup("menuGroup")
@@ -91,14 +97,13 @@ class MenuScreen {
 
                 textlabels = new Textlabel[1];
 
-
                 textlabels[0] = cp5.addTextlabel("message")
-                    .setText("Welcome " + user.getUser_name() + ". You last completed an exercise on : " + Year + " / " + " / " + Month + " / " + Day)
+                    .setText(welcomeMessage)
                     .setPosition(10, 538)
                     .setWidth(465)
                     .setHeight(40)
                     .setColorValue(color(51, 196, 242))
-                    .setFont(createFont("Arial",18))
+                    .setFont(createFont("Arial",30))
                     .setGroup(menuGroup)
                     ;
 

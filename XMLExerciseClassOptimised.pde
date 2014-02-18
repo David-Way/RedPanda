@@ -241,7 +241,11 @@ class XMLExerciseClassOptimised {
                  println("c1.z=" +  c1.z + " aimPoint.z=" +aimPoint.z);
 
                 //check for correct z position                
+<<<<<<< HEAD
                 if (truec1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220) {
+=======
+                /*if (true/*c1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220) {
+>>>>>>> 85a85523d6749faa41d4ec246030108aab2e6e1d
                         directionMessage.destroy();    
                         if (aimPoint.z > c1.z + 200) {                                                        
                                 directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Back Slightly!");                                
@@ -259,7 +263,11 @@ class XMLExerciseClassOptimised {
                 } 
                 else if (!directionMessage.check()) {
                         //directionMessage.destroy();
+<<<<<<< HEAD
                 }     */            
+=======
+                }*/            
+>>>>>>> 85a85523d6749faa41d4ec246030108aab2e6e1d
 
                 PVector added1 = PVector.add(p1, c3);
                 PVector added2 =  PVector.add(p2, c3);

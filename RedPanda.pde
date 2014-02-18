@@ -67,7 +67,7 @@ PVector rightHand = new PVector();
 PVector convertedLeftJoint = new PVector();
 PVector convertedRightJoint = new PVector();
 PImage backgroundImage;
-PImage roomImage;
+PImage backgroundImage2;
 
 //variables for removing screens on next frame
 boolean deleteErrorScreen = false;
@@ -80,6 +80,8 @@ boolean deleteExerciseScreenOne = false;
 boolean deleteExerciseScreenTwo = false;
 boolean deleteExerciseScreenThree = false;
 boolean deleteCommentsScreen = false;
+
+ArrayList<Exercise> e = new ArrayList<Exercise>();
 
 void setup() {
         //basic sketch setup functions
@@ -94,7 +96,7 @@ void setup() {
         //animation = Gif.getPImages(this, "images/loading.gif");
         //load background image
         backgroundImage = loadImage("images/background.png");
-        roomImage = loadImage("images/room.jpg");
+        backgroundImage2 = loadImage("images/background2.png");
         cp5 = new ControlP5(this);
         
         //load screen assets
@@ -182,50 +184,44 @@ void draw() {
 
         case 4: //progress screen
                 checkForScreensToDelete(); 
-                background(backgroundImage);
+                background(backgroundImage2);
                 progressScreen.drawUI();
-                pushMatrix();
-                scale(2.5);
-                trackUser();
-                popMatrix();
-                progressScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
+                //pushMatrix();
+                //scale(2.5);
+                //trackUser();
+                //popMatrix();
+                //progressScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
 
         case 5: //comments screen
                 checkForScreensToDelete(); 
-                background(backgroundImage);
+                background(backgroundImage2);
                 commentsScreen.drawUI();
-                pushMatrix();
-                scale(2.5);
-                trackUser();
-                popMatrix();
-                commentsScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
+                //pushMatrix();
+                //scale(2.5);
+                //trackUser();
+                //popMatrix();
+                //commentsScreen.checkBtn(convertedLeftJoint, convertedRightJoint);
                 break;
 
         case 6: //exercise screen? or screens?
                 checkForScreensToDelete();
-                background(backgroundImage);
+                background(backgroundImage2);
                 exerciseScreenOne.drawUI(); 
-                //exerciseScreenOne.trackUser();
-                exerciseScreenOne.trackSkeleton(kinect);
-                exerciseScreenOne.startExercise();
-                exerciseScreenOne.checkBtn(convertedLeftJoint, convertedRightJoint);
+                exerciseScreenOne.startExercise(kinect);
                 break;
 
         case 7://xml exercise
                 checkForScreensToDelete();
-                background(backgroundImage);
+                background(backgroundImage2);
                 xmlExercise.drawUI(false); //parameter true to draw debug HUD
                 break;
 
          case 8: //exercise screen? or screens?
                 checkForScreensToDelete();
-                background(backgroundImage);
+                background(backgroundImage2);
                 exerciseScreenThree.drawUI(); 
-                //exerciseScreenThree.trackUser();
-                exerciseScreenThree.trackSkeleton(kinect);
-                exerciseScreenThree.startExercise();
-                exerciseScreenThree.checkBtn(convertedLeftJoint, convertedRightJoint);
+                exerciseScreenThree.startExercise(kinect);
                 break;
         }
 }
@@ -237,7 +233,17 @@ void draw() {
 
 public void controlEvent(ControlEvent theEvent) {
         //tells you what controller was called
+    
         println(">/>"+ theEvent.getController().getName());
+
+        //Loop  to check if any of the dynamic buttons created in the comments screen have been clicked. 
+        //If this was the event clicked, get the button value and send as parameter to buttonClicked function in
+        //comments screen to do GET request for comments with that exercise id
+        for( int i = 0; i < e.size(); i++){
+            if(theEvent.controller().name().equals("button" + i)){
+                 commentsScreen.buttonClicked(theEvent.controller().value());
+            }
+        }
 
         if (theEvent.getController().getName().equals("log in")) { //f the button was the log in button
                 //get the values from the username and password fields
@@ -250,11 +256,15 @@ public void controlEvent(ControlEvent theEvent) {
                 if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theyre in the loggin screen
                         println("Logged IN");
                         //get exercise programme
+                        try{
                         ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
                         programme = programmeDAO.getProgramme();
                         //println("create date: " + programme.getCreate_date());
                         //get the exercise objects and add them to the programme object.
-                        ArrayList<Exercise> e = new ArrayList<Exercise>();
+                        }
+                       catch (Exception ex) {
+                                System.out.println("Programs not retrieved/set");
+                        }
                         try {
                                 ExerciseDAO exerciseDAO = new ExerciseDAO();
                                 e = exerciseDAO.getExercises(programme.getProgramme_id());
@@ -265,8 +275,12 @@ public void controlEvent(ControlEvent theEvent) {
                                 System.out.println("exercises not retrieved/set");
                         }
                         deleteLoginScreen = true;
+                        try{
                         RecordDAO recordDAO = new RecordDAO();
                         record = recordDAO.getLastDone(user.getUser_id());
+                        }catch (Exception ex) {
+                                System.out.println("exercises not retrieved/set");
+                        }
                         menuScreen.create(user, record);
                         currentScene = 1;
                 } 
@@ -412,7 +426,7 @@ void makeComments() {
                 deleteProfileScreen = true;
         }
         deleteMenuScreen = true;
-        commentsScreen.create();
+        commentsScreen.create(user, programme);
         currentScene = 5;
 }
 

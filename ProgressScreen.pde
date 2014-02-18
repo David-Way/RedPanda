@@ -10,7 +10,9 @@ class ProgressScreen {
         private Group progressGroup;
         boolean start = false;
         int timer;
-        ProgressChart chart;
+        //ProgressChart chart;
+        JFreeProgressChart chartObject;
+        PImage chartImage;
         Programme programme;
         ArrayList<Exercise> exs;
         ArrayList<ArrayList<Record>> records;
@@ -22,10 +24,11 @@ class ProgressScreen {
         }
 
         void loadImages() {
-                //load images  for login button
+                //load images  for buttons
                 this.menuBack[0]  = loadImage("images/menu.jpg");
                 this.menuBack[1]  = loadImage("images/menuOver.jpg");
                 this.menuBack[2]  = loadImage("images/menu.jpg");
+
                 this.logout[0] = loadImage("images/logout.jpg");
                 this.logout[1] =loadImage("images/logoutOver.jpg");
                 this.logout[2] =loadImage("images/logout.jpg");
@@ -42,6 +45,8 @@ class ProgressScreen {
         public void create(Programme _programme) {
                 this.programme = _programme;
                 start = false;
+
+                //create UI elements
                 cp5.setAutoDraw(false);
 
                 progressGroup = cp5.addGroup("progressGroup")
@@ -78,7 +83,7 @@ class ProgressScreen {
                                         .updateSize()
                                                 .setGroup(progressGroup)
                                                         ;
-                                                        
+                //generate charts
                 loadChartData();                   
                 createChart();
         }
@@ -90,7 +95,6 @@ class ProgressScreen {
 
                 for (int i = 0; i < exs.size(); i ++) {
                         records.add(dao.getRecords(user.getUser_id(), exs.get(i).getExercise_id()));
-                        //records.add(dao.getRecords(user.getUser_id(), i));
                 }
         }
 
@@ -106,22 +110,8 @@ class ProgressScreen {
                         score[i] = sc;
                 }  
 
-                chart = new ProgressChart(context, dates, score, "date", "score");
-                /*switch (currentChartNumber) {
-                 case 1: 
-                 
-                 chart = new ProgressChart(context, new float[] {
-                 1900, 1910, 1920, 1930, 1940, 1950, 
-                 1960, 1970, 1980, 1990, 2000
-                 }
-                 , 
-                 new float[] { 
-                 6322, 6489, 6401, 7657, 9649, 9767, 
-                 12167, 15154, 18200, 23124, 28645
-                 }
-                 , "Date", "Score");
-                 break;
-                 }*/
+                chartObject = new JFreeProgressChart(dates, score, exs.get(currentChartNumber).getName(), "Date", "Score");
+                chartImage = chartObject.getChartImage();
         }
 
         void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
@@ -179,12 +169,14 @@ class ProgressScreen {
         void drawUI() {
                 pushStyle();
 
-                fill(255, 180);
-                rect(10, 95, 1180, 495);
+                //fill(255, 180);
+                //rect(10, 95, 1180, 495);
 
                 popStyle();
                 cp5.draw();
-                chart.drawUI();
+                //chart.drawUI();
+                image(chartImage, 116, 100);               
+
                 drawInfo();
         }
 
@@ -195,20 +187,20 @@ class ProgressScreen {
                 textAlign(LEFT);   
                 fill(255);
                 textSize(24);
-                text("Progress Details", 10, 28);
+                //text("Progress Details", 10, 28);
                 textSize(16);
                 text("Start Date: " + programme.getCreate_date(), 10, 45); 
                 text("End Date: " + programme.getEnd_date(), 10, 65);
                 text("Number of Exercises: " + programme.getEnd_date(), 10, 85);
-                text("Programme version: " + programme.getEnd_date(), 10, 105);
+                //text("Programme version: " + programme.getEnd_date(), 10, 105);
                 textSize(24);
-                text("Chart Legend ", 10, 145); 
+                //text("Chart Legend ", 10, 145); 
                 //text("Start Date: " + programme.getStart_date(), 10, 70);
                 popMatrix(); 
                 popStyle();
         }
 
-        public void nextChartPressed() {
+        public void nextChartPressed() { //chart navigation , next chart
                 if (currentChartNumber < exs.size() -1) {
                         currentChartNumber++;
                 } 
@@ -220,12 +212,12 @@ class ProgressScreen {
                 createChart();
         }
 
-        public void previousChartPressed() {
+        public void previousChartPressed() { //chart navigation, previous chart
                 if (currentChartNumber > 0) {
                         currentChartNumber--;
                 } 
                 else {
-                        currentChartNumber = exs.size();
+                        currentChartNumber = exs.size() -1;
                 }
                 println(currentChartNumber);
                 loadChartData();                   
@@ -233,14 +225,13 @@ class ProgressScreen {
                 createChart();
         }
 
-        
+
         void destroy() {
                 for ( int i = 0 ; i < buttons.length ; i++ ) {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
                 cp5.getGroup("progressGroup").remove();
-                //progressGroup.remove();
         }
 }
 

@@ -53,9 +53,10 @@ class XMLExerciseClassOptimised {
         private Button []buttons;
         private Group exerciseGroup2;
 
-        long startTime;
+        long startTime = 0;
         Message message;
         Message timerMessage;
+        Message directionMessage;
         String exerciseName;
         float c = (float)0.0;
         float offByDistance = (float)0.0;
@@ -65,6 +66,7 @@ class XMLExerciseClassOptimised {
         int currentRep = 0;
         boolean paused = false;
         boolean recording = false;
+        boolean exerciseStarted = false;
         boolean exerciseComplete = false;
         Gif target;
         //set colours for user avatar
@@ -72,7 +74,8 @@ class XMLExerciseClassOptimised {
         color userColourGreen = color(0, 255, 0);
         color userColourBlue = color(0, 0, 255);
         color userColourGrey = color(155, 155, 155);
-        color currentUserColour = userColourGrey;
+        color userColourWhite = color(255, 255, 255);
+        color currentUserColour = userColourWhite;
 
         PVector messagePosition = new PVector(10, 100);
 
@@ -134,10 +137,13 @@ class XMLExerciseClassOptimised {
 
                 message = new Message(280, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\n" + "The blue targets will lead you throught the exercise. Try to follow them." +"\n" + e.getDescription());
                 message.create("mgroup", "lname");
-                startTime  = System.currentTimeMillis();
+                //startTime  = System.currentTimeMillis();
 
-                timerMessage = new Message(240, 50, new PVector(950, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
+                timerMessage = new Message(240, 50, new PVector(950, 100), "Time: 0s");
                 timerMessage.create("a", "b");
+
+                directionMessage = new Message(240, 100, new PVector(480, 400), "Get into positon in front of the camera.");
+                directionMessage.create("c", "d");
 
                 exerciseComplete = false;
                 currentFrame = 0;
@@ -148,10 +154,11 @@ class XMLExerciseClassOptimised {
         }
 
         void drawUI(boolean drawHUD) {
-                background(255, 255, 255);
+                //background(255, 255, 255);
+
                 context.update();
                 //message.drawUI();
-                timerMessage.drawUI();
+                directionMessage.drawUI();
                 //println(currentRep);
 
                 if (drawHUD) {
@@ -170,6 +177,10 @@ class XMLExerciseClassOptimised {
                         int userId = userList.get(0);
                         setUser(userId);
                         if ( context.isTrackingSkeleton(userId)) {
+                                if (!exerciseStarted) {
+                                        startTime  = System.currentTimeMillis();
+                                        exerciseStarted = true;
+                                }
                                 drawSkeleton(userId); //draw the user
                                 // if we're recording tell the recorder to capture this frame
                                 if (recording) { //if recordng 
@@ -182,7 +193,7 @@ class XMLExerciseClassOptimised {
                                 } 
                                 else {
                                         //the user should be grey
-                                        setUserColour(userColourGrey);
+                                        setUserColour(userColourWhite);
                                         //display exercise target
                                         drawExerciseSkeleton(userId);
                                         timerMessage.destroy();
@@ -213,8 +224,33 @@ class XMLExerciseClassOptimised {
                 PVector p1 = exercisePointsForCurrentFrame.get(2);
                 PVector p2 = exercisePointsForCurrentFrame.get(1);
                 //PVector p3 = exercisePointsForCurrentFrame.get(0);
+                
+                //reconstruct current jont position
+                PVector aimPoint = PVector.add(c3, p2);
+                aimPoint = PVector.add(aimPoint, p1);
+                
+                 println("c1.z=" +  c1.z + " aimPoint.z=" +aimPoint.z);
 
-                //println(p3.x);
+                //check for correct z position                
+                if (true/*c1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220*/) {
+                        directionMessage.destroy();    
+                        if (aimPoint.z > c1.z + 200) {                                                        
+                                directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Back Slightly!");                                
+                                println("move back p=" +  p1.z + " aimPoint=" +aimPoint.z);
+                        } 
+                        else if (c1.z < aimPoint.z - 200) {
+                                directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Forward Slightly!");
+                                println("move forward");
+                        } 
+                        else {
+                                directionMessage = new Message(240, 0, new PVector(950, 150), "");
+                        } 
+
+                        directionMessage.create("mgroup2", "lname2");
+                } 
+                else if (!directionMessage.check()) {
+                        //directionMessage.destroy();
+                }                 
 
                 PVector added1 = PVector.add(p1, c3);
                 PVector added2 =  PVector.add(p2, c3);
@@ -227,7 +263,7 @@ class XMLExerciseClassOptimised {
 
                 if (c1.mag() < 220 && c2.mag() <220) {
                         result = true;
-                }
+                } 
                 return result;
         }
 
@@ -324,79 +360,7 @@ class XMLExerciseClassOptimised {
 
                 popMatrix();
                 popStyle();
-        }
-
-        // draw the skeleton with the selected joints
-        void drawSkeleton2(int userId) {
-                pushStyle();
-                pushMatrix();
-                //rotateX(radians(-180));
-                //translate(-320,-240, 0);
-                scale(0.8f);
-                PVector p1 = new PVector();
-                PVector p2 = new PVector();
-
-                // left arm
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, p1);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, p2);
-                Limb2 testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-                p1.set(p2);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-
-                // right arm
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, p1);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-                p1.set(p2);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-
-                // left leg
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HIP, p1);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_KNEE, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-                p1.set(p2);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_FOOT, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-
-                // right leg
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HIP, p1);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-                p1.set(p2);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_FOOT, p2);
-                testLimb2 = new Limb2(p1, p2, 0.3f, 0.3f, currentUserColour);
-                testLimb2.draw();
-
-                // torso
-                PVector p3 = new PVector();
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, p1);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HIP, p2);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HIP, p3);
-                // fiddle with offset here
-                testLimb2 = new Limb2(p1, new PVector((p2.x+p3.x)/2.f, (p2.y+p3.y)/2.f, (p2.z+p3.z)/2.f), 0.6f, 0.6f, currentUserColour);
-                testLimb2.draw();
-
-                // head
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, p1);
-                context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_HEAD, p2);
-                p1.add(0, 100, 0);
-                p2.add(0, 100, 0);
-                testLimb2 = new Limb2(p1, p2, 0.5f, 0.5f, currentUserColour);
-                testLimb2.draw();
-
-                popMatrix();
-                popStyle();
-        }
-
+        }     
 
         // draw the skeleton with the selected joints
         void drawSkeleton(int userId) {
@@ -570,25 +534,18 @@ class XMLExerciseClassOptimised {
                 }
         }
 
-        void drawHeadsUpDisplay() {
+        void drawHeadsUpDisplay() { //used for debugiing
                 pushMatrix();
                 // create hud
                 fill(0);
                 text("totalFrames: " + framesGroup.get(0).size(), 5, 10);
                 text("recording: " + recording, 5, 24);
                 text("currentFrame: " + currentFrame, 5, 38 );
-
-                // set text color as a gradient from red to green
-                // based on distance between hands
-                //c = map(offByDistance, 0, 1000, 0, 255); 
-                //fill(c, 255-c, 0);
-                //text("joint 1 off by: " + offByDistance, 5, 52);
                 popMatrix();
         }
 
         void loadImages() {
-
-                //load images  for login button
+                //load images  for buttons
                 this.menuBack[0]  = loadImage("images/menu.jpg");
                 this.menuBack[1]  = loadImage("images/menuOver.jpg");
                 this.menuBack[2]  = loadImage("images/menu.jpg");
@@ -597,20 +554,21 @@ class XMLExerciseClassOptimised {
                 this.logout[2] =loadImage("images/logout.jpg");
         }
 
-        void toggleRecording() {
+        void toggleRecording() { //change the programs recording state
                 recording = !recording;
                 System.out.println("recording state: " + recording);
         }
 
-        void loadPressed() {
+        void loadPressed() { //load default exercise
                 readXML("default");
         }
 
-        void savePressed() {
-                writeXML("left-arm-three-joint");
+        void savePressed() { //save the recordedexercise
+                writeXML("right arm curl");
         }
 
-        void readXML(String fileName) {
+        void readXML(String fileName) { //reads the xml docment of the given name
+                currentFrame = 0;
                 paused = true;
                 framesGroup = null;
                 framesGroup = new ArrayList<ArrayList<PVector>>(3);
@@ -665,7 +623,7 @@ class XMLExerciseClassOptimised {
         }
 
 
-        public void writeXML(String fileName) {
+        public void writeXML(String fileName) { //writes xml file of given name
                 try {
                         //String pathName =  "C:\\Users\\David\\Documents\\Processing\\movementRecorderClass\\" + "xml-exercises\\" + fileName;
                         String pathName = sketchPath("xml-exercises") + "\\" + fileName + ".xml";
@@ -737,6 +695,7 @@ class XMLExerciseClassOptimised {
                 cp5.getGroup("exerciseGroup2").remove();
                 message.destroy();
                 timerMessage.destroy();
+                directionMessage.destroy();
         }
 }
 

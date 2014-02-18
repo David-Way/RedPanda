@@ -214,6 +214,7 @@ void draw() {
 
         case 7://xml exercise
                 checkForScreensToDelete();
+                background(backgroundImage);
                 xmlExercise.drawUI(false); //parameter true to draw debug HUD
                 break;
 
@@ -372,7 +373,7 @@ void makeExerciseTwo() {
         xmlExercise = new XMLExerciseClassOptimised(this);
         xmlExercise.loadImages();
         xmlExercise.create(kinect, user, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, e.get(1));
-        xmlExercise.readXML("default");
+        xmlExercise.readXML(e.get(1).getName());
         currentScene = 7;
 }
 

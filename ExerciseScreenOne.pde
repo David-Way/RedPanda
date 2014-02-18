@@ -22,7 +22,7 @@ class ExerciseScreenOne {
         PVector currentPos = new PVector();
         //Array of hightestpoint per rep
         PVector  highestPoint[];
-
+        IntVector userList;
 
         boolean startExercise = false;
         int timerCountDown;
@@ -59,6 +59,7 @@ class ExerciseScreenOne {
         public void create(User user, Exercise e) {
                 countDownIcon = new Gif(context, "images/countdown.gif");
                 target = new Gif(context, "images/target.gif");
+                userList = new IntVector();
                 exerciseId = e.getExercise_id();
                 userId = user.getUser_id();
                 MAX_REPS = e.getRepetitions();
@@ -114,7 +115,7 @@ class ExerciseScreenOne {
 
         public void startExercise() {
 
-                IntVector userList = new IntVector();
+                
                 kinect.getUsers(userList);
 
                 if (userList.size() > 0) {
@@ -339,7 +340,7 @@ class ExerciseScreenOne {
                 // update the cam
                 kinect.update();
 
-                IntVector userList = new IntVector();
+                //IntVector userList = new IntVector();
                 kinect.getUsers(userList);
                 if (userList.size() > 0) {
                         int trackingUserId = userList.get(0);

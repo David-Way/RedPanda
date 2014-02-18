@@ -69,6 +69,7 @@ class XMLExerciseClassOptimised {
         boolean exerciseStarted = false;
         boolean exerciseComplete = false;
         Gif target;
+        int FONT_30 = 30;
         //set colours for user avatar
         color userColourRed = color(255, 0, 0);
         color userColourGreen = color(0, 255, 0);
@@ -78,6 +79,7 @@ class XMLExerciseClassOptimised {
         color currentUserColour = userColourWhite;
 
         PVector messagePosition = new PVector(10, 100);
+        IntVector userList;
 
         XMLExerciseClassOptimised(RedPanda parent) {
                 this.parent = parent;
@@ -94,7 +96,7 @@ class XMLExerciseClassOptimised {
                 //initilise required variables 
                 this.context = tempContext; 
                 this.user = user;
-
+                userList = new IntVector();
                 this.jointID[0] = tempJointIDOne; //store the chosen joint parameters
                 this.jointID[1] = tempJointIDTwo;
                 this.jointID[2] = tempJointIDThree;
@@ -106,11 +108,12 @@ class XMLExerciseClassOptimised {
                 this.framesGroup.add(framesOne); //add these arrays to a group array
                 this.framesGroup.add(framesTwo);
                 this.framesGroup.add(framesThree);
-
+                //set exercise info
                 this.e = ex;
                 this.exerciseName = e.getName();
                 this.numberOfReps = e.getRepetitions();
-
+                
+                //create UI elements
                 cp5.setAutoDraw(false);
 
                 exerciseGroup2 = cp5.addGroup("exerciseGroup2")
@@ -134,8 +137,9 @@ class XMLExerciseClassOptimised {
                                         .updateSize()
                                                 .setGroup(exerciseGroup2)
                                                         ;
-
-                message = new Message(280, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\n" + "The blue targets will lead you throught the exercise. Try to follow them." +"\n" + e.getDescription());
+                
+                //create message UI elements
+                message = new Message(280, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\nDescription:\n" + e.getDescription());
                 message.create("mgroup", "lname");
                 //startTime  = System.currentTimeMillis();
 
@@ -145,6 +149,7 @@ class XMLExerciseClassOptimised {
                 directionMessage = new Message(240, 100, new PVector(480, 400), "Get into positon in front of the camera.");
                 directionMessage.create("c", "d");
 
+                //set exercise 
                 exerciseComplete = false;
                 currentFrame = 0;
                 numberOfFrames = 0;
@@ -169,8 +174,8 @@ class XMLExerciseClassOptimised {
                 noStroke();
                 translate(width/2, height/2, 0);
                 rotateX(radians(180));
-
-                IntVector userList = new IntVector();
+                
+                
                 context.getUsers(userList);
 
                 if (userList.size() > 0 && !exerciseComplete) {
@@ -194,11 +199,15 @@ class XMLExerciseClassOptimised {
                                 else {
                                         //the user should be grey
                                         setUserColour(userColourWhite);
-                                        //display exercise target
+                                        //display user directions
+                                        directionMessage.destroy();
+                                        directionMessage = new Message(240, 100, new PVector(480, 400), "The blue targets will lead you throught the exercise. Try to follow them.");
+                                        directionMessage.create("e", "f");
+                                        
                                         drawExerciseSkeleton(userId);
                                         timerMessage.destroy();
                                         timerMessage = new Message(240, 50, new PVector(950, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
-                                        timerMessage.create("a", "b");
+                                        timerMessage.create("g", "h");
                                         //if user is close to points
                                         if (checkUserCompliance(userId)) {
                                                 nextFrame(); //advance to the next target position
@@ -226,13 +235,13 @@ class XMLExerciseClassOptimised {
                 //PVector p3 = exercisePointsForCurrentFrame.get(0);
                 
                 //reconstruct current jont position
-                PVector aimPoint = PVector.add(c3, p2);
+                /*PVector aimPoint = PVector.add(c3, p2);
                 aimPoint = PVector.add(aimPoint, p1);
                 
                  println("c1.z=" +  c1.z + " aimPoint.z=" +aimPoint.z);
 
                 //check for correct z position                
-                if (true/*c1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220*/) {
+                if (truec1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220) {
                         directionMessage.destroy();    
                         if (aimPoint.z > c1.z + 200) {                                                        
                                 directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Back Slightly!");                                
@@ -250,18 +259,19 @@ class XMLExerciseClassOptimised {
                 } 
                 else if (!directionMessage.check()) {
                         //directionMessage.destroy();
-                }                 
+                }     */            
 
                 PVector added1 = PVector.add(p1, c3);
                 PVector added2 =  PVector.add(p2, c3);
-                c1.sub(added1);
-                c2.sub(added2);
-
-                //println(">" + c1.mag());
-                //println(">>" + c2.mag());
-                //println(result + " " + c1.mag() + " " + c2.mag());
-
-                if (c1.mag() < 220 && c2.mag() <220) {
+                PVector flat1 = new PVector(added1.x, added1.y);
+                PVector flat2 = new PVector(added2.x, added2.y);
+                PVector flatA = new PVector(c1.x, c1.y);
+                PVector flatB = new PVector(c2.x, c2.y);
+                //c1.sub(added1);
+                //c2.sub(added2);
+          
+                //if the distance between the points is less than 200 or the x and y is close but the z isnt.
+                if ((flatA.dist(flat1) < 200  && flatB.dist(flat2) < 200)) { 
                         result = true;
                 } 
                 return result;
@@ -491,7 +501,8 @@ class XMLExerciseClassOptimised {
                                 if (currentRep < numberOfReps) {        
                                         message.destroy();                            
                                         message = new Message(280, 100, messagePosition, "Target Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
-                                        message.create("mgroup", "lname");
+                                        message.create("mgroup", "lname");                                   
+                                        
                                 } 
                                 else if (!exerciseComplete) { //on exercise complete
                                         long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
@@ -516,11 +527,12 @@ class XMLExerciseClassOptimised {
                                                 timeFeedback = "You finished the exercise at a good pace.";
                                         } 
                                         else {
-                                                timeFeedback = "You took a while to complete the exercise, try to finish a little faster next time if you can.";
+                                                timeFeedback = "Try to finish a little faster next time if you can.";
                                         }
                                         message.destroy();                                        
-                                        message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\nTime to Complete: " + elapsedTime + " seconds" + "\nScore: " + score + " points \n" + scoreFeedback + "\n" + timeFeedback);
+                                        message = new Message(550, 450, new PVector(325, 100), "Well Done!"  + "\n\nTime to Complete: " + elapsedTime + " seconds" + "\n\nScore: " + score/10 + " points \n\n" + scoreFeedback + "\n\n" + timeFeedback, FONT_30);
                                         message.create("mgroup", "lname");
+                                        //message.destroy();
                                         exerciseComplete = true;
                                         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                                         Date currentDate = new Date();

@@ -8,9 +8,18 @@ class Message {
         PVector position;
         String m_string;
         String groupName = "messageGroup";
+        int m_fontSize = 24;
 
         public Message(int _w, int _h, PVector _pos, String _s) {
                 //bgCol = bgCol;
+                m_height = _h;
+                m_width = _w;
+                position = _pos;
+                m_string = _s;
+        }
+
+        public Message(int _w, int _h, PVector _pos, String _s, int _fs) {
+                m_fontSize = _fs;
                 m_height = _h;
                 m_width = _w;
                 position = _pos;
@@ -36,7 +45,7 @@ class Message {
                                         .setWidth(m_width - 10)
                                                 .setHeight(m_height - 10)
                                                         .setColorValue(0xffffffff)
-                                                                .setFont(createFont("Arial", 24))
+                                                                .setFont(createFont("Arial", m_fontSize))
                                                                         .setGroup(messageGroup)
                                                                                 .setMultiline(true)
                                                                                         ;
@@ -62,7 +71,7 @@ class Message {
                                         .setWidth(m_width - 10)
                                                 .setHeight(m_height - 10)
                                                         .setColorValue(0xffffffff)
-                                                                .setFont(createFont("Arial", 24))
+                                                                .setFont(createFont("Arial", m_fontSize))
                                                                         .setGroup(messageGroup)
                                                                                 .setMultiline(true)
                                                                                         ;

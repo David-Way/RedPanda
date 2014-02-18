@@ -103,14 +103,17 @@ class ProgressScreen {
 
                 float[] dates = new float[rs.size()];
                 float[] score = new float[rs.size()];
+                float[] time = new float[rs.size()];
                 for (int i = 0; i < rs.size(); i++) {                        
                         float  dd = rs.get(i).getDateDone();
-                        float sc = rs.get(i).getScore();                        
+                        float sc = rs.get(i).getScore();
+                        float tm = rs.get(i).getTimeToComplete();                        
                         dates[i] = dd;
                         score[i] = sc;
+                        time[i] = tm;
                 }  
 
-                chartObject = new JFreeProgressChart(dates, score, exs.get(currentChartNumber).getName(), "Date", "Score");
+                chartObject = new JFreeProgressChart(dates, score, time, exs.get(currentChartNumber).getName(), "Date", "Score", "Time");
                 chartImage = chartObject.getChartImage();
         }
 
@@ -175,7 +178,12 @@ class ProgressScreen {
                 popStyle();
                 cp5.draw();
                 //chart.drawUI();
-                image(chartImage, 116, 100);               
+                
+                image(chartImage, 116, 100);    
+                //draw current chart number
+                fill(123);
+                textSize(32);
+                text(currentChartNumber + "/" +  exs.size(), 600, 550);           
 
                 drawInfo();
         }

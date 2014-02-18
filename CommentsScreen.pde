@@ -5,7 +5,9 @@ class CommentsScreen {
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
         private Button []buttons;
+        private Button []buttons2;
         private Group commentsGroup;
+        ArrayList<Exercise> e = new ArrayList<Exercise>();
         boolean start = false;
         int timer;
 
@@ -23,7 +25,7 @@ class CommentsScreen {
                 this.logout[2] =loadImage("images/logout.jpg");
         }
 
-        public void create() {
+        public void create(User user, Programme programme) {
                 start = false;
                 cp5.setAutoDraw(false);
 
@@ -31,6 +33,8 @@ class CommentsScreen {
                         .setPosition(0, 0)
                                 .hideBar()
                                         ;
+
+
 
                 buttons = new Button[2];
 
@@ -47,6 +51,46 @@ class CommentsScreen {
                                         .updateSize()
                                                 .setGroup(commentsGroup)
                                                         ;
+
+                  if (programme.getProgramme_id() != -1) {
+                        
+                        try {
+                              
+                                e = programme.getExercises();   
+                                buttons2 = new Button[e.size()];
+                                for (int i = 0; i < e.size(); i++) {
+                                        int x = 200;
+                                        int y = 200;
+                                        int width = 200;
+                                        int height = 100;
+                                        buttons2[i] = cp5.addButton("button" + i)
+                                                .setPosition(x + (width*i), y + height)
+                                                .updateSize()
+                                                .setBroadcast(false)
+                                                .setValue(e.get(i).getExercise_id())
+                                                .setBroadcast(true)
+                                                .setWidth(width)
+                                                .setHeight(height)
+                                                .setGroup(commentsGroup)
+                                                        ;    
+                                }  
+
+                                buttonClicked(e.get(0).getExercise_id());            
+                
+                        } catch (Exception ex) {
+                                System.out.println("exercises not retrieved/set");
+                        }
+
+                  }      
+        }
+
+        void buttonClicked(float btnValue){
+                ArrayList<Comment> comment  = new ArrayList<Comment>();
+                CommentDAO commentDAO = new CommentDAO();
+                comment=commentDAO.getComments(user.getUser_id(), int(btnValue));
+                for (int i=0; i < comment.size(); i++){
+                         println(comment.get(i).getComment());
+                }
         }
 
 
@@ -114,8 +158,11 @@ class CommentsScreen {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
+                for ( int i = 0 ; i < buttons2.length ; i++ ) {
+                        buttons2[i].remove();
+                        buttons2[i] = null;
+                }
                 cp5.getGroup("commentsGroup").remove();
-                //commentsGroup.remove();
         }
 }
 

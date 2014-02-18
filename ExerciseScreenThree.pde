@@ -112,8 +112,8 @@ class ExerciseScreenThree {
                                                         ;
         }
 
-        public void startExercise() {
-
+        public void startExercise(SimpleOpenNI kinect) {
+                trackSkeleton(kinect);
                 IntVector userList = new IntVector();
                 kinect.getUsers(userList);
 

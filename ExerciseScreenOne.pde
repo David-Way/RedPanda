@@ -112,8 +112,9 @@ class ExerciseScreenOne {
                                                         ;
         }
 
-        public void startExercise() {
+        public void startExercise(SimpleOpenNI kinect) {
 
+                trackSkeleton(kinect);
                 IntVector userList = new IntVector();
                 kinect.getUsers(userList);
 
@@ -122,7 +123,7 @@ class ExerciseScreenOne {
                         if (kinect.isTrackingSkeleton(trackingUserId)) {
 
                                 if (startPoint == null) {
-                                        text(timeLeft, 40, 40, 0);
+                                        //text(timeLeft, 40, 40, 0);
 
                                         if (startExercise == false) {
                                                 startExercise = true;

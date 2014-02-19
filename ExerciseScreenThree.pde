@@ -40,6 +40,7 @@ class ExerciseScreenThree {
         float lastTime;
         int timer;
         long startTime;
+        long timeOut;
         int timeCompleted;
         IntVector userList;
 
@@ -59,6 +60,7 @@ class ExerciseScreenThree {
         }
 
         public void create(User user, Exercise e) {
+                timeOut = System.currentTimeMillis();
                 countDownIcon = new Gif(context, "images/countdown.gif");
                 target = new Gif(context, "images/target.gif");
                 exerciseId = e.getExercise_id();
@@ -323,6 +325,12 @@ class ExerciseScreenThree {
         void drawUI() {
                 //cp5.draw();
                 message.drawUI();
+                 //Timer to cancel exercise incase user have left.
+                if(((System.currentTimeMillis() - timeOut) / 1000) > 120){
+                        println(((System.currentTimeMillis()/1000) - startTime));
+                        context.deleteExerciseScreenOne = true;
+                        menuBack();
+                }
         }
 
         void destroy() {

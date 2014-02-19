@@ -11,6 +11,9 @@ class ProgramsScreen {
         private Group programmesGroup;
         boolean start = false;
         int timer;
+        Gif exercise_one_tut;
+        Gif exercise_two_tut;
+        Gif exercise_three_tut;
 
         public ProgramsScreen(RedPanda c) {
                 this.context = c;
@@ -34,12 +37,17 @@ class ProgramsScreen {
                 this.logout[0] = loadImage("images/logout.jpg");
                 this.logout[1] =loadImage("images/logoutOver.jpg");
                 this.logout[2] =loadImage("images/logout.jpg");
+                exercise_one_tut = new Gif(context,"images/ex1_sml.gif");
+                exercise_two_tut = new Gif(context,"images/ex2_sml.gif");
+                exercise_three_tut = new Gif(context,"images/ex3_sml.gif");
         }
 
         public void create() {
                 start = false;
                 cp5.setAutoDraw(false);
-
+                exercise_one_tut.play();
+                exercise_two_tut.play();
+                exercise_three_tut.play();
 
                 programmesGroup = cp5.addGroup("programmesGroup")
                         .setPosition(0, 0)
@@ -56,28 +64,31 @@ class ProgramsScreen {
                                                         ;
 
                 buttons[1] = cp5.addButton("exerciseOne")
-                        .setPosition(10, 120)
+                        .setPosition(10, 100)
                                 .setImages(exerciseOne)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
                                                         ;
 
+
                 buttons[2] = cp5.addButton("exerciseTwo")
-                        .setPosition(242, 120)
+                        .setPosition(242, 100)
                                 .setImages(exerciseTwo)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
                                                         ;
 
+                 
+                                                    
 
                 buttons[3] = cp5.addButton("exerciseThree")
-                        .setPosition(482, 120)
+                        .setPosition(482, 100)
                                 .setImages(exerciseThree)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
                                                         ;
 
-
+            
 
                 buttons[4] = cp5.addButton("logoutPrograms")
                         .setPosition(978, 10)
@@ -89,6 +100,9 @@ class ProgramsScreen {
 
         void drawUI() {
                 cp5.draw();
+                image(exercise_one_tut, 10, 325);
+                image(exercise_two_tut, 242, 325);
+                image(exercise_three_tut, 482, 325);    
         }
 
 

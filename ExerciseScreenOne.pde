@@ -62,6 +62,7 @@ class ExerciseScreenOne {
                 userList = new IntVector();
                 exerciseId = e.getExercise_id();
                 userId = user.getUser_id();
+                userList = new IntVector();
                 MAX_REPS = e.getRepetitions();
                 highestPoint = new PVector[MAX_REPS];
                 startPoint = null;
@@ -78,12 +79,12 @@ class ExerciseScreenOne {
                         int Month=int(date.substring(4, 6));
                         int Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
-                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on : " + Day +" / " + Month + " / "+ Year + "\nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("g", "l");
                 }
                 else {
                         PVector pos = new PVector(10, 100);
-                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nYou have not attempted this exercise yet. \nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nYou have not attempted this exercise yet. \n\n Directions : \nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("g", "l");
                 }
 
@@ -114,7 +115,6 @@ class ExerciseScreenOne {
         }
 
         public void startExercise(SimpleOpenNI kinect) {
-
                 trackSkeleton(kinect);
                 kinect.getUsers(userList);
 
@@ -247,7 +247,7 @@ class ExerciseScreenOne {
                 }
                 score  = (int) average / reps;
                 message.destroy();                                        
-                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\nTime to Complete: " + timeCompleted + " seconds" + "\nScore: " + score + " points");
+                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points");
                 message.create("eg", "el");
                 addToRecords();
         }
@@ -339,8 +339,6 @@ class ExerciseScreenOne {
 
                 // update the cam
                 kinect.update();
-
-                //IntVector userList = new IntVector();
                 kinect.getUsers(userList);
                 if (userList.size() > 0) {
                         int trackingUserId = userList.get(0);

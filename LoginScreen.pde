@@ -21,7 +21,7 @@ class LoginScreen {
                 this.login_images[1] = loadImage("images/login_button_b.png");
                 this.login_images[2] = loadImage("images/login_button_a.png");
 
-                // load background image & logo
+                // load background image, loading icon & logo
                 this.loginBackgroundImage = loadImage("images/background.png");
                 this.logoImage = loadImage("images/logo.png");
         }
@@ -105,9 +105,10 @@ class LoginScreen {
                 buttons[0] = cp5.addButton("log in").setColorBackground(color(8, 187, 209))
                         .setPosition(width / 2 - 110, 424).setImages(login_images)
                                 .updateSize().setGroup(loginGroup).setId(3);
+                                
         }
-
-        void drawUI() {
+        
+        void drawUI() {               
                 cp5.draw();
         }
 

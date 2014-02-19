@@ -246,6 +246,8 @@ public void controlEvent(ControlEvent theEvent) {
         }
 
         if (theEvent.getController().getName().equals("log in")) { //f the button was the log in button
+                println("Loggin in..");
+                
                 //get the values from the username and password fields
                 loginUserName = cp5.get(Textfield.class, "userName").getText();
                 loginPassword = cp5.get(Textfield.class, "password").getText();
@@ -254,7 +256,7 @@ public void controlEvent(ControlEvent theEvent) {
                 user = userDAO.logIn(loginUserName, loginPassword);
                 //println("dob: " +user.getDob() +  " -injury type: " + user.getInjury_type());
                 if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theyre in the loggin screen
-                        println("Logged IN");
+                        println("Success!");
                         //get exercise programme
                         try{
                         ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
@@ -285,6 +287,7 @@ public void controlEvent(ControlEvent theEvent) {
                         currentScene = 1;
                 } 
                 else { //user is not logged in
+                        
                         loginScreen.displayError("Incorrect login details");
                 }
         }

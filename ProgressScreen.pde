@@ -18,9 +18,11 @@ class ProgressScreen {
         ArrayList<ArrayList<Record>> records;
         int currentChartNumber = 0;
         ArrayList<ArrayList<float[]>> charts = new ArrayList<ArrayList<float[]>>(); 
+        PFont Font1;
 
         public ProgressScreen(RedPanda c) {
                 this.context = c;
+                Font1 = createFont("Arial Bold", 30);
         }
 
         void loadImages() {
@@ -93,7 +95,7 @@ class ProgressScreen {
                 records = new ArrayList<ArrayList<Record>>();
                 RecordDAO dao = new RecordDAO();
 
-                for (int i = 0; i < exs.size(); i ++) {
+                for (int i = 0; i < exs.size(); i ++) {                   
                         records.add(dao.getRecords(user.getUser_id(), exs.get(i).getExercise_id()));
                 }
         }
@@ -101,13 +103,14 @@ class ProgressScreen {
         void createChart() {
                 ArrayList<Record> rs = records.get(currentChartNumber);
 
-                float[] dates = new float[rs.size()];
-                float[] score = new float[rs.size()];
-                float[] time = new float[rs.size()];
-                for (int i = 0; i < rs.size(); i++) {                        
-                        float  dd = rs.get(i).getDateDone();
-                        float sc = rs.get(i).getScore();
-                        float tm = rs.get(i).getTimeToComplete();                        
+                int[] dates = new int[rs.size()];
+                int[] score = new int[rs.size()];
+                int[] time = new int[rs.size()];
+                for (int i = 0; i < rs.size(); i++) {       
+                       Record record = rs. get(i);                 
+                        int  dd = record.getDateDone();
+                        int sc = record.getScore();
+                        int tm = record.getTimeToComplete();                        
                         dates[i] = dd;
                         score[i] = sc;
                         time[i] = tm;
@@ -183,7 +186,8 @@ class ProgressScreen {
                 //draw current chart number
                 fill(123);
                 textSize(32);
-                text(currentChartNumber + "/" +  exs.size(), 600, 550);           
+                textFont(Font1);
+                text((currentChartNumber +1) + "/" +  exs.size(), 600, 550);           
 
                 drawInfo();
         }

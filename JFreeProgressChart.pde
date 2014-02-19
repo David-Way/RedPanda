@@ -11,25 +11,23 @@ class JFreeProgressChart {
 
         JFreeChart chartObject;
 
-        public JFreeProgressChart(float[] date, float[] score, float[] time, String chartName, String xAxisName, String yAxisName, String altAxisName) {
-                XYSeries scoreSeries = new XYSeries("Scores");
+        public JFreeProgressChart(int[] date, int[] score, int[] time, String chartName, String xAxisName, String yAxisName, String altAxisName) {
+                XYSeries scoreSeries = new XYSeries("Scores", false);
                 for (int i = 0; i < date.length; i++) {
                         scoreSeries.add(date[i], score[i]);
                 }
-
-                //XYDataset dataset = new XYSeriesCollection(scoreSeries);
 
                 TimeSeries pop = new TimeSeries("Scores", Day.class);
 
                 for (int i = 0; i < date.length; i++) {
                         //012345678
                         //20140314
-                        //String d = Float.toString(date[i]);
                         String d = new BigDecimal(date[i]).toPlainString();
-                        println("d="+d);
+                        //println("d="+d);
                         int day = Integer.parseInt(d.substring(6, 8));
                         int month = Integer.parseInt(d.substring(4, 6));
-                        int year = Integer.parseInt(d.substring(0, 4));                        
+                        int year = Integer.parseInt(d.substring(0, 4));   
+                        //println("d="+ day +" month=" + month + " year=" + year );                     
                         pop.addOrUpdate(new Day(day, month, year), score[i]/10);
                 }
 
@@ -38,7 +36,6 @@ class JFreeProgressChart {
 
                 for (int i = 0; i < date.length; i++) {                        
                         String d = new BigDecimal(date[i]).toPlainString();
-                        //println("d="+d);
                         int day = Integer.parseInt(d.substring(6, 8));
                         int month = Integer.parseInt(d.substring(4, 6));
                         int year = Integer.parseInt(d.substring(0, 4));                        
@@ -65,12 +62,13 @@ class JFreeProgressChart {
                 DateAxis dAx = new DateAxis();
 
                 dAx.setDateFormatOverride(new SimpleDateFormat("dd/MM"));
+                dAx.setTickUnit(new DateTickUnit(DateTickUnitType.DAY, 1));
                 plot.setDomainAxis(dAx);
 
-                NumberAxis rAx = new  NumberAxis();
+                /*NumberAxis rAx = new  NumberAxis();
                 rAx.setLowerBound((double) 0);
                 rAx.setUpperBound((double)200);
-                plot.setRangeAxis(rAx);         
+                plot.setRangeAxis(rAx);         */
 
 
                 XYItemRenderer renderer = plot.getRenderer();

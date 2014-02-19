@@ -29,6 +29,7 @@ class ExerciseScreenThree {
         boolean start = false;
         boolean firstTime = true;
         boolean finished = false;
+        boolean stopTime = true;
         boolean enterData = true;
         Message message;
         Record record;
@@ -187,17 +188,16 @@ class ExerciseScreenThree {
                 //draw
                 if (currentPos != new PVector()) {
                         pushMatrix();
-                        fill(0, 255, 0);
                         translate(currentPos.x, currentPos.y, currentPos.z);
-                        sphere(40);
-                        popMatrix();
-                }
-                for ( int i = 0 ; i < reps ; i++ ) {
-                        pushMatrix();
-                        translate(highestPoint[i].x, highestPoint[i].y, highestPoint[i].z);            
                         image(target, -125, -125, 250, 250);
                         popMatrix();
-                       }
+                }
+                if(reps > 0 && reps <= MAX_REPS) {
+                        pushMatrix();
+                        translate(highestPoint[reps -1].x, highestPoint[reps -1].y, highestPoint[reps - 1].z);            
+                        image(target, -125, -125, 250, 250);
+                        popMatrix();
+                }
                 popMatrix();
                 //update
                 if ( finished ) {
@@ -240,7 +240,10 @@ class ExerciseScreenThree {
         }
 
         public void stopExercise() {
+                if(stopTime){
                 timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
+                stopTime = false;
+                }
                 float average = 0;
                 for ( int i = 0 ; i < reps ; i++ ) {
                         average  = average +  highestPoint[i].y;

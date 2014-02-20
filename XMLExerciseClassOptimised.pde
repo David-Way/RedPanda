@@ -77,7 +77,7 @@ class XMLExerciseClassOptimised {
         color userColourGrey = color(155, 155, 155);
         color userColourWhite = color(255, 255, 255);
         color currentUserColour = userColourWhite;
-        
+
         boolean finishedTimerStarted = false;
         long finishStartTime = 0;
 
@@ -115,7 +115,7 @@ class XMLExerciseClassOptimised {
                 this.e = ex;
                 this.exerciseName = e.getName();
                 this.numberOfReps = e.getRepetitions();
-                
+
                 //create UI elements
                 cp5.setAutoDraw(false);
 
@@ -140,7 +140,7 @@ class XMLExerciseClassOptimised {
                                         .updateSize()
                                                 .setGroup(exerciseGroup2)
                                                         ;
-                
+
                 //create message UI elements
                 message = new Message(280, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\nDescription:\n" + e.getDescription());
                 message.create("mgroup", "lname");
@@ -177,8 +177,8 @@ class XMLExerciseClassOptimised {
                 noStroke();
                 translate(width/2, height/2, 0);
                 rotateX(radians(180));
-                
-                
+
+
                 context.getUsers(userList);
 
                 if (userList.size() > 0 && !exerciseComplete) {
@@ -204,9 +204,9 @@ class XMLExerciseClassOptimised {
                                         setUserColour(userColourWhite);
                                         //display user directions
                                         directionMessage.destroy();
-                                        directionMessage = new Message(240, 100, new PVector(480, 400), "The blue targets will lead you throught the exercise. Try to follow them.");
+                                        directionMessage = new Message(240, 150, new PVector(950, 160), "The blue targets will lead you throught the exercise. Try to follow them.");
                                         directionMessage.create("e", "f");
-                                        
+
                                         drawExerciseSkeleton(userId);
                                         timerMessage.destroy();
                                         timerMessage = new Message(240, 50, new PVector(950, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
@@ -236,39 +236,39 @@ class XMLExerciseClassOptimised {
                 PVector p1 = exercisePointsForCurrentFrame.get(2);
                 PVector p2 = exercisePointsForCurrentFrame.get(1);
                 //PVector p3 = exercisePointsForCurrentFrame.get(0);
-                
+
                 //reconstruct current jont position
                 /*PVector aimPoint = PVector.add(c3, p2);
-                aimPoint = PVector.add(aimPoint, p1);
-                
+                 aimPoint = PVector.add(aimPoint, p1);
+                 
                  println("c1.z=" +  c1.z + " aimPoint.z=" +aimPoint.z);
-
-                //check for correct z position                
-
-                if (truec1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220) {
-
+                 
+                 //check for correct z position                
+                 
+                 if (truec1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220) {
+                 
                 /*if (true/*c1.x - aimPoint.x < 220 && c1.y - aimPoint.y < 220) {
+                 
+                 directionMessage.destroy();    
+                 if (aimPoint.z > c1.z + 200) {                                                        
+                 directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Back Slightly!");                                
+                 println("move back p=" +  p1.z + " aimPoint=" +aimPoint.z);
+                 } 
+                 else if (c1.z < aimPoint.z - 200) {
+                 directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Forward Slightly!");
+                 println("move forward");
+                 } 
+                 else {
+                 directionMessage = new Message(240, 0, new PVector(950, 150), "");
+                 } 
+                 
+                 directionMessage.create("mgroup2", "lname2");
+                 } 
+                 else if (!directionMessage.check()) {
+                 //directionMessage.destroy();
+                 
+                 }     */
 
-                        directionMessage.destroy();    
-                        if (aimPoint.z > c1.z + 200) {                                                        
-                                directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Back Slightly!");                                
-                                println("move back p=" +  p1.z + " aimPoint=" +aimPoint.z);
-                        } 
-                        else if (c1.z < aimPoint.z - 200) {
-                                directionMessage = new Message(240, 100, new PVector(950, 150), "Move Joint Forward Slightly!");
-                                println("move forward");
-                        } 
-                        else {
-                                directionMessage = new Message(240, 0, new PVector(950, 150), "");
-                        } 
-
-                        directionMessage.create("mgroup2", "lname2");
-                } 
-                else if (!directionMessage.check()) {
-                        //directionMessage.destroy();
-
-                }     */            
-                        
 
 
                 PVector added1 = PVector.add(p1, c3);
@@ -279,7 +279,7 @@ class XMLExerciseClassOptimised {
                 PVector flatB = new PVector(c2.x, c2.y);
                 //c1.sub(added1);
                 //c2.sub(added2);
-          
+
                 //if the distance between the points is less than 200 or the x and y is close but the z isnt.
                 if ((flatA.dist(flat1) < 200  && flatB.dist(flat2) < 200)) { 
                         result = true;
@@ -511,8 +511,7 @@ class XMLExerciseClassOptimised {
                                 if (currentRep < numberOfReps) {        
                                         message.destroy();                            
                                         message = new Message(280, 100, messagePosition, "Target Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
-                                        message.create("mgroup", "lname");                                   
-                                        
+                                        message.create("mgroup", "lname");
                                 } 
                                 else if (!exerciseComplete) { //on exercise complete
                                         long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
@@ -539,6 +538,14 @@ class XMLExerciseClassOptimised {
                                         else {
                                                 timeFeedback = "Try to finish a little faster next time if you can.";
                                         }
+
+                                        timerMessage.destroy();
+                                        timerMessage = new Message(240, 0, new PVector(950, 100), "");
+                                        timerMessage.create("a", "b");
+                                        directionMessage.destroy();
+                                        directionMessage = new Message(240, 0, new PVector(480, 400), "");
+                                        directionMessage.create("c", "d");
+
                                         message.destroy();                                        
                                         message = new Message(550, 450, new PVector(325, 100), "Well Done!"  + "\n\nTime to Complete: " + elapsedTime + " seconds" + "\n\nScore: " + score/10 + " points \n\n" + scoreFeedback + "\n\n" + timeFeedback, FONT_30);
                                         message.create("mgroup", "lname");
@@ -707,11 +714,11 @@ class XMLExerciseClassOptimised {
                         tfe.printStackTrace();
                 }
         }
-        
+
         public boolean checkForComplete() {
                 return exerciseComplete;
         }
-        
+
         public void startFinishTimer() {
                 if (!finishedTimerStarted) { //create timer
                         println("started");

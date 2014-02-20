@@ -42,7 +42,7 @@ class ExerciseScreenOne {
         long startTime;
         long timeOut;
         int timeCompleted;
-        
+
         boolean finishedTimerStarted = false;
         long finishStartTime = 0;
 
@@ -103,7 +103,7 @@ class ExerciseScreenOne {
                                 .hideBar()
                                         ;
 
-                buttons = new Button[2];
+                buttons = new Button[3];
 
                 buttons[0] = cp5.addButton("menuBackExercises")
                         .setPosition(10, 10)
@@ -116,6 +116,14 @@ class ExerciseScreenOne {
                         .setPosition(978, 10)
                                 .setImages(logout)
                                         .updateSize()
+                                                .setGroup(exerciseGroup)
+                                                        ;
+
+                buttons[2] = cp5.addButton("cancelProgramme")
+                        .setPosition(494, 525)
+                                .setImages(logout)
+                                        .updateSize()
+                                        .setVisible(false)
                                                 .setGroup(exerciseGroup)
                                                         ;
         }
@@ -155,7 +163,6 @@ class ExerciseScreenOne {
                                         popMatrix();
                                         popMatrix();
                                         setPoints();
-
                                 }
                         }
                 }
@@ -197,7 +204,7 @@ class ExerciseScreenOne {
                         image(target, -125, -125, 250, 250);
                         popMatrix();
                 }
-                if(reps > 0 && reps <= MAX_REPS) {
+                if (reps > 0 && reps <= MAX_REPS) {
                         pushMatrix();
                         translate(highestPoint[reps -1].x, highestPoint[reps -1].y, highestPoint[reps - 1].z);            
                         image(target, -125, -125, 250, 250);
@@ -245,9 +252,9 @@ class ExerciseScreenOne {
         }
 
         public void stopExercise() {
-                if(stopTime){
-                timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
-                stopTime = false;
+                if (stopTime) {
+                        timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
+                        stopTime = false;
                 }
                 float average = 0;
                 for ( int i = 0 ; i < reps ; i++ ) {
@@ -265,7 +272,7 @@ class ExerciseScreenOne {
                 Date currentDate = new Date();
                 int date = int(dateFormat.format(currentDate));
                 if (enterData) {
-                        Record newRecord = new Record(0, userId, exerciseId, date, timeCompleted , reps, score, "Error");
+                        Record newRecord = new Record(0, userId, exerciseId, date, timeCompleted, reps, score, "Error");
                         recordDAO.setRecord(newRecord);
                         enterData = false;
                 }
@@ -328,7 +335,7 @@ class ExerciseScreenOne {
                 //cp5.draw();
                 message.drawUI();
                 //Timer to cancel exercise incase user have left.
-                if(((System.currentTimeMillis() - timeOut) / 1000) > 120){
+                if (((System.currentTimeMillis() - timeOut) / 1000) > 120) {
                         println(((System.currentTimeMillis()/1000) - startTime));
                         context.deleteExerciseScreenOne = true;
                         menuBack();
@@ -340,7 +347,7 @@ class ExerciseScreenOne {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
-                
+
                 cp5.getGroup("exerciseGroup").remove();
                 message.destroy();
         }
@@ -462,7 +469,7 @@ class ExerciseScreenOne {
                 kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
                 popMatrix();
         }
-        
+
         public boolean checkForComplete() {
                 return finished;
         }
@@ -478,6 +485,9 @@ class ExerciseScreenOne {
                         if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
                                 context.autoMoveToScreenTwo();
                         }
+
+                        //cancel button
+                        buttons[2].setVisible(true);
                 }
         }
 }

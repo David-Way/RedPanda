@@ -50,6 +50,7 @@ class XMLExerciseClassOptimised {
 
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
+        private PImage[] cancel = new PImage[3];
         private Button []buttons;
         private Group exerciseGroup2;
 
@@ -57,6 +58,7 @@ class XMLExerciseClassOptimised {
         Message message;
         Message timerMessage;
         Message directionMessage;
+        Message continueMessage;
         String exerciseName;
         float c = (float)0.0;
         float offByDistance = (float)0.0;
@@ -69,7 +71,8 @@ class XMLExerciseClassOptimised {
         boolean exerciseStarted = false;
         boolean exerciseComplete = false;
         Gif target;
-        int FONT_30 = 30;
+        final int FONT_30 = 30;
+        final int FONT_24 = 24;
         //set colours for user avatar
         color userColourRed = color(255, 0, 0);
         color userColourGreen = color(0, 255, 0);
@@ -124,7 +127,7 @@ class XMLExerciseClassOptimised {
                                 .hideBar()
                                         ;
 
-                buttons = new Button[2];
+                buttons = new Button[3];
 
                 buttons[0] = cp5.addButton("menuBackExercises2")
                         .setPosition(10, 10)
@@ -141,16 +144,27 @@ class XMLExerciseClassOptimised {
                                                 .setGroup(exerciseGroup2)
                                                         ;
 
+                buttons[2] = cp5.addButton("cancelProgramme")
+                        .setPosition(494, 515)
+                                .setImages(cancel)
+                                        .updateSize()
+                                                .setVisible(false)
+                                                        .setGroup(exerciseGroup2)
+                                                                ;
+
                 //create message UI elements
-                message = new Message(280, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\nTarget Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\nDescription:\n" + e.getDescription());
+                message = new Message(209, 400, messagePosition, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise " + "\n\nTarget Reps: " + e.getRepetitions() + "\n\nCurrent Reps: " + currentRep + "\n\nComplete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%"  +"\n\nDescription:\n" + e.getDescription());
                 message.create("mgroup", "lname");
                 //startTime  = System.currentTimeMillis();
 
-                timerMessage = new Message(240, 50, new PVector(950, 100), "Time: 0s");
+                timerMessage = new Message(209, 50, new PVector(978, 100), "Time: 0s");
                 timerMessage.create("a", "b");
 
                 directionMessage = new Message(240, 100, new PVector(480, 400), "Get into positon in front of the camera.");
                 directionMessage.create("c", "d");
+                
+                continueMessage = new Message(10,10, new PVector(0, 0), "", FONT_24);
+                continueMessage.create("s", "q");
 
                 //set exercise 
                 exerciseComplete = false;
@@ -204,12 +218,12 @@ class XMLExerciseClassOptimised {
                                         setUserColour(userColourWhite);
                                         //display user directions
                                         directionMessage.destroy();
-                                        directionMessage = new Message(240, 150, new PVector(950, 160), "The blue targets will lead you throught the exercise. Try to follow them.");
+                                        directionMessage = new Message(209, 150, new PVector(978, 160), "The blue targets will lead you throught the exercise. Try to follow them.");
                                         directionMessage.create("e", "f");
 
                                         drawExerciseSkeleton(userId);
                                         timerMessage.destroy();
-                                        timerMessage = new Message(240, 50, new PVector(950, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
+                                        timerMessage = new Message(209, 50, new PVector(978, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
                                         timerMessage.create("g", "h");
                                         //if user is close to points
                                         if (checkUserCompliance(userId)) {
@@ -510,7 +524,7 @@ class XMLExerciseClassOptimised {
                                 //PVector pos = new PVector(10, 100);
                                 if (currentRep < numberOfReps) {        
                                         message.destroy();                            
-                                        message = new Message(280, 100, messagePosition, "Target Repetitions: " + e.getRepetitions() + "\nCurrent Repetition: " + currentRep + "\nPercent Complete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%");
+                                        message = new Message(209, 280, messagePosition, "Target Reps: " + e.getRepetitions() + "\n\nCurrent Rep: " + currentRep + "\n\nComplete: " + (int)Math.round(100.0 / numberOfReps * currentRep) + "%" +"\n\nDescription:\n" + e.getDescription());
                                         message.create("mgroup", "lname");
                                 } 
                                 else if (!exerciseComplete) { //on exercise complete
@@ -540,14 +554,14 @@ class XMLExerciseClassOptimised {
                                         }
 
                                         timerMessage.destroy();
-                                        timerMessage = new Message(240, 0, new PVector(950, 100), "");
+                                        timerMessage = new Message(240, 0, new PVector(1950, 100), "");
                                         timerMessage.create("a", "b");
                                         directionMessage.destroy();
-                                        directionMessage = new Message(240, 0, new PVector(480, 400), "");
+                                        directionMessage = new Message(240, 0, new PVector(1950, 400), "");
                                         directionMessage.create("c", "d");
 
                                         message.destroy();                                        
-                                        message = new Message(550, 450, new PVector(325, 100), "Well Done!"  + "\n\nTime to Complete: " + elapsedTime + " seconds" + "\n\nScore: " + score/10 + " points \n\n" + scoreFeedback + "\n\n" + timeFeedback, FONT_30);
+                                        message = new Message(550, 300, new PVector(325, 100), "Well Done!"  + "\n\nTime to Complete: " + elapsedTime + " seconds" + "\n\nScore: " + score/10 + " points \n\n" + scoreFeedback + "\n\n" + timeFeedback, FONT_24);
                                         message.create("mgroup", "lname");
                                         //message.destroy();
                                         exerciseComplete = true;
@@ -581,6 +595,9 @@ class XMLExerciseClassOptimised {
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
                 this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
                 this.logout[2] =loadImage("images/NewUI/logout.jpg");
+                this.cancel[0] = loadImage("images/NewUI/cancel.jpg");
+                this.cancel[1] = loadImage("images/NewUI/cancelOver.jpg");
+                this.cancel[2] = loadImage("images/NewUI/cancel.jpg");
         }
 
         void toggleRecording() { //change the programs recording state
@@ -730,6 +747,12 @@ class XMLExerciseClassOptimised {
                         if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
                                 parent.autoMoveToScreenThree();
                         }
+
+                        //cancel button
+                        buttons[2].setVisible(true);
+                        continueMessage.destroy();                               
+                        continueMessage = new Message(550, 50, new PVector(325, 410), "Next exercise in "+ (10 -((System.currentTimeMillis()/1000) - finishStartTime)) + " seconds, use Cancel to quit.", FONT_24);
+                        continueMessage.create("zz", "tt");
                 }
         }
 
@@ -743,6 +766,7 @@ class XMLExerciseClassOptimised {
                 message.destroy();
                 timerMessage.destroy();
                 directionMessage.destroy();
+                continueMessage.destroy();
         }
 }
 

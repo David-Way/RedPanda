@@ -86,7 +86,7 @@ class ExerciseScreenOne {
                         int Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
                         message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \nOn 5, raise you right hand away from your body as high as you comfortably can.");
-                        message.create("g", "l");
+                        message.create("n", "p");
                 }
                 else {
                         PVector pos = new PVector(10, 100);
@@ -120,7 +120,7 @@ class ExerciseScreenOne {
                                                         ;
 
                 buttons[2] = cp5.addButton("cancelProgramme")
-                        .setPosition(494, 525)
+                        .setPosition(494, 515)
                                 .setImages(logout)
                                         .updateSize()
                                         .setVisible(false)

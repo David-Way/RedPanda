@@ -22,9 +22,9 @@ class ProgramsScreen {
         void loadImages() {
 
                 //load images  for login button
-                this.menuBack[0]  = loadImage("images/menu.jpg");
-                this.menuBack[1]  = loadImage("images/menuOver.jpg");
-                this.menuBack[2]  = loadImage("images/menu.jpg");
+                this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
+                this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
                 this.exerciseOne[0]  = loadImage("images/NewUI/exercise1.jpg");
                 this.exerciseOne[1]  =loadImage("images/NewUI/exercise1Over.jpg");
                 this.exerciseOne[2]  =loadImage("images/NewUI/exercise1.jpg");
@@ -34,9 +34,9 @@ class ProgramsScreen {
                 this.exerciseThree[0] = loadImage("images/NewUI/exercise3.jpg");
                 this.exerciseThree[1] = loadImage("images/NewUI/exercise3Over.jpg");
                 this.exerciseThree[2] = loadImage("images/NewUI/exercise3.jpg");
-                this.logout[0] = loadImage("images/logout.jpg");
-                this.logout[1] =loadImage("images/logoutOver.jpg");
-                this.logout[2] =loadImage("images/logout.jpg");
+                this.logout[0] = loadImage("images/NewUI/logout.jpg");
+                this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
+                this.logout[2] =loadImage("images/NewUI/logout.jpg");
                 exercise_one_tut = new Gif(context,"images/ex1_sml.gif");
                 exercise_two_tut = new Gif(context,"images/ex2_sml.gif");
                 exercise_three_tut = new Gif(context,"images/ex3_sml.gif");

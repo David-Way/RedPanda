@@ -17,12 +17,12 @@ class LoginScreen {
 
         public void loadImages() {
                 // load images for login button
-                this.login_images[0] = loadImage("images/login_button_a.png");
-                this.login_images[1] = loadImage("images/login_button_b.png");
-                this.login_images[2] = loadImage("images/login_button_a.png");
+                this.login_images[0] = loadImage("images/NewUI/login_button_a.jpg");
+                this.login_images[1] = loadImage("images/NewUI/login_button_b.jpg");
+                this.login_images[2] = loadImage("images/NewUI/login_button_a.jpg");
 
                 // load background image, loading icon & logo
-                this.loginBackgroundImage = loadImage("images/background.png");
+                this.loginBackgroundImage = loadImage("images/background1.png");
                 this.logoImage = loadImage("images/logo.png");
         }
 
@@ -40,7 +40,7 @@ class LoginScreen {
                 fill(255);
                 text("version 1.01", 45, 10);
                 
-                image(logoImage, 506, 185, 180, 101);
+                image(logoImage, 430, 165, 334, 376);
 
                 // set and draw title text with drop shadow
                 String title = "Red Panda";

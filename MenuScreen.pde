@@ -36,9 +36,9 @@ class MenuScreen {
                 this.comments[0] = loadImage("images/NewUI/comments.jpg");
                 this.comments[1] =loadImage("images/NewUI/commentsOver.jpg");
                 this.comments[2] =loadImage("images/NewUI/comments.jpg");
-                this.logout[0] = loadImage("images/logout.jpg");
-                this.logout[1] =loadImage("images/logoutOver.jpg");
-                this.logout[2] =loadImage("images/logout.jpg");
+                this.logout[0] = loadImage("images/NewUI/logout.jpg");
+                this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
+                this.logout[2] =loadImage("images/NewUI/logout.jpg");
         }
 
         public void create(User user, Record record) {

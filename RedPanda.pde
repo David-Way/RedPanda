@@ -97,7 +97,7 @@ void setup() {
         loadingIcon = new Gif(this, "images/loading.gif");
         //animation = Gif.getPImages(this, "images/loading.gif");
         //load background image
-        backgroundImage = loadImage("images/background.png");
+        backgroundImage = loadImage("images/background1.png");
         backgroundImage2 = loadImage("images/background2.png");
         cp5 = new ControlP5(this);
 

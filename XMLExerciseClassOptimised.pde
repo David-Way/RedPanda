@@ -568,12 +568,12 @@ class XMLExerciseClassOptimised {
 
         void loadImages() {
                 //load images  for buttons
-                this.menuBack[0]  = loadImage("images/menu.jpg");
-                this.menuBack[1]  = loadImage("images/menuOver.jpg");
-                this.menuBack[2]  = loadImage("images/menu.jpg");
-                this.logout[0] = loadImage("images/logout.jpg");
-                this.logout[1] =loadImage("images/logoutOver.jpg");
-                this.logout[2] =loadImage("images/logout.jpg");
+                this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
+                this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
+                this.logout[0] = loadImage("images/NewUI/logout.jpg");
+                this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
+                this.logout[2] =loadImage("images/NewUI/logout.jpg");
         }
 
         void toggleRecording() { //change the programs recording state

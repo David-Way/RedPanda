@@ -27,21 +27,21 @@ class ProgressScreen {
 
         void loadImages() {
                 //load images  for buttons
-                this.menuBack[0]  = loadImage("images/menu.jpg");
-                this.menuBack[1]  = loadImage("images/menuOver.jpg");
-                this.menuBack[2]  = loadImage("images/menu.jpg");
+                this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
+                this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
 
-                this.logout[0] = loadImage("images/logout.jpg");
-                this.logout[1] =loadImage("images/logoutOver.jpg");
-                this.logout[2] =loadImage("images/logout.jpg");
+                this.logout[0] = loadImage("images/NewUI/logout.jpg");
+                this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
+                this.logout[2] =loadImage("images/NewUI/logout.jpg");
 
-                this.previous[0] = loadImage("images/previous.jpg");
-                this.previous[1] =loadImage("images/previous.jpg");
-                this.previous[2] =loadImage("images/previous.jpg");
+                this.previous[0] = loadImage("images/NewUI/previous.png");
+                this.previous[1] =loadImage("images/NewUI/previousOver.png");
+                this.previous[2] =loadImage("images/NewUI/previous.png");
 
-                this.next[0] = loadImage("images/next.jpg");
-                this.next[1] =loadImage("images/next.jpg");
-                this.next[2] =loadImage("images/next.jpg");
+                this.next[0] = loadImage("images/NewUI/next.png");
+                this.next[1] =loadImage("images/NewUI/nextOver.png");
+                this.next[2] =loadImage("images/NewUI/next.png");
         }
 
         public void create(Programme _programme) {

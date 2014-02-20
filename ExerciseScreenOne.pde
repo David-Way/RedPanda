@@ -93,16 +93,10 @@ class ExerciseScreenOne {
                         Month=int(date.substring(4, 6));
                         Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
-<<<<<<< HEAD
-<<<<<<< HEAD
-                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \nOn 5, raise you right hand away from your body as high as you comfortably can.");
-                        message.create("n", "p");
-=======
-=======
->>>>>>> ee52c49ae637d18e7f6e2375f5bab562217797e2
+
+                       
                         message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName()  +  " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("g", "l");
->>>>>>> ee52c49ae637d18e7f6e2375f5bab562217797e2
                 }
                 else {
                         PVector pos = new PVector(10, 100);

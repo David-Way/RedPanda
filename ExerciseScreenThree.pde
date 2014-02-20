@@ -96,7 +96,7 @@ class ExerciseScreenThree {
                 else {
                         PVector pos = new PVector(10, 100);
                         message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + exercise.getName()  +  " exercise. \n\nYou have not attempted this exercise yet. \n\n Directions : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
-                        message.create("z", "w");
+                        message.create("x", "y");
                 }
                 messageTwo = new Message(0, 0, new PVector(10, 978), "");
                 messageTwo.create("pi", "pt");
@@ -202,8 +202,9 @@ class ExerciseScreenThree {
                  "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
                   (int)Math.round(100.0 / MAX_REPS * reps) + "%");
                 message.create("gp", "lp");
+                messageTwo.destroy();
                 messageTwo = new Message(209, 50, new PVector(978, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
-                messageTwo.create("fp", "hp");
+                messageTwo.create("fp3", "hp3");
                 messageThree.destroy();
                 messageThree = new Message(209, 150, new PVector(978, 170), "Raise you right hand away from your body as high as you comfortably can.");
                 messageThree.create("jp", "kp");
@@ -277,7 +278,7 @@ class ExerciseScreenThree {
                 message.create("eg", "el");
                 messageTwo.destroy();
                 messageTwo = new Message(0, 0, new PVector(10, 978), "");
-                messageTwo.create("z", "x");
+                messageTwo.create("z2", "x2");
                 messageThree.destroy();
                 messageThree = new Message(0, 0, new PVector(70, 978), "");
                 messageThree.create("w", "y");

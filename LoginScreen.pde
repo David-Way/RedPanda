@@ -115,14 +115,14 @@ class LoginScreen {
         public void displayError(String s) {
                 fill(51, 196, 242);
                 textSize(20);
-                text(s, width / 2 - 109, 475, 218, 48);  // Text wraps within text box
+                text(s, width / 2 - 109, 525, 218, 48);  // Text wraps within text box
         }
 
         public void drawFade() {
                 //draws white box with alpha over error message area
                 noStroke();
                 fill(255, 3);
-                rect( width / 2 - 109, 475, 218, 48);
+                rect( width / 2 - 109, 525, 218, 48);
         }
 
         void destroy() {

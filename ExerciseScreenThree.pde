@@ -32,9 +32,15 @@ class ExerciseScreenThree {
         boolean stopTime = true;
         boolean enterData = true;
         Message message;
+        Message messageTwo;
+        Message messageThree;
         Record record;
         RecordDAO recordDAO;
         User user;
+        Exercise exercise;
+        int Year;
+        int Month;
+        int Day;
         int trackingUserId;
         int userId;
         float lastTime;
@@ -59,7 +65,9 @@ class ExerciseScreenThree {
                 this.logout[2] =loadImage("images/NewUI/logout.jpg");
         }
 
-        public void create(User user, Exercise e) {
+        public void create(User u, Exercise e) {
+                user = u;
+                exercise = e;
                 timeOut = System.currentTimeMillis();
                 countDownIcon = new Gif(context, "images/countdown.gif");
                 target = new Gif(context, "images/target.gif");
@@ -78,19 +86,22 @@ class ExerciseScreenThree {
                 record = recordDAO.getLastForExercise(userId, exerciseId);
                 if (record.getRecord_id() != -1) {
                         String date = String.valueOf(record.getDateDone());
-                        int Year=int(date.substring(0, 4));
-                        int Month=int(date.substring(4, 6));
-                        int Day=int(date.substring(6, 8));
+                        Year=int(date.substring(0, 4));
+                        Month=int(date.substring(4, 6));
+                        Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
-                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \nOn 5, raise you right leg away from your body as high as you comfortably can.");
+                        message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName()  +  " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("x", "y");
                 }
                 else {
                         PVector pos = new PVector(10, 100);
-                        message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nYou have not attempted this exercise yet. \n\nDirections : \nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + exercise.getName()  +  " exercise. \n\nYou have not attempted this exercise yet. \n\n Directions : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("z", "w");
                 }
-
+                messageTwo = new Message(0, 0, new PVector(10, 978), "");
+                messageTwo.create("pi", "pt");
+                messageThree = new Message(0, 0, new PVector(70, 978), "");
+                messageThree.create("pr", "ps");
                 lastTime = (float)millis()/1000.f;
                 start = false;
                 cp5.setAutoDraw(false);
@@ -141,7 +152,7 @@ class ExerciseScreenThree {
                                 }
 
 
-                                if (startPoint != null) {
+                                if (startPoint != null && startPoint.x != 0 && startPoint.y != 0 && startPoint.z != 0 ) {
                                         pushMatrix();
                                         translate(width/2, height/2, 0);
                                         rotateX(radians(180));  
@@ -185,8 +196,17 @@ class ExerciseScreenThree {
                 rotateX(radians(180));
                 message.destroy();
                 PVector pos = new PVector(10, 100);
-                message = new Message(280, 400, pos, "Target Repetitions: " + MAX_REPS + "\nCurrent Repetition: " + reps + "\nPercent Complete: " + (int)Math.round(100.0 / MAX_REPS * reps) + "%" + "\nTime: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
-                message.create("pg", "pl");
+                message = new Message(209, 400, new PVector(10, 100), "Hi " + user.getFirst_name() +
+                 ",\n\nWelcome to the " + exercise.getName()  +  
+                 " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + 
+                 "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
+                  (int)Math.round(100.0 / MAX_REPS * reps) + "%");
+                message.create("gp", "lp");
+                messageTwo = new Message(209, 50, new PVector(978, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
+                messageTwo.create("fp", "hp");
+                messageThree.destroy();
+                messageThree = new Message(209, 150, new PVector(978, 170), "Raise you right hand away from your body as high as you comfortably can.");
+                messageThree.create("jp", "kp");
                 //draw
                 if (currentPos != new PVector()) {
                         pushMatrix();
@@ -253,8 +273,14 @@ class ExerciseScreenThree {
                 float temp_score  = (int) average / reps;
                 score = int(((startPoint.y - temp_score)*-1));
                 message.destroy();                                        
-                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\nTime to Complete: " + timeCompleted + " seconds" + "\nScore: " + score/10 + " points");
+                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points");
                 message.create("eg", "el");
+                messageTwo.destroy();
+                messageTwo = new Message(0, 0, new PVector(10, 978), "");
+                messageTwo.create("z", "x");
+                messageThree.destroy();
+                messageThree = new Message(0, 0, new PVector(70, 978), "");
+                messageThree.create("w", "y");
                 addToRecords();
         }
 
@@ -341,6 +367,8 @@ class ExerciseScreenThree {
                 
                 cp5.getGroup("exerciseGroup3").remove();
                 message.destroy();
+                messageTwo.destroy();
+                messageThree.destroy();
         }
 
 

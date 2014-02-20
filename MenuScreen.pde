@@ -48,9 +48,9 @@ class MenuScreen {
                 int Year=int(date.substring(0,4));
                 int Month=int(date.substring(4,6));
                 int Day=int(date.substring(6,8));
-                welcomeMessage = ("Welcome " + user.getUser_name() + ".\nYou last completed an exercise on : " + Year + " / " + Month + " / " + Day);
+                welcomeMessage = ("Welcome " + user.getFirst_name() + ".\nYou last completed an exercise on : " + Year + " / " + Month + " / " + Day);
                 }else{
-                    welcomeMessage = ("Welcome " + user.getUser_name() + ". Lets get started");
+                    welcomeMessage = ("Welcome " + user.getFirst_name() + ". Lets get started");
                 }
                 cp5.setAutoDraw(false);
 

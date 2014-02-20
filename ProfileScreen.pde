@@ -29,9 +29,9 @@ class ProfileScreen {
 
 
                 profileGroup = cp5.addGroup("profileGroup")
-                        .setPosition(690, 40)
+                        .setPosition(700, 65)
                                 .setSize(260, 400)
-                                        .setBackgroundColor(color(51, 196, 242))
+                                        .setBackgroundColor(color(62, 151, 139))
                                              .hideBar()
                                                 ;
 
@@ -46,7 +46,7 @@ class ProfileScreen {
                                                         ;
 
                 textlabels[0] = cp5.addTextlabel("name")
-                    .setText("Name : " + user.getLast_name() + ", " + user.getFirst_name())
+                    .setText("Name : \n" + user.getLast_name() + ", " + user.getFirst_name())
                     .setPosition(10,10)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
@@ -54,40 +54,40 @@ class ProfileScreen {
                     ;
 
                 textlabels[1] = cp5.addTextlabel("age")
-                    .setText("DOB : " + user.getDob())
-                    .setPosition(10,30)
+                    .setText("\nDOB : \n" + user.getDob())
+                    .setPosition(10,35)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
                     .setGroup(profileGroup)
                     ;
 
                 textlabels[2] = cp5.addTextlabel("gender")
-                    .setText("Gender : " + user.getSex() )
-                    .setPosition(10,50)
+                    .setText("\nGender : \n" + user.getSex() )
+                    .setPosition(10,80)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
                     .setGroup(profileGroup)
                     ;
 
                 textlabels[3] = cp5.addTextlabel("height")
-                    .setText("Height : " + user.getHeight() + "cm")
-                    .setPosition(10,70)
+                    .setText("\nHeight : \n" + user.getHeight() + "cm")
+                    .setPosition(10,125)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
                     .setGroup(profileGroup)
                     ;
 
                 textlabels[4] = cp5.addTextlabel("weight")
-                    .setText("Weight : " + user.getWeight() + "kg")
-                    .setPosition(10,90)
+                    .setText("\nWeight : \n" + user.getWeight() + "kg")
+                    .setPosition(10,175)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
                     .setGroup(profileGroup)
                     ;
 
                 textlabels[5] = cp5.addTextlabel("injury")
-                    .setText("Injury type : \n" + user.getInjury_type())
-                    .setPosition(10,110)
+                    .setText("\nInjury type : \n" + user.getInjury_type())
+                    .setPosition(10,225)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
                     .setGroup(profileGroup)
@@ -95,7 +95,7 @@ class ProfileScreen {
 
                 textlabels[6] = cp5.addTextlabel("programmeDesc")
                     .setText("\nProgramme \n: Shoulder Stretching")
-                    .setPosition(10,130)
+                    .setPosition(10,280)
                     .setColorValue(0xffffffff)
                     .setFont(createFont("Arial",18))
                     .setGroup(profileGroup)

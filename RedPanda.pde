@@ -511,7 +511,8 @@ void makeLogout() {
                 deleteProgramsScreen = true;
         } 
         else if (currentScene == 3) { //profile screen
-                deleteProfileScreen = true;
+                //deleteProfileScreen = true;
+                deleteMenuScreen = true;
         } 
         else if (currentScene == 4) { //progress screen
                 deleteProgressScreen = true;
@@ -546,6 +547,10 @@ void checkForScreensToDelete() {
                 deleteLoginScreen = false;
         } 
         else if (deleteMenuScreen == true) {
+                if (cp5.getGroup("profileGroup") != null) {
+                profileScreen.destroy();
+                deleteProfileScreen = false;
+                }
                 menuScreen.destroy();
                 deleteMenuScreen = false;
         } 

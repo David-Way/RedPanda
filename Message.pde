@@ -3,7 +3,7 @@ class Message {
         private Group messageGroup;
         private Textlabel [] textlabels;
 
-        color bgCol = color(51, 196, 242);
+        color bgCol = color(68, 142, 174);
         int m_height, m_width;
         PVector position;
         String m_string;

@@ -24,18 +24,18 @@ class MenuScreen {
         void loadImages() {
 
                 //load images  for login button
-                this.programme[0]  = loadImage("images/programme.jpg");
-                this.programme[1]  =loadImage("images/programmeOver.jpg");
-                this.programme[2]  =loadImage("images/programme.jpg");
-                this.profile[0] = loadImage("images/profile.jpg");
-                this.profile[1] =loadImage("images/profileOver.jpg");
-                this.profile[2] =loadImage("images/profile.jpg");
-                this.progress[0] = loadImage("images/progress.jpg");
-                this.progress[1] = loadImage("images/progressOver.jpg");
-                this.progress[2] = loadImage("images/progress.jpg");
-                this.comments[0] = loadImage("images/comments.jpg");
-                this.comments[1] =loadImage("images/commentsOver.jpg");
-                this.comments[2] =loadImage("images/comments.jpg");
+                this.programme[0]  = loadImage("images/NewUI/programme.jpg");
+                this.programme[1]  =loadImage("images/NewUI/programmeOver.jpg");
+                this.programme[2]  =loadImage("images/NewUI/programme.jpg");
+                this.profile[0] = loadImage("images/NewUI/profile.jpg");
+                this.profile[1] =loadImage("images/NewUI/profileOver.jpg");
+                this.profile[2] =loadImage("images/NewUI/profile.jpg");
+                this.progress[0] = loadImage("images/NewUI/progress.jpg");
+                this.progress[1] = loadImage("images/NewUI/progressOver.jpg");
+                this.progress[2] = loadImage("images/NewUI/progress.jpg");
+                this.comments[0] = loadImage("images/NewUI/comments.jpg");
+                this.comments[1] =loadImage("images/NewUI/commentsOver.jpg");
+                this.comments[2] =loadImage("images/NewUI/comments.jpg");
                 this.logout[0] = loadImage("images/logout.jpg");
                 this.logout[1] =loadImage("images/logoutOver.jpg");
                 this.logout[2] =loadImage("images/logout.jpg");

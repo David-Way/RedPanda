@@ -25,15 +25,15 @@ class ProgramsScreen {
                 this.menuBack[0]  = loadImage("images/menu.jpg");
                 this.menuBack[1]  = loadImage("images/menuOver.jpg");
                 this.menuBack[2]  = loadImage("images/menu.jpg");
-                this.exerciseOne[0]  = loadImage("images/exercise1.jpg");
-                this.exerciseOne[1]  =loadImage("images/exercise1Over.jpg");
-                this.exerciseOne[2]  =loadImage("images/exercise1.jpg");
-                this.exerciseTwo[0] = loadImage("images/exercise2.jpg");
-                this.exerciseTwo[1] =loadImage("images/exercise2Over.jpg");
-                this.exerciseTwo[2] =loadImage("images/exercise2.jpg");
-                this.exerciseThree[0] = loadImage("images/exercise3.jpg");
-                this.exerciseThree[1] = loadImage("images/exercise3Over.jpg");
-                this.exerciseThree[2] = loadImage("images/exercise3.jpg");
+                this.exerciseOne[0]  = loadImage("images/NewUI/exercise1.jpg");
+                this.exerciseOne[1]  =loadImage("images/NewUI/exercise1Over.jpg");
+                this.exerciseOne[2]  =loadImage("images/NewUI/exercise1.jpg");
+                this.exerciseTwo[0] = loadImage("images/NewUI/exercise2.jpg");
+                this.exerciseTwo[1] =loadImage("images/NewUI/exercise2Over.jpg");
+                this.exerciseTwo[2] =loadImage("images/NewUI/exercise2.jpg");
+                this.exerciseThree[0] = loadImage("images/NewUI/exercise3.jpg");
+                this.exerciseThree[1] = loadImage("images/NewUI/exercise3Over.jpg");
+                this.exerciseThree[2] = loadImage("images/NewUI/exercise3.jpg");
                 this.logout[0] = loadImage("images/logout.jpg");
                 this.logout[1] =loadImage("images/logoutOver.jpg");
                 this.logout[2] =loadImage("images/logout.jpg");
@@ -72,7 +72,7 @@ class ProgramsScreen {
 
 
                 buttons[2] = cp5.addButton("exerciseTwo")
-                        .setPosition(242, 100)
+                        .setPosition(262, 100)
                                 .setImages(exerciseTwo)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
@@ -82,7 +82,7 @@ class ProgramsScreen {
                                                     
 
                 buttons[3] = cp5.addButton("exerciseThree")
-                        .setPosition(482, 100)
+                        .setPosition(502, 100)
                                 .setImages(exerciseThree)
                                         .updateSize()
                                                 .setGroup(programmesGroup)
@@ -101,8 +101,8 @@ class ProgramsScreen {
         void drawUI() {
                 cp5.draw();
                 image(exercise_one_tut, 10, 325);
-                image(exercise_two_tut, 242, 325);
-                image(exercise_three_tut, 482, 325);    
+                image(exercise_two_tut, 262, 325);
+                image(exercise_three_tut, 502, 325);    
         }
 
 
@@ -128,7 +128,7 @@ class ProgramsScreen {
                 }//CHECK FOR EXERCISE ONE BUTTON
                 //(leftHand.x > 10/2.5 && leftHand.x < 232/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
                 //rightHand.x > 10/2.5 && rightHand.x < 232/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
-                else if (leftHand.x > (10/2.5) && leftHand.x < (232/2.5) && leftHand.y > (120/2.5) && leftHand.y < (338/2.5))
+                else if (leftHand.x > (10/2.5) && leftHand.x < (236/2.5) && leftHand.y > (100/2.5) && leftHand.y < (331/2.5))
                 {
                         if (start == false) {
                                 println("Over Exercise One");
@@ -143,7 +143,7 @@ class ProgramsScreen {
                 }//CHECK FOR EXCERCISE TWO BUTTON
                 //(leftHand.x > 242/2.5 && leftHand.x < 464/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
                 //rightHand.x > 242/2.5 && rightHand.x < 464/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
-                else if(leftHand.x > (242/2.5) && leftHand.x < (464/2.5) && leftHand.y > (120/2.5) && leftHand.y < (338/2.5))
+                else if(leftHand.x > (262/2.5) && leftHand.x < (488/2.5) && leftHand.y > (100/2.5) && leftHand.y < (331/2.5))
                  {
                         if(start == false){
                                 println("Over Exercise Two");
@@ -152,12 +152,12 @@ class ProgramsScreen {
                                 loaderOn();
                         }if(checkTimer() == 1){
                                 println("Exercise Two called");
-                                makeExerciseOne();
+                                makeExerciseTwo();
                         }
                  }//CHECK FOR EXERCISE THREE BUTTON
                  //(leftHand.x > 482/2.5 && leftHand.x < 504/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
                  //rightHand.x > 482/2.5 && rightHand.x < 504/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
-                 else if(leftHand.x > (482/2.5) && leftHand.x < (504/2.5) && leftHand.y > (120/2.5) && leftHand.y < (338/2.5))
+                 else if(leftHand.x > (502/2.5) && leftHand.x < (728/2.5) && leftHand.y > (100/2.5) && leftHand.y < (331/2.5))
                  {
                         if(start == false){
                                 println("Over Exercise Three");
@@ -166,7 +166,7 @@ class ProgramsScreen {
                                 loaderOn();
                          }if(checkTimer() == 1){
                                 println("Exercise Three called");
-                                makeExerciseOne();
+                                makeExerciseThree();
                         }
                  }//CHECK FOR LOGOUT BUTTON
                  //(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5) || (

@@ -42,6 +42,9 @@ class ExerciseScreenOne {
         long startTime;
         long timeOut;
         int timeCompleted;
+        
+        boolean finishedTimerStarted = false;
+        long finishStartTime = 0;
 
         public ExerciseScreenOne(RedPanda c) {
                 this.context = c;
@@ -458,6 +461,24 @@ class ExerciseScreenOne {
                 joint.draw();
                 kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
                 popMatrix();
+        }
+        
+        public boolean checkForComplete() {
+                return finished;
+        }
+
+        public void startFinishTimer() {
+                if (!finishedTimerStarted) { //create timer
+                        println("started");
+                        finishStartTime = System.currentTimeMillis() /1000;
+                        finishedTimerStarted = true;
+                } 
+                else { //check timer
+                        println(10 -((System.currentTimeMillis()/1000) - finishStartTime) );
+                        if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
+                                context.autoMoveToScreenTwo();
+                        }
+                }
         }
 }
 

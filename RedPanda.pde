@@ -81,6 +81,8 @@ boolean deleteExerciseScreenTwo = false;
 boolean deleteExerciseScreenThree = false;
 boolean deleteCommentsScreen = false;
 
+boolean currentExerciseComplete = false;
+
 ArrayList<Exercise> e = new ArrayList<Exercise>();
 
 void setup() {
@@ -98,7 +100,7 @@ void setup() {
         backgroundImage = loadImage("images/background.png");
         backgroundImage2 = loadImage("images/background2.png");
         cp5 = new ControlP5(this);
-        
+
         //load screen assets
         errorScreen.loadImages();
         loginScreen.loadImages();
@@ -209,15 +211,19 @@ void draw() {
                 background(backgroundImage2);
                 exerciseScreenOne.drawUI(); 
                 exerciseScreenOne.startExercise(kinect);
+                currentExerciseComplete = exerciseScreenOne.checkForComplete();
+                checkIfExerciseComplete();
                 break;
 
         case 7://xml exercise
                 checkForScreensToDelete();
                 background(backgroundImage2);
                 xmlExercise.drawUI(false); //parameter true to draw debug HUD
+                currentExerciseComplete = xmlExercise.checkForComplete();
+                checkIfExerciseComplete();
                 break;
 
-         case 8: //exercise screen? or screens?
+        case 8: //exercise screen? or screens?
                 checkForScreensToDelete();
                 background(backgroundImage2);
                 exerciseScreenThree.drawUI(); 
@@ -226,28 +232,63 @@ void draw() {
         }
 }
 
+public void checkIfExerciseComplete() {
+        if (currentExerciseComplete) {
+                if (currentScene == 6) {
+                        exerciseScreenOne.startFinishTimer();
+                } 
+                else if (currentScene == 7) {
+                        xmlExercise.startFinishTimer();
+                } 
+                else if (currentScene == 8) {
+                        //currentScene = 5;
+                }
+                currentExerciseComplete = false;
+        }
+}
 
+void autoMoveToScreenTwo() {
+        deleteExerciseScreenOne = true;
+        ArrayList<Exercise> e = new ArrayList<Exercise>();
+        e = programme.getExercises();
+        //load second exercise data
+        xmlExercise = new XMLExerciseClassOptimised(this);
+        xmlExercise.loadImages();
+        xmlExercise.create(kinect, user, SimpleOpenNI.SKEL_LEFT_SHOULDER, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_HAND, e.get(1));
+        xmlExercise.readXML(e.get(1).getName());
+        currentScene = 7;
+}
+
+void autoMoveToScreenThree () {
+        exerciseScreenThree = new ExerciseScreenThree(this);
+        exerciseScreenThree.loadImages();
+        deleteExerciseScreenTwo = true;
+        ArrayList<Exercise> e = new ArrayList<Exercise>();
+        e = programme.getExercises();
+        exerciseScreenThree.create(user, e.get(2));
+        currentScene = 8;
+}
 
 //////////////////////////////////////////////////////////////////////
 ///BUTTONS PRESSED ACTIONS///////////////////////////////////////////
 
 public void controlEvent(ControlEvent theEvent) {
         //tells you what controller was called
-    
+
         println(">/>"+ theEvent.getController().getName());
 
         //Loop  to check if any of the dynamic buttons created in the comments screen have been clicked. 
         //If this was the event clicked, get the button value and send as parameter to buttonClicked function in
         //comments screen to do GET request for comments with that exercise id
-        for( int i = 0; i < e.size(); i++){
-            if(theEvent.controller().name().equals("button" + i)){
-                 commentsScreen.buttonClicked(theEvent.controller().value());
-            }
+        for ( int i = 0; i < e.size(); i++) {
+                if (theEvent.controller().name().equals("button" + i)) {
+                        commentsScreen.buttonClicked(theEvent.controller().value());
+                }
         }
 
         if (theEvent.getController().getName().equals("log in")) { //f the button was the log in button
                 println("Loggin in..");
-                
+
                 //get the values from the username and password fields
                 loginUserName = cp5.get(Textfield.class, "userName").getText();
                 loginPassword = cp5.get(Textfield.class, "password").getText();
@@ -258,13 +299,13 @@ public void controlEvent(ControlEvent theEvent) {
                 if (user.getUser_id() != -1 && currentScene == 0) { //if the user is logged in and theyre in the loggin screen
                         println("Success!");
                         //get exercise programme
-                        try{
-                        ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
-                        programme = programmeDAO.getProgramme();
-                        //println("create date: " + programme.getCreate_date());
-                        //get the exercise objects and add them to the programme object.
+                        try {
+                                ProgrammeDAO programmeDAO = new ProgrammeDAO(user.getUser_id());
+                                programme = programmeDAO.getProgramme();
+                                //println("create date: " + programme.getCreate_date());
+                                //get the exercise objects and add them to the programme object.
                         }
-                       catch (Exception ex) {
+                        catch (Exception ex) {
                                 System.out.println("Programs not retrieved/set");
                         }
                         try {
@@ -277,17 +318,18 @@ public void controlEvent(ControlEvent theEvent) {
                                 System.out.println("exercises not retrieved/set");
                         }
                         deleteLoginScreen = true;
-                        try{
-                        RecordDAO recordDAO = new RecordDAO();
-                        record = recordDAO.getLastDone(user.getUser_id());
-                        }catch (Exception ex) {
+                        try {
+                                RecordDAO recordDAO = new RecordDAO();
+                                record = recordDAO.getLastDone(user.getUser_id());
+                        }
+                        catch (Exception ex) {
                                 System.out.println("exercises not retrieved/set");
                         }
                         menuScreen.create(user, record);
                         currentScene = 1;
                 } 
                 else { //user is not logged in
-                        
+
                         loginScreen.displayError("Incorrect login details");
                 }
         }
@@ -304,7 +346,7 @@ public void controlEvent(ControlEvent theEvent) {
                 makeExerciseTwo();
         }
 
-         if (theEvent.getController().getName().equals("exerciseThree")) {
+        if (theEvent.getController().getName().equals("exerciseThree")) {
                 makeExerciseThree();
         }
 
@@ -331,11 +373,11 @@ public void controlEvent(ControlEvent theEvent) {
         if (theEvent.getController().getName().equals("logout") || theEvent.getController().getName().equals("logoutPrograms") || theEvent.getController().getName().equals("logoutProgress") || theEvent.getController().getName().equals("logoutComments") || theEvent.getController().getName().equals("logoutExercise") || theEvent.getController().getName().equals("logoutExercise2") || theEvent.getController().getName().equals("logoutExercise3") ) {
                 makeLogout();
         }
-        
+
         if (theEvent.getController().getName().equals("nextChart")) {
                 progressScreen.nextChartPressed();
         }
-        
+
         if (theEvent.getController().getName().equals("previousChart")) {
                 progressScreen.previousChartPressed();
         }
@@ -448,7 +490,7 @@ void menuBack() {
         else if (currentScene == 6) { //exercise screen
                 deleteExerciseScreenOne = true;
         } 
-       else if (currentScene == 7) { //exercise screen
+        else if (currentScene == 7) { //exercise screen
                 deleteExerciseScreenTwo = true;
         } 
         else if (currentScene == 8) { //exercise screen
@@ -491,8 +533,7 @@ void makeLogout() {
         //background(backgroundImage);
         loginScreen.create();
         deleteLoginScreen = false;
-        //loginScreen.drawUI();   
-        
+        //loginScreen.drawUI();
 }
 
 void checkForScreensToDelete() {

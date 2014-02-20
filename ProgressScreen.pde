@@ -189,7 +189,7 @@ class ProgressScreen {
                 textFont(Font1);
                 text((currentChartNumber +1) + "/" +  exs.size(), 600, 550);           
 
-                drawInfo();
+                //drawInfo();
         }
 
         public void drawInfo() {
@@ -219,7 +219,7 @@ class ProgressScreen {
                 else {
                         currentChartNumber = 0;
                 }
-                loadChartData();                   
+                //loadChartData();                   
                 println(currentChartNumber);
                 createChart();
         }
@@ -232,7 +232,7 @@ class ProgressScreen {
                         currentChartNumber = exs.size() -1;
                 }
                 println(currentChartNumber);
-                loadChartData();                   
+                //loadChartData();                   
 
                 createChart();
         }

@@ -83,12 +83,12 @@ class ExerciseScreenThree {
                         int Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
                         message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \nOn 5, raise you right leg away from your body as high as you comfortably can.");
-                        message.create("g", "l");
+                        message.create("x", "y");
                 }
                 else {
                         PVector pos = new PVector(10, 100);
                         message = new Message(280, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + e.getName()  +  " exercise. \nYou have not attempted this exercise yet. \n\nDirections : \nOn 5, raise you right hand away from your body as high as you comfortably can.");
-                        message.create("g", "l");
+                        message.create("z", "w");
                 }
 
                 lastTime = (float)millis()/1000.f;

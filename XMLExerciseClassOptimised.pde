@@ -77,6 +77,9 @@ class XMLExerciseClassOptimised {
         color userColourGrey = color(155, 155, 155);
         color userColourWhite = color(255, 255, 255);
         color currentUserColour = userColourWhite;
+        
+        boolean finishedTimerStarted = false;
+        long finishStartTime = 0;
 
         PVector messagePosition = new PVector(10, 100);
         IntVector userList;
@@ -702,6 +705,24 @@ class XMLExerciseClassOptimised {
                 } 
                 catch (TransformerException tfe) {  
                         tfe.printStackTrace();
+                }
+        }
+        
+        public boolean checkForComplete() {
+                return exerciseComplete;
+        }
+        
+        public void startFinishTimer() {
+                if (!finishedTimerStarted) { //create timer
+                        println("started");
+                        finishStartTime = System.currentTimeMillis() /1000;
+                        finishedTimerStarted = true;
+                } 
+                else { //check timer
+                        println(10 -((System.currentTimeMillis()/1000) - finishStartTime) );
+                        if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
+                                parent.autoMoveToScreenThree();
+                        }
                 }
         }
 

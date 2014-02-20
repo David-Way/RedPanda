@@ -90,12 +90,12 @@ class ExerciseScreenThree {
                         Month=int(date.substring(4, 6));
                         Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
-                        message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName()  +  " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(208, 450, pos, "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName()  +  " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right leg away from your body as high as you comfortably can.");
                         message.create("x", "y");
                 }
                 else {
                         PVector pos = new PVector(10, 100);
-                        message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + exercise.getName()  +  " exercise. \n\nYou have not attempted this exercise yet. \n\n Directions : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(208, 450, pos, "Hi " + user.getFirst_name() + ",\nWelcome to the " + exercise.getName()  +  " exercise. \n\nYou have not attempted this exercise yet. \n\n Directions : \n\nOn 5, raise you right leg away from your body as high as you comfortably can.");
                         message.create("x", "y");
                 }
                 messageTwo = new Message(0, 0, new PVector(10, 978), "");
@@ -206,7 +206,7 @@ class ExerciseScreenThree {
                 messageTwo = new Message(209, 50, new PVector(978, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
                 messageTwo.create("fp3", "hp3");
                 messageThree.destroy();
-                messageThree = new Message(209, 150, new PVector(978, 170), "Raise you right hand away from your body as high as you comfortably can.");
+                messageThree = new Message(209, 150, new PVector(978, 170), "Raise you right leg away from your body as high as you comfortably can.");
                 messageThree.create("jp", "kp");
                 //draw
                 if (currentPos != new PVector()) {

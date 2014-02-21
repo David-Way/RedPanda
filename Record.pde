@@ -1,5 +1,7 @@
+//This class is used to store information about exercises completed by the users
 public class Record{
 
+        //declare variables to hold the record data
 	private int record_id;
 	private int user_id;
 	private int exercise_id;
@@ -9,10 +11,12 @@ public class Record{
 	private int reps;
 	private String error = null;
 
+        //constructor takes no parameters
 	public Record(){
 		this.record_id = -1;
 	}
 
+        //over written constructor takes parametes for all values held by the record object
 	public Record (int id, int us_is, int ex_id, int dd, int t, int r, int s, String er){
 		this.record_id = id;
 		this.user_id = us_is; 
@@ -24,6 +28,7 @@ public class Record{
 		this.error = er;
 	}
 
+        //getters and setters for the objects variables
 	public int getRecord_id(){
 		return record_id;
 	}

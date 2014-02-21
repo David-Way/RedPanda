@@ -1,10 +1,14 @@
+//this class is used to display a login form for the patient to access the program through
 class LoginScreen {
 
+        //declare variables to be used
         private RedPanda context;
-        // Array to strore login buttons images
+        //array to store login buttons images
         private PImage[] login_images = new PImage[3];
+        //to store images used
         private PImage loginBackgroundImage;
         private PImage logoImage;
+        //variables to hold the Gp5 UI elements
         private Textfield[] textfields;
         private Button[] buttons;
         private Group loginGroup;
@@ -15,6 +19,7 @@ class LoginScreen {
                 this.context = c;
         }
 
+        //function called to load the assets for this screen
         public void loadImages() {
                 // load images for login button
                 this.login_images[0] = loadImage("images/NewUI/login_button_a.jpg");
@@ -27,7 +32,7 @@ class LoginScreen {
         }
 
         public void create() {
-
+                //configure the Cp5 object
                 cp5.setAutoDraw(false);
 
                 // draw background image
@@ -40,9 +45,10 @@ class LoginScreen {
                 fill(255);
                 text("version 1.01", 45, 10);
                 
+                //draw the logo image around the text boxes
                 image(logoImage, 430, 165, 334, 376);
 
-                // set and draw title text with drop shadow
+                // set and draw title text with drop shadow,  not used
                 String title = "Red Panda";
                 String subTitle = "Physio";
                 textSize(32);
@@ -63,9 +69,11 @@ class LoginScreen {
                                .hideBar()
                                 ;
 
+                //iinitialise UI element arrays, used to make removing them easier
                 textfields = new Textfield[2];
                 buttons = new Button[1];
 
+                //create a text field for the username, set its group, format it and make it visible
                 textfields[0] = cp5.addTextfield("userName")
                         .setLabelVisible(true)
                         .setCaptionLabel("USERNAME")
@@ -82,7 +90,9 @@ class LoginScreen {
                                                                                         .setText("patient")
                                                                                         //.setAutoClear(false)
                                                                                                 .setGroup(loginGroup).setId(1);
-
+                                                                                                
+                //create a textfield for password, set its group, format it  and make it visible
+                //setPasswordMode is not compatible with the version of Cp5 we had to use
                 textfields[1] = cp5.addTextfield("password")
                         .setLabelVisible(true)
                                 .setCaptionLabel("PASSWORD")
@@ -102,16 +112,19 @@ class LoginScreen {
                                                                                                                 .setGroup(loginGroup)
                                                                                                                         .setId(2);
 
+                //create a login button, set its group format it and set its normal, hover and click images.
                 buttons[0] = cp5.addButton("log in").setColorBackground(color(8, 187, 209))
                         .setPosition(width / 2 - 110, 424).setImages(login_images)
                                 .updateSize().setGroup(loginGroup).setId(3);
                                 
         }
         
+        //this function is called in the RedPanda draw loop to draw the UI elements added to the Cp5 object 
         void drawUI() {               
                 cp5.draw();
         }
 
+        //function used to display a given error mesage
         public void displayError(String s) {
                 fill(51, 196, 242);
                 textSize(20);
@@ -125,15 +138,19 @@ class LoginScreen {
                 rect( width / 2 - 109, 525, 218, 48);
         }
 
+        //function called to remove UI elemts from the screen
         void destroy() {
+                //loops through all the textfield elements and removes them
                 for ( int i = 0 ; i < textfields.length; i++ ) {
                         textfields[i].remove();
                         textfields[i] = null;
                 }
+                //loops through all the button elements and removes them
                 for ( int i = 0 ; i < buttons.length ; i++ ) {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
+                //removes the group set for this screen from the Cp5 object
                 cp5.getGroup("loginGroup").remove();
         }
 }

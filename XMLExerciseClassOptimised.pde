@@ -698,25 +698,28 @@ class XMLExerciseClassOptimised {
                 }
         }
 
+        //this function returns true if the exercise is complete
         public boolean checkForComplete() {
                 return exerciseComplete;
         }
 
+        //this function is called by the RedPanda file when the check for complete returns true
         public void startFinishTimer() {
+                //if the timer hasnt been started already, finishedTimeStarted is not true 
                 if (!finishedTimerStarted) { //create timer
-                        println("started");
-                        finishStartTime = System.currentTimeMillis() /1000;
-                        finishedTimerStarted = true;
+                        finishStartTime = System.currentTimeMillis() /1000; //get the current time
+                        finishedTimerStarted = true; //set the finishedTimeStarted variable to true so the finishStart time is not set on next check
                 } 
-                else { //check timer
-                        println(10 -((System.currentTimeMillis()/1000) - finishStartTime) );
+                else { //if timer started is true check timer
                         if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
-                                parent.autoMoveToScreenThree();
+                                parent.autoMoveToScreenThree(); //call this function in the RedPanda class to advance to the next exercise
                         }
 
-                        //cancel button
+                        //draw cancel button
                         buttons[2].setVisible(true);
-                        continueMessage.destroy();                               
+                        //destrol the previous continue message
+                        continueMessage.destroy();                             
+                        //create a new message showing the current time left until the autoMoveToScreenThree function is going to be called
                         continueMessage = new Message(550, 50, new PVector(325, 410), "Next exercise in "+ (10 -((System.currentTimeMillis()/1000) - finishStartTime)) + " seconds, use Cancel to quit.", FONT_24);
                         continueMessage.create("zz", "tt");
                 }

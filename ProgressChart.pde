@@ -1,25 +1,28 @@
-
+//This class is used to create a scatter chart using the giUtilities libraries
+//it IS no longer used JFreeProgressChart has replaced it
 class ProgressChart {       
-
+        
+        //declare variables 
         RedPanda c;
         XYChart scatterplot;
         float [] dates, scores; 
         String labelOne, labelTwo;
 
-
+        //contructor takes reference to the RedPanda class, two float arrays containing the data to be plotted and the names of the axis
         public ProgressChart(RedPanda _c, float[] _dates, float[] _scores, String _labelOne, String _labelTwo) {
+                //initialise variable
                 this.c = _c;
-                this.scatterplot = new XYChart(c);
+                this.scatterplot = new XYChart(c); //create chart object
                 this.dates = _dates;
                 this.scores = _scores;
                 this.labelOne = _labelOne;
                 this.labelTwo = _labelTwo;
 
                 // Both x and y data set here.  
-                if (dates != null && scores != null) {
-                        scatterplot.setData(dates, scores);
+                if (dates != null && scores != null) { //i fthe data isnt null
+                        scatterplot.setData(dates, scores); //set the chart data
                 } 
-                else {
+                else { //set default values
                         scatterplot.setData(new float[] {
                                 1900, 1910, 1920, 1930, 1940, 1950, 
                                 1960, 1970, 1980, 1990, 2000
@@ -50,15 +53,12 @@ class ProgressChart {
         }
 
         public void drawUI() {   
+                //draw translucent white square over background
                 fill(51, 196, 241);                
                 rect(764, 105, 319, 380);
-
-                //scatterplot.draw(116, 105, 638, 380);               
-                scatterplot.draw(116, 105, 800, 380);               
-
-                //drawInfo();
-        }
-
-        
+                
+                //draw the scatter plot chart object
+                scatterplot.draw(116, 105, 800, 380);                               
+        }        
 }
 

@@ -1,5 +1,6 @@
+//this screen is used to notify the user when the kinect isnt connected
 class ErrorScreen {
-        
+        //Store the vaiables for the kinect and the image
         private RedPanda context;
         private PImage kinectImage;
         
@@ -7,6 +8,7 @@ class ErrorScreen {
                 this.context = c;                
         }
         
+        //load the error image
         public void loadImages() {
                 this.kinectImage = loadImage("images/kinect.png");
         }
@@ -16,11 +18,11 @@ class ErrorScreen {
        }
 
         public void drawUI() {
-                background(255);
+                background(255); //set the background to white
                 println(dataPath(""));
-                println(sketchPath("xml-exercises"));
-                image(kinectImage, width/2 - 330, height/2 - 128);
-                textSize(32);
+                println(sketchPath("xml-exercises")); 
+                image(kinectImage, width/2 - 330, height/2 - 128); //draw the error image
+                textSize(32); //draw the error message to the screen
                 text("Camera Not Connected!", width/2, height/2 + 100);
                 text("Please Connect Camera and Restart Application", width/2, height/2 + 140); 
                 fill(0, 102, 153);

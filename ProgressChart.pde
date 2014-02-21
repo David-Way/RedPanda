@@ -1,4 +1,4 @@
-import org.gicentre.utils.stat.*;    // For chart classes
+
 class ProgressChart {       
 
         RedPanda c;

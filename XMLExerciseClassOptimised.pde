@@ -1,38 +1,4 @@
-import java.util.ArrayList;
-import java.io.File;
-import processing.opengl.*;
-import SimpleOpenNI.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
-import org.xml.sax.*;
-import org.w3c.dom.*;
-import gifAnimation.*;
 
-import java.util.ArrayList;
-
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;        
-
-import javax.xml.transform.stream.*;
-import org.xml.sax.*;
-import org.w3c.dom.*;
-
-import java.io.File;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 //import peasy.*;
 
 class XMLExerciseClassOptimised {
@@ -144,7 +110,7 @@ class XMLExerciseClassOptimised {
                                                 .setGroup(exerciseGroup2)
                                                         ;
 
-                buttons[2] = cp5.addButton("cancelProgramme")
+                buttons[2] = cp5.addButton("cancelProgramme2")
                         .setPosition(494, 515)
                                 .setImages(cancel)
                                         .updateSize()
@@ -593,8 +559,8 @@ class XMLExerciseClassOptimised {
                 this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
                 this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
-                this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
-                this.logout[2] =loadImage("images/NewUI/logout.jpg");
+                this.logout[1] = loadImage("images/NewUI/logoutOver.jpg");
+                this.logout[2] = loadImage("images/NewUI/logout.jpg");
                 this.cancel[0] = loadImage("images/NewUI/cancel.jpg");
                 this.cancel[1] = loadImage("images/NewUI/cancelOver.jpg");
                 this.cancel[2] = loadImage("images/NewUI/cancel.jpg");
@@ -767,6 +733,7 @@ class XMLExerciseClassOptimised {
                 timerMessage.destroy();
                 directionMessage.destroy();
                 continueMessage.destroy();
+                //System.gc();
         }
 }
 

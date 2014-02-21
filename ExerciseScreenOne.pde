@@ -1,9 +1,11 @@
+
 class ExerciseScreenOne {
 
         private RedPanda context;
 
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
+        private PImage[] cancel = new PImage[3];
         private Button []buttons;
         private Group exerciseGroup;
         Gif countDownIcon;
@@ -34,6 +36,7 @@ class ExerciseScreenOne {
         Message message;
         Message messageTwo;
         Message messageThree;
+        Message continueMessage;
         Record record;
         RecordDAO recordDAO;
         User user;
@@ -57,14 +60,16 @@ class ExerciseScreenOne {
         }
 
         void loadImages() {
-
                 //load images  for login button
                 this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
                 this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
-                this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[2] = this.menuBack[0];
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
                 this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
-                this.logout[2] =loadImage("images/NewUI/logout.jpg");
+                this.logout[2] = this.logout[0];
+                this.cancel[0] = loadImage("images/NewUI/cancel.jpg");
+                this.cancel[1] = loadImage("images/NewUI/cancelOver.jpg");
+                this.cancel[2] = this.cancel[0];
         }
 
         public void create(User u, Exercise e) {
@@ -94,7 +99,7 @@ class ExerciseScreenOne {
                         Day=int(date.substring(6, 8));
                         PVector pos = new PVector(10, 100);
 
-                       
+
                         message = new Message(208, 400, pos, "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName()  +  " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("g", "l");
                 }
@@ -107,6 +112,9 @@ class ExerciseScreenOne {
                 messageTwo.create("pz", "px");
                 messageThree = new Message(0, 0, new PVector(70, 978), "");
                 messageThree.create("pw", "py");
+                continueMessage = new Message(10, 10, new PVector(0, 0), "", 24);
+                continueMessage.create("s", "q");
+
                 lastTime = (float)millis()/1000.f;
                 start = false;
                 cp5.setAutoDraw(false);
@@ -132,13 +140,13 @@ class ExerciseScreenOne {
                                                 .setGroup(exerciseGroup)
                                                         ;
 
-                buttons[2] = cp5.addButton("cancelProgramme")
+                buttons[2] = cp5.addButton("cancelProgramme1")
                         .setPosition(494, 515)
-                                .setImages(logout)
+                                .setImages(cancel)
                                         .updateSize()
-                                        .setVisible(false)
-                                                .setGroup(exerciseGroup)
-                                                        ;
+                                                .setVisible(false)
+                                                        .setGroup(exerciseGroup)
+                                                                ;
         }
 
         public void startExercise(SimpleOpenNI kinect) {
@@ -208,10 +216,10 @@ class ExerciseScreenOne {
                 rotateX(radians(180));
                 message.destroy();
                 message = new Message(209, 400, new PVector(10, 100), "Hi " + user.getFirst_name() +
-                 ",\n\nWelcome to the " + exercise.getName()  +  
-                 " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + 
-                 "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
-                  (int)Math.round(100.0 / MAX_REPS * reps) + "%");
+                        ",\n\nWelcome to the " + exercise.getName()  +  
+                        " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + 
+                        "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
+                        (int)Math.round(100.0 / MAX_REPS * reps) + "%");
                 message.create("pg", "pl");
                 messageTwo.destroy();
                 messageTwo = new Message(209, 50, new PVector(978, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
@@ -284,7 +292,7 @@ class ExerciseScreenOne {
                 }
                 score  = (int) average / reps;
                 message.destroy();                                       
-                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points");
+                message = new Message(550, 300, new PVector(325, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points", 24);
                 message.create("eg", "el");
                 messageTwo.destroy();
                 messageTwo = new Message(0, 0, new PVector(10, 978), "");
@@ -379,7 +387,8 @@ class ExerciseScreenOne {
                 cp5.getGroup("exerciseGroup").remove();
                 message.destroy();
                 messageTwo.destroy();
-                messageThree.destroy(); 
+                messageThree.destroy();
+                continueMessage.destroy();
         }
 
 
@@ -518,6 +527,9 @@ class ExerciseScreenOne {
 
                         //cancel button
                         buttons[2].setVisible(true);
+                        continueMessage.destroy();                               
+                        continueMessage = new Message(550, 50, new PVector(325, 410), "Next exercise in "+ (10 -((System.currentTimeMillis()/1000) - finishStartTime)) + " seconds, use Cancel to quit.", 24);
+                        continueMessage.create("zz", "tt");
                 }
         }
 }

@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat; 
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -24,6 +25,54 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Paint;
+import java.math.BigDecimal;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Ellipse2D;
+
+import org.gicentre.utils.stat.*;    // For chart classes
+import java.io.UnsupportedEncodingException; 
+import java.util.ArrayList;
+import java.io.File;
+import processing.opengl.*;
+import SimpleOpenNI.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+import org.xml.sax.*;
+import org.w3c.dom.*;
+import gifAnimation.*;
+
+import java.util.ArrayList;
+
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;        
+
+import javax.xml.transform.stream.*;
+import org.xml.sax.*;
+import org.w3c.dom.*;
+
+import java.io.File;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 //initialise kinect
 SimpleOpenNI kinect;
@@ -89,6 +138,7 @@ void setup() {
         //basic sketch setup functions
         size(1200, 600, P3D);
         frameRate(30);
+        
         //textMode(SHAPE);
         textAlign(CENTER, CENTER);
         //hand tracking image loading
@@ -100,7 +150,7 @@ void setup() {
         backgroundImage = loadImage("images/background1.png");
         backgroundImage2 = loadImage("images/background2.png");
         cp5 = new ControlP5(this);
-
+        cp5.setFont(createFont("",10));//memory leak semi-fix
         //load screen assets
         errorScreen.loadImages();
         loginScreen.loadImages();
@@ -228,6 +278,8 @@ void draw() {
                 background(backgroundImage2);
                 exerciseScreenThree.drawUI(); 
                 exerciseScreenThree.startExercise(kinect);
+                currentExerciseComplete = exerciseScreenThree.checkForComplete();
+                checkIfExerciseComplete();
                 break;
         }
 }
@@ -241,7 +293,7 @@ public void checkIfExerciseComplete() {
                         xmlExercise.startFinishTimer();
                 } 
                 else if (currentScene == 8) {
-                        //currentScene = 5;
+                        exerciseScreenThree.startFinishTimer();
                 }
                 currentExerciseComplete = false;
         }
@@ -267,6 +319,13 @@ void autoMoveToScreenThree () {
         e = programme.getExercises();
         exerciseScreenThree.create(user, e.get(2));
         currentScene = 8;
+}
+
+void autoMoveToExerciseScreen() {
+        //programsScreen = new ProgramsScreen(this);
+        programsScreen.create();
+        deleteExerciseScreenThree = true;
+        currentScene = 2;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -366,7 +425,7 @@ public void controlEvent(ControlEvent theEvent) {
                 makeComments();
         }
 
-        if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises") || theEvent.getController().getName().equals("menuBackExercise3")  || theEvent.getController().getName().equals("menuBackExercises2") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments")) {
+        if (theEvent.getController().getName().equals("menuBackProgrammes") || theEvent.getController().getName().equals("menuBackExercises") || theEvent.getController().getName().equals("menuBackExercise3")  || theEvent.getController().getName().equals("menuBackExercises2") || theEvent.getController().getName().equals("menuBackProgress") || theEvent.getController().getName().equals("menuBackComments") || theEvent.getController().getName().equals("cancelProgramme1") || theEvent.getController().getName().equals("cancelProgramme2") || theEvent.getController().getName().equals("cancelProgramme3") ) {
                 menuBack();
         }
 

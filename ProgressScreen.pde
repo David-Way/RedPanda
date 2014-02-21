@@ -6,6 +6,7 @@ class ProgressScreen {
         private PImage[] logout = new PImage[3];
         private PImage[] previous = new PImage[3];
         private PImage[] next = new PImage[3];
+        private PImage[] dots = new PImage[3];
         private Button []buttons;
         private Group progressGroup;
         boolean start = false;
@@ -29,19 +30,23 @@ class ProgressScreen {
                 //load images  for buttons
                 this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
                 this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
-                this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[2]  = menuBack[0];
 
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
-                this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
-                this.logout[2] =loadImage("images/NewUI/logout.jpg");
+                this.logout[1] = loadImage("images/NewUI/logoutOver.jpg");
+                this.logout[2] = logout[0];
 
                 this.previous[0] = loadImage("images/NewUI/previous.png");
-                this.previous[1] =loadImage("images/NewUI/previousOver.png");
-                this.previous[2] =loadImage("images/NewUI/previous.png");
+                this.previous[1] = loadImage("images/NewUI/previousOver.png");
+                this.previous[2] = previous[0];
 
                 this.next[0] = loadImage("images/NewUI/next.png");
-                this.next[1] =loadImage("images/NewUI/nextOver.png");
-                this.next[2] =loadImage("images/NewUI/next.png");
+                this.next[1] = loadImage("images/NewUI/nextOver.png");
+                this.next[2] = next[0];
+
+                this.dots[0] = loadImage("images/NewUI/1_3.png");
+                this.dots[1] = loadImage("images/NewUI/2_3.png");
+                this.dots[2] = loadImage("images/NewUI/3_3.png");
         }
 
         public void create(Programme _programme) {
@@ -107,7 +112,7 @@ class ProgressScreen {
                 int[] score = new int[rs.size()];
                 int[] time = new int[rs.size()];
                 for (int i = 0; i < rs.size(); i++) {       
-                       Record record = rs. get(i);                 
+                        Record record = rs.get(i);                 
                         int  dd = record.getDateDone();
                         int sc = record.getScore();
                         int tm = record.getTimeToComplete();                        
@@ -181,14 +186,15 @@ class ProgressScreen {
                 popStyle();
                 cp5.draw();
                 //chart.drawUI();
-                
-                image(chartImage, 116, 100);    
-                //draw current chart number
-                fill(123);
-                textSize(32);
-                textFont(Font1);
-                text((currentChartNumber +1) + "/" +  exs.size(), 600, 550);           
 
+                image(chartImage, 116, 100);  
+
+                //draw current chart number
+                //fill(123);
+                //textSize(32);
+                //textFont(Font1);
+                //text((currentChartNumber +1) + "/" +  exs.size(), 600, 550);           
+                image(dots[currentChartNumber], 512, 524, 175, 51);
                 //drawInfo();
         }
 
@@ -222,6 +228,7 @@ class ProgressScreen {
                 //loadChartData();                   
                 println(currentChartNumber);
                 createChart();
+                
         }
 
         public void previousChartPressed() { //chart navigation, previous chart

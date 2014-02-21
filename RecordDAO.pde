@@ -46,13 +46,13 @@ public class RecordDAO {
 
                         try {
                                 String jsonString = result.toString();                        
-                                JSONArray jsonArray = new JSONArray(jsonString);
+                                org.json.JSONArray jsonArray = new org.json.JSONArray(jsonString);
 
                                 //get the ids for the prescribed exercises
                                 for (int i = 0; i < jsonArray.length(); i++) {
 
                                         try {
-                                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                org.json.JSONObject jsonObject = jsonArray.getJSONObject(i);
                                                 Gson gson = new Gson();
                                                 Record record = gson.fromJson(jsonObject.toString(), Record.class);                                                
                                                 records.add(record);

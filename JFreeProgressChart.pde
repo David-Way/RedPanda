@@ -1,12 +1,3 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Paint;
-import java.math.BigDecimal;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Ellipse2D;
-
-
 class JFreeProgressChart {
 
         JFreeChart chartObject;

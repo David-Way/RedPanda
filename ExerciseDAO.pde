@@ -48,12 +48,12 @@ class ExerciseDAO {
                                 //convert the string buffer to a string
                                 String jsonString = result.toString();
                                 //create a jason array using this string                        
-                                JSONArray jsonArray = new JSONArray(jsonString);
+                                org.json.JSONArray jsonArray = new org.json.JSONArray(jsonString);
                                 ArrayList<Integer> ids = new ArrayList<Integer>();
 
                                 //get the ids for the prescribed exercises
                                 for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        org.json.JSONObject jsonObject = jsonArray.getJSONObject(i);
                                         //System.out.println(jsonObject.getString("exercise_id"));
                                         ids.add(jsonObject.getInt("exercise_id"));
                                 }
@@ -97,9 +97,9 @@ class ExerciseDAO {
 
                                                 //create a new json array using the results string
                                                 jsonArray = null;
-                                                jsonArray = new JSONArray(result.toString());
+                                                jsonArray = new org.json.JSONArray(result.toString());
                                                 //get the firsts json onject in this array
-                                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                                org.json.JSONObject jsonObject = jsonArray.getJSONObject(0);
 
                                                 //retrieve the object values fron the json object
                                                 int e_id = jsonObject.getInt("exercise_id");

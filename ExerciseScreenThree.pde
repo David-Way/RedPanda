@@ -4,6 +4,7 @@ class ExerciseScreenThree {
 
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
+        private PImage[] cancel = new PImage[3];
         private Button []buttons;
         private Group exerciseGroup3;
         Gif countDownIcon;
@@ -34,6 +35,7 @@ class ExerciseScreenThree {
         Message message;
         Message messageTwo;
         Message messageThree;
+        Message continueMessage;
         Record record;
         RecordDAO recordDAO;
         User user;
@@ -48,6 +50,10 @@ class ExerciseScreenThree {
         long startTime;
         long timeOut;
         int timeCompleted;
+
+        boolean finishedTimerStarted = false;
+        long finishStartTime = 0;
+
         IntVector userList;
 
         public ExerciseScreenThree(RedPanda c) {
@@ -55,14 +61,16 @@ class ExerciseScreenThree {
         }
 
         void loadImages() {
-
                 //load images  for login button
                 this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
                 this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
-                this.menuBack[2]  = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[2]  = menuBack[0];
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
                 this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
-                this.logout[2] =loadImage("images/NewUI/logout.jpg");
+                this.logout[2] = logout[0];
+                this.cancel[0] = loadImage("images/NewUI/cancel.jpg");
+                this.cancel[1] = loadImage("images/NewUI/cancelOver.jpg");
+                this.cancel[2] = cancel[0];
         }
 
         public void create(User u, Exercise e) {
@@ -102,6 +110,9 @@ class ExerciseScreenThree {
                 messageTwo.create("pi", "pt");
                 messageThree = new Message(0, 0, new PVector(70, 978), "");
                 messageThree.create("pr", "ps");
+                continueMessage = new Message(10, 10, new PVector(1900, 0), "", 24);
+                continueMessage.create("s", "q");
+
                 lastTime = (float)millis()/1000.f;
                 start = false;
                 cp5.setAutoDraw(false);
@@ -111,7 +122,7 @@ class ExerciseScreenThree {
                                 .hideBar()
                                         ;
 
-                buttons = new Button[2];
+                buttons = new Button[3];
 
                 buttons[0] = cp5.addButton("menuBackExercise3")
                         .setPosition(10, 10)
@@ -126,6 +137,14 @@ class ExerciseScreenThree {
                                         .updateSize()
                                                 .setGroup(exerciseGroup3)
                                                         ;
+
+                buttons[2] = cp5.addButton("cancelProgramme3")
+                        .setPosition(494, 515)
+                                .setImages(cancel)
+                                        .updateSize()
+                                                .setVisible(false)
+                                                        .setGroup(exerciseGroup3)
+                                                                ;
         }
 
         public void startExercise(SimpleOpenNI kinect) {
@@ -163,7 +182,6 @@ class ExerciseScreenThree {
                                         popMatrix();
                                         popMatrix();
                                         setPoints();
-
                                 }
                         }
                 }
@@ -197,10 +215,10 @@ class ExerciseScreenThree {
                 message.destroy();
                 PVector pos = new PVector(10, 100);
                 message = new Message(209, 400, new PVector(10, 100), "Hi " + user.getFirst_name() +
-                 ",\n\nWelcome to the " + exercise.getName()  +  
-                 " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + 
-                 "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
-                  (int)Math.round(100.0 / MAX_REPS * reps) + "%");
+                        ",\n\nWelcome to the " + exercise.getName()  +  
+                        " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + 
+                        "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
+                        (int)Math.round(100.0 / MAX_REPS * reps) + "%");
                 message.create("gp", "lp");
                 messageTwo.destroy();
                 messageTwo = new Message(209, 50, new PVector(978, 100), "Time: " + ((System.currentTimeMillis() - startTime) / 1000) +"s");
@@ -215,7 +233,7 @@ class ExerciseScreenThree {
                         image(target, -125, -125, 250, 250);
                         popMatrix();
                 }
-                if(reps > 0 && reps <= MAX_REPS) {
+                if (reps > 0 && reps <= MAX_REPS) {
                         pushMatrix();
                         translate(highestPoint[reps -1].x, highestPoint[reps -1].y, highestPoint[reps - 1].z);            
                         image(target, -125, -125, 250, 250);
@@ -263,9 +281,9 @@ class ExerciseScreenThree {
         }
 
         public void stopExercise() {
-                if(stopTime){
-                timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
-                stopTime = false;
+                if (stopTime) {
+                        timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
+                        stopTime = false;
                 }
                 float average = 0;
                 for ( int i = 0 ; i < reps ; i++ ) {
@@ -274,7 +292,7 @@ class ExerciseScreenThree {
                 float temp_score  = (int) average / reps;
                 score = int(((startPoint.y - temp_score)*-1));
                 message.destroy();                                        
-                message = new Message(400, 400, new PVector(400, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points");
+                message = new Message(550, 300, new PVector(325, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points", 24);
                 message.create("eg", "el");
                 messageTwo.destroy();
                 messageTwo = new Message(0, 0, new PVector(10, 978), "");
@@ -290,7 +308,7 @@ class ExerciseScreenThree {
                 Date currentDate = new Date();
                 int date = int(dateFormat.format(currentDate));
                 if (enterData) {
-                        Record newRecord = new Record(0, userId, exerciseId, date, timeCompleted , reps, score, "Error");
+                        Record newRecord = new Record(0, userId, exerciseId, date, timeCompleted, reps, score, "Error");
                         recordDAO.setRecord(newRecord);
                         enterData = false;
                 }
@@ -352,11 +370,35 @@ class ExerciseScreenThree {
         void drawUI() {
                 //cp5.draw();
                 message.drawUI();
-                 //Timer to cancel exercise incase user have left.
-                if(((System.currentTimeMillis() - timeOut) / 1000) > 120){
+                //Timer to cancel exercise incase user have left.
+                if (((System.currentTimeMillis() - timeOut) / 1000) > 120) {
                         println(((System.currentTimeMillis()/1000) - startTime));
-                        context.deleteExerciseScreenOne = true;
+                        context.deleteExerciseScreenThree = true;
                         menuBack();
+                }
+        }
+
+        public boolean checkForComplete() {
+                return finished;
+        }
+
+        public void startFinishTimer() {
+                if (!finishedTimerStarted) { //create timer
+                        println("started");
+                        finishStartTime = System.currentTimeMillis() /1000;
+                        finishedTimerStarted = true;
+                } 
+                else { //check timer
+                        println(10 -((System.currentTimeMillis()/1000) - finishStartTime) );
+                        if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
+                                context.autoMoveToExerciseScreen();
+                        }
+
+                        //cancel button
+                        buttons[2].setVisible(true);
+                        continueMessage.destroy();                               
+                        continueMessage = new Message(550, 50, new PVector(325, 410), "Next exercise in "+ (10 -((System.currentTimeMillis()/1000) - finishStartTime)) + " seconds, use Cancel to quit.", 24);
+                        continueMessage.create("zz", "tt");
                 }
         }
 
@@ -365,11 +407,12 @@ class ExerciseScreenThree {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
-                
+
                 cp5.getGroup("exerciseGroup3").remove();
                 message.destroy();
                 messageTwo.destroy();
                 messageThree.destroy();
+                continueMessage.destroy();
         }
 
 

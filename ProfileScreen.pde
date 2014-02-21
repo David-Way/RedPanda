@@ -102,39 +102,48 @@ class ProfileScreen {
                     ;
         }
 
+        //CheckBtn called from main file, sending in the converted 3d perspective 
+        //positioning of the left and right hand into a flat plane
         void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
-
+                //set PVectors to vectors sent in
                 PVector leftHand = convertedLeftJoint;
                 PVector rightHand = convertedRightJoint;
 
+                //If left hand x position is within the boundaries of the close profile button
+                //Start is set to false initially, once left hand x is within these boundaries start will be set to true
+                //the timer will be set and loaderOn() is called, which changes the hand image to a loader gif
+               
                 if (leftHand.x > (910/2.5) && leftHand.x < (970/2.5) && leftHand.y > (20/2.5) && leftHand.y < (80/2.5))
-                {
+                {       
                         if (start == false) {
                                 println("Close Profile Called");
                                 start = true;
                                 timer = millis();
                                 loaderOn();
                         }
-                        if (checkTimer() == 1) {
+                        if (checkTimer()) {
                                 makeProfileClose();
                         }
-                }else {
+                }
+                //If left hand position goes outside the boundaries of the button set start to false again
+                //Turn off loading gif image, replace for hand image.
+                else {
                         start = false;
                         loaderOff();
-                        //println("Over Nothing");
                 }
         }
 
+         //checkTimer will only return true if passed time is greater than the total time set.
         public int checkTimer() {
                 int totalTime = 5000;
-                int checkInt = 0;
+                boolean checkInt = false;
                 if (start) {
                         int passedTime = millis() - timer;
                         if (passedTime > totalTime) {
-                                checkInt = 1;
+                                checkInt = true;
                         }
                         else {
-                                checkInt = -1;
+                                checkInt = false;
                         }
                 }
                 return checkInt;

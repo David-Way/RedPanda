@@ -340,7 +340,8 @@ public void controlEvent(ControlEvent theEvent) {
         //If this was the event clicked, get the button value and send as parameter to buttonClicked function in
         //comments screen to do GET request for comments with that exercise id
         for ( int i = 0; i < e.size(); i++) {
-                if (theEvent.controller().name().equals("button" + i)) {
+                if (theEvent.controller().name().equals(e.get(i).getName())){
+                //if (theEvent.controller().value() == e.get(i).getExercise_id()) {
                         commentsScreen.buttonClicked(theEvent.controller().value());
                 }
         }

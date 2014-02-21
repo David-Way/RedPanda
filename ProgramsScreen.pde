@@ -37,9 +37,9 @@ class ProgramsScreen {
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
                 this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
                 this.logout[2] =loadImage("images/NewUI/logout.jpg");
-                exercise_one_tut = new Gif(context,"images/ex1_sml.gif");
-                exercise_two_tut = new Gif(context,"images/ex2_sml.gif");
-                exercise_three_tut = new Gif(context,"images/ex3_sml.gif");
+                this.exercise_one_tut = new Gif(context,"images/ex1_sml.gif");
+                this.exercise_two_tut = new Gif(context,"images/ex2_sml.gif");
+                this.exercise_three_tut = new Gif(context,"images/ex3_sml.gif");
         }
 
         public void create() {
@@ -211,6 +211,9 @@ class ProgramsScreen {
                         buttons[i].remove();
                         buttons[i] = null;
                 }
+                exercise_one_tut.stop();
+                exercise_two_tut.stop();
+                exercise_three_tut.stop();
                 cp5.getGroup("programmesGroup").remove();
         }
 }

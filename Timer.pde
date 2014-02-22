@@ -1,7 +1,13 @@
+//Timer Class
+/// not: must call update and pass the seconds elapsed since last timer update call as argument for timer to work
 class Timer {
-  float waitTime, curWaitTime;
-  boolean looping, finished, running;
+  float waitTime;
+  float curWaitTime;
+  boolean looping;
+  boolean finished;
+  boolean running;
 
+  //Setup timer, set running to true to start immediatley
   public Timer( float _waitTime, boolean _looping, boolean _running ) {
     waitTime = _waitTime;
     curWaitTime = waitTime;
@@ -10,16 +16,22 @@ class Timer {
     running = _running;
   }
 
+  //Returns true if timer expired or finished, false is running or stopped.
   public boolean update(float deltaTime ) {
-    if( !running ) {
+    if ( !running ) {
       return false;
     }
+    //descrease timer
     curWaitTime -= deltaTime;
-    if( curWaitTime <= 0.f ) {
-      if( looping ) {
+    //If timer expired
+    if ( curWaitTime <= 0.f ) { 
+      //If timer set to loop, start timer again and return true
+      if ( looping ) { 
         curWaitTime += waitTime;
         return true;
-      } else {
+      } 
+      // if not looping then set finished flag
+      else {
         curWaitTime = 0.f;
         finished = true;
       }
@@ -27,9 +39,11 @@ class Timer {
     return finished;
   }
 
+  // resets the timer and starts it
   public void reset() {
     curWaitTime = waitTime;
     finished = false;
     running = true;
   }
 }
+

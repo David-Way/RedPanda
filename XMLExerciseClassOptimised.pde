@@ -1,8 +1,7 @@
 //this class is used for displaying and recording an exercising using xml data
 //the program can load the prescibed movement comprised of the pre recorded joint 
 //position data of 3 selected joints
-class XMLExerciseClassOptimised {
-        
+class XMLExerciseClassOptimised {        
         //declare variables to store screen main objects
         RedPanda parent;
         SimpleOpenNI context;
@@ -781,5 +780,6 @@ class XMLExerciseClassOptimised {
                 continueMessage.destroy();
                 //System.gc();
         }
+      
 }
 

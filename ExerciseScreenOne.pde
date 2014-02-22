@@ -3,7 +3,7 @@ class ExerciseScreenOne {
         private RedPanda context;
 
         //UI ELEMENTS///////////////////////////
-        //Arrays to store button images. 
+        //Arrays to store button images.
         private PImage[] menuBack = new PImage[3];
         private PImage[] logout = new PImage[3];
         private PImage[] cancel = new PImage[3];
@@ -18,11 +18,10 @@ class ExerciseScreenOne {
         Message messageTwo;
         Message messageThree;
         Message continueMessage;
-        
-        //Variables for debouncing skeleton tracking.
+
+        //Variables for stabilising skeleton streaming data.
         Timer debouncingTimer;
         float lastTime;
-        int timerCountDown;
 
         //Variables for exercise
         int MAX_REPS = 5;
@@ -31,27 +30,28 @@ class ExerciseScreenOne {
         int reps = 0;
         int timeLeft = 0;
         int score;
+        //Count down timer for start of exercise;
+        int timerCountDown;
         //Start time of exercise.
         long startTime;
         //Time out incase of exercise left running.
         long timeOut;
-        //Time exercise completed in. 
+        //Time exercise completed in.
         int timeCompleted;
 
         //USER TRACKING VARIABLES
         //PVectors of start and current point exercise
         PVector startPoint = new PVector();
-        PVector startPos = new PVector(); 
+        PVector startPos = new PVector();
         PVector currentPos = new PVector();
         //Tracking user id, differenct from userId.
         int trackingUserId;
         IntVector userList;
         //Array of hightestpoint per rep
-        PVector  highestPoint[];
+        PVector highestPoint[];
 
-        //Booleans for start, first time, finished, stop timer and enter new record data
+        //Booleans for first time, finished, stop timer and enter new record data
         boolean startExercise = false;
-        boolean start = false;
         boolean firstTime = true;
         boolean finished = false;
         boolean stopTime = true;
@@ -62,7 +62,7 @@ class ExerciseScreenOne {
         Record record;
         User user;
         Exercise exercise;
-         //Record date;
+        //Record date;
         int Year;
         int Month;
         int Day;
@@ -82,8 +82,8 @@ class ExerciseScreenOne {
 
         void loadImages() {
                 //load images for UI
-                this.menuBack[0]  = loadImage("images/NewUI/menu.jpg");
-                this.menuBack[1]  = loadImage("images/NewUI/menuOver.jpg");
+                this.menuBack[0] = loadImage("images/NewUI/menu.jpg");
+                this.menuBack[1] = loadImage("images/NewUI/menuOver.jpg");
                 this.menuBack[2] = this.menuBack[0];
                 this.logout[0] = loadImage("images/NewUI/logout.jpg");
                 this.logout[1] =loadImage("images/NewUI/logoutOver.jpg");
@@ -102,7 +102,7 @@ class ExerciseScreenOne {
                 //Create gifs for countdown and target
                 countDownIcon = new Gif(context, "images/countdown.gif");
                 target = new Gif(context, "images/target.gif");
-                //Initial userlist, exercise id, userid, MAX_REPS,highest point array size and startpoint 
+                //Initial userlist, exercise id, userid, MAX_REPS,highest point array size and startpoint
                 userList = new IntVector();
                 exerciseId = e.getExercise_id();
                 userId = user.getUser_id();
@@ -129,12 +129,12 @@ class ExerciseScreenOne {
                         Month=int(date.substring(4, 6));
                         Day=int(date.substring(6, 8));
                         //Create new Message object, with GroupName and Label to avoid conflicts
-                        message = new Message(208, 400, new PVector(10, 100), "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName()  +  " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(208, 400, new PVector(10, 100), "Hi " + user.getFirst_name() + ",\n\nWelcome to the " + exercise.getName() + " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + "\n\nDirections : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("g", "l");
                 }
                 //If there is no record for this user and exercise display a different message
                 else {
-                        message = new Message(208, 450, new PVector(10, 100), "Hi " + user.getFirst_name() + ",\nWelcome to the " + exercise.getName()  +  " exercise. \n\nYou have not attempted this exercise yet. \n\n Directions : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
+                        message = new Message(208, 450, new PVector(10, 100), "Hi " + user.getFirst_name() + ",\nWelcome to the " + exercise.getName() + " exercise. \n\nYou have not attempted this exercise yet. \n\n Directions : \n\nOn 5, raise you right hand away from your body as high as you comfortably can.");
                         message.create("g", "l");
                 }
                 //Create blank messages to be used later for user feedback. These need to be created here as they are destroyed and recreated
@@ -149,9 +149,6 @@ class ExerciseScreenOne {
                 //Set last time for debouncing timer
                 lastTime = (float)millis()/1000.f;
 
-                //Start set to false for hand tracking, if not set before UI elements created
-                //The handtracking can set off one of the buttons created below.
-                start = false;
                 //Set cp5 autodraw to false to create the UI and draw on demand.
                 cp5.setAutoDraw(false);
 
@@ -207,7 +204,7 @@ class ExerciseScreenOne {
                         //If kinect is tracking user of that id continue with the exercise set up
                         if (kinect.isTrackingSkeleton(trackingUserId)) {
 
-                                //Start point is null, this function will run only once. 
+                                //Start point is null, this function will run only once.
                                 if (startPoint == null) {
 
                                         //Startexercise is false, timer is set to current time
@@ -231,15 +228,15 @@ class ExerciseScreenOne {
                                 //Draw a target gif at that position
                                 if (startPoint != null && startPoint.x != 0 && startPoint.y != 0 && startPoint.z != 0 ) {
                                         //Push matrix saves current state of transformation matrix.
-                                        pushMatrix(); 
+                                        pushMatrix();
                                         //Tranlate and rotate x so things appear drawn in the centre of the screen.
                                         translate(width/2, height/2, 0);
-                                        rotateX(radians(180));  
+                                        rotateX(radians(180));
                                         pushMatrix();
                                         //Set target gif to play
                                         //Draw gif at start point position
                                         target.play();
-                                        translate(startPoint.x, startPoint.y, startPoint.z);          
+                                        translate(startPoint.x, startPoint.y, startPoint.z);
                                         image(target, -125, -125, 250, 250);
                                         popMatrix();
                                         popMatrix();
@@ -272,7 +269,7 @@ class ExerciseScreenOne {
         }
 
 
-        //Set Points is used to set the current point and the highest point of each rep. 
+        //Set Points is used to set the current point and the highest point of each rep.
         //It is also used to calulate the repeitions, display messages and finish the exercise.
         float distance = 0.f;
         public void setPoints() {
@@ -284,8 +281,8 @@ class ExerciseScreenOne {
                 //Create new message containing exercise statistics on each frame
                 message.destroy();
                 message = new Message(209, 400, new PVector(10, 100), "Hi " + user.getFirst_name() +
-                        ",\n\nWelcome to the " + exercise.getName()  +  
-                        " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year + 
+                        ",\n\nWelcome to the " + exercise.getName() +
+                        " exercise. \n\nWhich was last done on :\n " + Day +" / " + Month + " / "+ Year +
                         "\n\nTarget Reps: " + MAX_REPS + "\n\nCurrent Reps: " + reps + "\n\nComplete: " +
                         (int)Math.round(100.0 / MAX_REPS * reps) + "%");
                 message.create("pg", "pl");
@@ -307,7 +304,7 @@ class ExerciseScreenOne {
                 //draw target for highest point reached per repetition.
                 if (reps > 0 && reps <= MAX_REPS) {
                         pushMatrix();
-                        translate(highestPoint[reps -1].x, highestPoint[reps -1].y, highestPoint[reps - 1].z);            
+                        translate(highestPoint[reps -1].x, highestPoint[reps -1].y, highestPoint[reps - 1].z);
                         image(target, -125, -125, 250, 250);
                         popMatrix();
                 }
@@ -322,7 +319,7 @@ class ExerciseScreenOne {
                 pushMatrix();
                 translate(width/2, height/2, 0);
                 rotateX(radians(180));
-                //Set current time
+                //Set current timeSo
                 float curTime = (float)millis()/1000.f;
 
                 if ( firstTime ) {
@@ -334,18 +331,19 @@ class ExerciseScreenOne {
                         currentPos = new PVector();
                         kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
                 }
+                //If first time set highestPoint to current pos to calculate the distance used later
                 if ( firstTime ) {
                         firstTime = false;
                         highestPoint[reps].set(currentPos);
                 }
                 //Check for current position being greater than current highest point and out of the minimum distance from start point.
                 //If true this means the current point is the new highest point
-                //Distance is set dynamically for each rep 
+                //Distance is set dynamically for each rep
                 if ( currentPos.y > highestPoint[reps].y && PVector.dist(startPoint, currentPos) > MIN_DIST ) {
                         highestPoint[reps].set(currentPos);
                         distance = 0.33f * PVector.dist(highestPoint[reps], startPoint);
                 }
-                //Check if the distance between the current point and the start point is less than distance 
+                //Check if the distance between the current point and the start point is less than distance
                 //If true this means the current point is close enough to the start point to set a new repetition
                 if ( PVector.dist(startPoint, currentPos) < distance ) {
                         println("Reps " + reps + highestPoint[reps].x + " : " + highestPoint[reps].y + " : " + highestPoint[reps].z);
@@ -353,8 +351,8 @@ class ExerciseScreenOne {
                         //If repitions are equal or greater than max reps set finished to true
                         if ( reps >= MAX_REPS ) {
                                 finished = true;
-                        } 
-                        //Else reset highest point and distance, this means the current point wil be going back up towards the last 
+                        }
+                        //Else reset highest point and distance, this means the current point wil be going back up towards the last
                         //highest point and distance will be reset once the current point starts coming back down.
                         else {
                                 highestPoint[reps].set(currentPos);
@@ -368,7 +366,7 @@ class ExerciseScreenOne {
 
         //Called when reps >= Max reps set from exercise information from database.
         public void stopExercise() {
-                //If stopTime is true set time completed. 
+                //If stopTime is true set time completed.
                 //stopTime then set to flase so this is only run once.
                 if (stopTime) {
                         timeCompleted = int(((System.currentTimeMillis() - startTime)/1000));
@@ -377,12 +375,12 @@ class ExerciseScreenOne {
                 //Loop through highestpoints y values and create an average highestpoint to use as score
                 float average = 0;
                 for ( int i = 0 ; i < reps ; i++ ) {
-                        average  = average +  highestPoint[i].y;
+                        average = average + highestPoint[i].y;
                 }
-                score  = (int) average / reps;
+                score = (int) average / reps;
                 //Destroy message and create a final message.
-                message.destroy();                                       
-                message = new Message(550, 300, new PVector(325, 100), "Well Done."  + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points", 24);
+                message.destroy();
+                message = new Message(550, 300, new PVector(325, 100), "Well Done." + "\n\nTime to Complete: " + timeCompleted + " seconds" + "\n\nScore: " + score/10 + " points", 24);
                 //create and destroy blank messages for messageTwo and messageThree objects.
                 //To be deleted in the final destroy screen function.
                 message.create("eg", "el");
@@ -392,7 +390,7 @@ class ExerciseScreenOne {
                 messageThree.destroy();
                 messageThree = new Message(0, 0, new PVector(70, 978), "");
                 messageThree.create("w", "y");
-                //Call add to records. 
+                //Call add to records.
                 addToRecords();
         }
 
@@ -403,7 +401,7 @@ class ExerciseScreenOne {
                 Date currentDate = new Date();
                 int date = int(dateFormat.format(currentDate));
                 //If enterData is true, create new instance of RecordDAO, call HTTP POST request to database
-                //Insert new record, set enterData to true so function is only called once. 
+                //Insert new record, set enterData to true so function is only called once.
                 if (enterData) {
                         Record newRecord = new Record(0, userId, exerciseId, date, timeCompleted, reps, score, "Error");
                         recordDAO.setRecord(newRecord);
@@ -411,7 +409,7 @@ class ExerciseScreenOne {
                 }
         }
 
-        //Draws UI        
+        //Draws UI
         void drawUI() {
                 //Message drawUI called cp5 drawUI, all cp5 elements are drawn.
                 message.drawUI();
@@ -495,7 +493,7 @@ class ExerciseScreenOne {
                 //Set P1 to P2 values, P2 was left elbow, now p1 is left elbow
                 p1.set(p2);
                 kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_LEFT_HAND, p2);
-                 //Reset limb instance, send in left elbow and left hand joints
+                //Reset limb instance, send in left elbow and left hand joints
                 limb = new Limb(p1, p2, 0.3f, 0.3f);
                 radius = limb.draw();
                 joint = new Joint(p2, radius);
@@ -591,7 +589,7 @@ class ExerciseScreenOne {
                 //Set P1 and P2 to neck and head positions
                 kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_NECK, p1);
                 kinect.getJointPositionSkeleton(trackingUserId, SimpleOpenNI.SKEL_HEAD, p2);
-                
+
                 //add 100 to Y position of p2
                 p2.add(0, 100, 0);
                 //new limb sending in head and neck positions.
@@ -605,25 +603,29 @@ class ExerciseScreenOne {
                 popMatrix();
         }
 
+        //this function returns true if the exercise is complete
         public boolean checkForComplete() {
                 return finished;
         }
 
+        //this function is called by the RedPanda file when the check for complete returns true
         public void startFinishTimer() {
+                //if the timer hasnt been started already, finishedTimeStarted is not true
                 if (!finishedTimerStarted) { //create timer
-                        println("started");
-                        finishStartTime = System.currentTimeMillis() /1000;
-                        finishedTimerStarted = true;
-                } 
-                else { //check timer
+                        finishStartTime = System.currentTimeMillis() /1000;//get the current time
+                        finishedTimerStarted = true; //set the finishedTimeStarted variable to true so the finishStart time is not set on next check
+                }
+                else { //if timer started is true check timer
                         println(10 -((System.currentTimeMillis()/1000) - finishStartTime) );
                         if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
-                                context.autoMoveToScreenTwo();
+                                context.autoMoveToScreenTwo(); //call this function in the RedPanda class to advance to the next exercise
                         }
 
-                        //cancel button
+                        //draw cancel button
                         buttons[2].setVisible(true);
-                        continueMessage.destroy();                               
+                        //destroy the previous continue message
+                        continueMessage.destroy();
+                        //create a new message showing the current time left until the autoMoveToScreenThree function is going to be called
                         continueMessage = new Message(550, 50, new PVector(325, 410), "Next exercise in "+ (10 -((System.currentTimeMillis()/1000) - finishStartTime)) + " seconds, use Cancel to quit.", 24);
                         continueMessage.create("zz", "tt");
                 }

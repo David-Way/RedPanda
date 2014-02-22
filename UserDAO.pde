@@ -1,63 +1,59 @@
+//This class is used to access user data
 public class UserDAO {
 
-        String[] resultArray;
+  private final String USER_AGENT = "Mozilla/5.0";
 
-        int u_user_id = -1;  
-        String u_username = "";
-        String u_password = "";
-        int u_therapist_id = -1;
-        String u_first_name ="";
-        String u_last_name = "";
-        String u_dob = "";
-        String u_height = "";
-        String u_weight = "";
-        String u_sex = "";
-        String u_injury_type = "";
-        String u_error ="";
-        private final String USER_AGENT = "Mozilla/5.0";
-        
-        public UserDAO () {
-        }
-        
-        public User logIn(String un, String pw) {
-                String url = "http://davidway.me/kinect/api/user.php/user_table/"+ un+"/" + pw;
-                User user = new User();
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet(url);
+  //Constructor
+  public UserDAO () {
+  }
 
-                // add request header
-                request.addHeader("User-Agent", USER_AGENT);
-                HttpResponse response = null;
-                try {
-                        response = client.execute(request);
+  //This function returns a user object for the passed in user name and password
+  public User logIn(String un, String pw) {
 
-                        System.out.println("\nSending 'GET' request to URL : " + url);
-                        System.out.println("Response Code : " + 
-                                response.getStatusLine().getStatusCode());
+    //URL to make SLiM API request
+    String url = "http://davidway.me/kinect/api/user.php/user_table/"+ un+"/" + pw;
+    User user = new User();
+    HttpClient client = new DefaultHttpClient();
+    HttpGet request = new HttpGet(url);
 
-                        BufferedReader rd = new BufferedReader(
-                        new InputStreamReader(response.getEntity().getContent()));
+    // add request header
+    request.addHeader("User-Agent", USER_AGENT);//Set user agent
+    HttpResponse response = null;
+    try {   
+      //execute the request using the client, store the response
+      response = client.execute(request);
 
-                        StringBuffer result = new StringBuffer();
-                        String line = "";
-                        while ( (line = rd.readLine ()) != null) {
-                                result.append(line);
-                        }
-                        
-                        
-                               Gson gson = new Gson();
-                               user = gson.fromJson(result.toString(), User.class);                        
-                        
-                        
-                        System.out.println("old " + result.toString());
-                        System.out.println("new" + user.getFirst_name());
-                } 
-                catch (Exception e) {
-                        System.out.println(e.getMessage());
-                }
-                
-                return user;
-        }
-        
+      System.out.println("\nSending 'GET' request to URL : " + url);
+      System.out.println("Response Code : " + 
+        response.getStatusLine().getStatusCode());
+
+      //Create a buffered reader for the content of the HTTP request
+      BufferedReader rd = new BufferedReader(
+      new InputStreamReader(response.getEntity().getContent()));
+
+      //Create a string buffer
+      StringBuffer result = new StringBuffer();
+      String line = "";
+      //Loop through append the values of lines into the string buffer
+      while ( (line = rd.readLine ()) != null) {
+        result.append(line);
+      }
+
+      //Creates a Gson object, from the google json parsing library
+      Gson gson = new Gson();
+      //Set the user object equal to the result string parsed into a record object
+      user = gson.fromJson(result.toString(), User.class);                        
+
+
+      System.out.println("old " + result.toString());
+      System.out.println("new" + user.getFirst_name());
+    } 
+    catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+
+    //Return the user object
+    return user;
+  }
 }
 

@@ -242,6 +242,7 @@ class ExerciseScreenOne {
                                         translate(startPoint.x, startPoint.y, startPoint.z);          
                                         image(target, -125, -125, 250, 250);
                                         popMatrix();
+                                        popMatrix();
                                         //Pop restores previous state of transformation matrix.
                                         setPoints();
                                 }

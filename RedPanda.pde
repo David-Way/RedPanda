@@ -1,14 +1,14 @@
-//Red Panda is a physiotherapy application created using the 
-//processing language and the OpenNI libraries for the Microsoft Kinect
-//Contributors: Emer Mooney and David Way
+//Red Panda is a physiotherapy application created using the processing language and the OpenNI libraries for the Microsoft Kinect.
+//This project was created with the aim of providing therapist with a tool for engaging with and monitoring the progress of their patients.
+//Contributors: Emer Mooney and David Way (3rd year students at IADT)
 //Supervisors: Joachim Pietsch and Andrew Errity
 
 //program imports
-import processing.opengl.*;
+import processing.opengl.*;  //alternative renderer
 
-import controlP5.*;
-import SimpleOpenNI.*;
-import gifAnimation.*;
+import controlP5.*;                 //UI element library
+import SimpleOpenNI.*;        //OpenNI and NITE wrapper for processing, allows use of kinect data
+import gifAnimation.*;           //gif loading/display library             
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,9 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.text.SimpleDateFormat; 
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-
+import org.apache.http.HttpResponse;                                        //apache libraries used when 
+import org.apache.http.NameValuePair;                                     //making Http requests to the database
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -32,8 +31,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
-import java.text.DateFormat;
-import java.util.Date;
+import java.text.DateFormat;                //java data, format and shape libraries
+import java.util.Date;                             //used by the JFreeCharts library to render charts
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
@@ -42,31 +41,19 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Ellipse2D;
 
-import org.gicentre.utils.stat.*;    // For chart classes
-import java.io.UnsupportedEncodingException; 
-import java.util.ArrayList;
+import org.gicentre.utils.stat.*;                                    // For old chart classes
+import java.io.UnsupportedEncodingException;     
 import java.io.File;
-import processing.opengl.*;
-import SimpleOpenNI.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
+
+import javax.xml.parsers.*;                                //libraries used for the XML file loader
+import javax.xml.transform.*;                             //parser, and writer used in exercise two
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.xml.sax.*;
 import org.w3c.dom.*;
-import gifAnimation.*;
-
-import java.util.ArrayList;
-
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;        
-
-import javax.xml.transform.stream.*;
-import org.xml.sax.*;
-import org.w3c.dom.*;
-
-import java.io.File;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -76,24 +63,20 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-//initialise kinect using SImppleOpenNi library
+//declare kinect using SImppleOpenNi library
 SimpleOpenNI kinect;
 
-//initialise UI objects for the cp5 library
+//declare UI objects for the cp5 library
 ControlP5 cp5;
 Group g1;
 Group g2;
-//login text fields
+// declare login text fields
 Textfield userNameTextField;
 Textfield passwordTextField;
 //login stored user name and password
 String loginUserName = "";
 String loginPassword = "";
-//create screens  that will be required
+//create screens the that will be required
 ErrorScreen errorScreen = new ErrorScreen(this);
 LoginScreen loginScreen  = new LoginScreen(this);
 MenuScreen menuScreen  = new MenuScreen(this);
@@ -146,8 +129,7 @@ void setup() {
         //basic sketch setup functions, sets size, framerate, text mode and renderer
         size(1200, 600, P3D);
         frameRate(30);
-
-        //textMode(SHAPE);
+        //textMode(SHAPE); 
         textAlign(CENTER, CENTER);
         //hand tracking image loading
         rightHandIcon = loadImage("images/righthand.png");
@@ -171,19 +153,14 @@ void setup() {
         exerciseScreenOne.loadImages();
         xmlExercise.loadImages();
         exerciseScreenThree.loadImages();
-        //loginScreen.create();
-        //loginScreen.drawUI();
-        //errorScreen.create();
+        
         currentScene = -1; //go to login scene
         //initialise the kinect using SimpleOpenNI library 
         kinect = new SimpleOpenNI(this);
         //enable depthMap generation
         kinect.enableDepth();
         // enable skeleton generation for all joints
-        kinect.enableUser();
-        //create and draw the login screen
-        System.out.println("connected");
-        //deleteLoginScreen = true;
+        kinect.enableUser();        
 }
 
 //This function is called repeatedly by the application
@@ -191,6 +168,7 @@ void draw() {
         //this switch statement is used to change the programs state
         //each screen is a different state that has its own scene number
         switch (currentScene) {
+                
         case -1: //error screen
                 if (kinect.isInit() == false) { //if the kinect cannot be initilised
                         //print console error

@@ -134,7 +134,7 @@ class ProfileScreen {
         }
 
          //checkTimer will only return true if passed time is greater than the total time set.
-        public int checkTimer() {
+        public boolean checkTimer() {
                 int totalTime = 5000;
                 boolean checkInt = false;
                 if (start) {

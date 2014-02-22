@@ -156,59 +156,7 @@ class ProgressScreen {
                 chartImage = chartObject.getChartImage();
         }
         
-        //function called for checking if the hand tracking is triggering a button
-        void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
-
-                PVector leftHand = convertedLeftJoint;
-                PVector rightHand = convertedRightJoint;
-
-                if (leftHand.x > (10/2.5) && leftHand.x < (222/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
-                {
-                        if (start == false) {
-                                println("Over Menu Back");
-                                start = true;
-                                timer = millis();
-                                loaderOn();
-                        }
-                        if (checkTimer() == 1) {
-                                println("Menu Back called");
-                                menuBack();
-                        }
-                }
-                else if (leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
-                {
-                        if (start == false) {
-                                println("Over Log out");
-                                start = true;
-                                timer = millis();
-                        }
-                        if (checkTimer() == 1) {
-                                println("logout called");
-                                makeLogout();
-                        }
-                }
-                else {
-                        start = false;
-                        loaderOff();
-                        //Over Nothing");
-                }
-        }
         
-        //function called to check if the user tracking selector has remaine in the right place for long enough
-        public int checkTimer() {
-                int totalTime = 5000;
-                int checkInt = 0;
-                if (start) {
-                        int passedTime = millis() - timer;
-                        if (passedTime > totalTime) {
-                                checkInt = 1;
-                        }
-                        else {
-                                checkInt = -1;
-                        }
-                }
-                return checkInt;
-        }
 
         //this function draws the UI elements for the screen
         void drawUI() {

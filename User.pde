@@ -1,5 +1,7 @@
+//Programme object, used to store information for each user
 public class User {
 
+        //declare variable for values
         private int user_id;
         private String user_name;
         private String password;
@@ -17,6 +19,7 @@ public class User {
                 this.user_id = -1;
         }
 
+        //constructor that takes all values and sets them        
         public User (int id, String un, String pw, int tid, String fn, String ln, String db, String uh, String wt, String sx, String it, String er) {
                 this.user_id = id;
                 this.user_name = un;
@@ -32,6 +35,7 @@ public class User {
                 this.error = er;
         }
 
+        //getters and setters for the user values
         public int getUser_id() {
                 return user_id;
         }

@@ -22,7 +22,6 @@ class ExerciseScreenOne {
         //Variables for debouncing skeleton tracking.
         Timer debouncingTimer;
         float lastTime;
-        int timerCountDown;
 
         //Variables for exercise
         int MAX_REPS = 5;
@@ -31,6 +30,8 @@ class ExerciseScreenOne {
         int reps = 0;
         int timeLeft = 0;
         int score;
+        //Count down timer for start of exercise;
+        int timerCountDown;
         //Start time of exercise.
         long startTime;
         //Time out incase of exercise left running.
@@ -49,9 +50,8 @@ class ExerciseScreenOne {
         //Array of hightestpoint per rep
         PVector  highestPoint[];
 
-        //Booleans for start, first time, finished, stop timer and enter new record data
+        //Booleans for first time, finished, stop timer and enter new record data
         boolean startExercise = false;
-        boolean start = false;
         boolean firstTime = true;
         boolean finished = false;
         boolean stopTime = true;
@@ -149,9 +149,6 @@ class ExerciseScreenOne {
                 //Set last time for debouncing timer
                 lastTime = (float)millis()/1000.f;
 
-                //Start set to false for hand tracking, if not set before UI elements created
-                //The handtracking can set off one of the buttons created below.
-                start = false;
                 //Set cp5 autodraw to false to create the UI and draw on demand.
                 cp5.setAutoDraw(false);
 
@@ -242,6 +239,7 @@ class ExerciseScreenOne {
                                         translate(startPoint.x, startPoint.y, startPoint.z);          
                                         image(target, -125, -125, 250, 250);
                                         popMatrix();
+                                        popMatrix();
                                         //Pop restores previous state of transformation matrix.
                                         setPoints();
                                 }
@@ -321,7 +319,7 @@ class ExerciseScreenOne {
                 pushMatrix();
                 translate(width/2, height/2, 0);
                 rotateX(radians(180));
-                //Set current time
+                //Set current timeSo
                 float curTime = (float)millis()/1000.f;
 
                 if ( firstTime ) {
@@ -333,6 +331,7 @@ class ExerciseScreenOne {
                         currentPos = new PVector();
                         kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, currentPos);
                 }
+                //If first time set highestPoint to current pos to calculate the distance used later
                 if ( firstTime ) {
                         firstTime = false;
                         highestPoint[reps].set(currentPos);
@@ -604,25 +603,29 @@ class ExerciseScreenOne {
                 popMatrix();
         }
 
+        //this function returns true if the exercise is complete
         public boolean checkForComplete() {
                 return finished;
         }
 
+        //this function is called by the RedPanda file when the check for complete returns true
         public void startFinishTimer() {
+                //if the timer hasnt been started already, finishedTimeStarted is not true
                 if (!finishedTimerStarted) { //create timer
-                        println("started");
-                        finishStartTime = System.currentTimeMillis() /1000;
-                        finishedTimerStarted = true;
+                        finishStartTime = System.currentTimeMillis() /1000;//get the current time
+                        finishedTimerStarted = true; //set the finishedTimeStarted variable to true so the finishStart time is not set on next check
                 } 
-                else { //check timer
+                else { //if timer started is true check timer
                         println(10 -((System.currentTimeMillis()/1000) - finishStartTime) );
                         if ((System.currentTimeMillis()/1000) - finishStartTime > 10) { //if 10 seconds has passed
-                                context.autoMoveToScreenTwo();
+                                context.autoMoveToScreenTwo(); //call this function in the RedPanda class to advance to the next exercise
                         }
 
-                        //cancel button
+                          //draw cancel button
                         buttons[2].setVisible(true);
-                        continueMessage.destroy();                               
+                         //destroy the previous continue message
+                        continueMessage.destroy();
+                        //create a new message showing the current time left until the autoMoveToScreenThree function is going to be called                               
                         continueMessage = new Message(550, 50, new PVector(325, 410), "Next exercise in "+ (10 -((System.currentTimeMillis()/1000) - finishStartTime)) + " seconds, use Cancel to quit.", 24);
                         continueMessage.create("zz", "tt");
                 }

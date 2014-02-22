@@ -1,5 +1,7 @@
+//Comment object, used to store information for each comment
 public class Comment{
 
+	//declare variable for values
 	private int comment_id;
 	private int therapist_id;
 	private int user_id;
@@ -8,10 +10,7 @@ public class Comment{
 	private int record_date;
 	private String error = null;
 
-	public Comment(){
-		this.comment_id = -1;
-	}
-
+	//constructor that takes all values and sets them      
 	public Comment (int id, int t_id, int u_id, String c, int d_e, int r_d, String er){
 		this.comment_id = id;
 		this.therapist_id = t_id; 
@@ -22,6 +21,7 @@ public class Comment{
 		this.error = er;
 	}
 
+	//getters and setters for the comment values
 	public int getComment_id(){
 		return comment_id;
 	}

@@ -13,6 +13,8 @@ class ProgramsScreen {
         private Button []buttons;
         //create a Gp5 group for this screen
         private Group programmesGroup;
+        //Boolean start for timer
+        //Timer int for timer seconds count
         boolean start = false;
         int timer;
         //declare variables for the demo gifs
@@ -51,6 +53,7 @@ class ProgramsScreen {
 
         //create the programmes screen UI
         public void create() {
+            //Set start to false to reset hand tracking
                 start = false;
                 cp5.setAutoDraw(false);
                 exercise_one_tut.play(); //play the demo gifs
@@ -115,13 +118,17 @@ class ProgramsScreen {
                 image(exercise_three_tut, 502, 325);    
         }
 
-
+        //CheckBtn called from main file, sending in the converted 3d perspective 
+        //positioning of the left and right hand into a flat plane
         void checkBtn(PVector convertedLeftJoint, PVector convertedRightJoint ) {
+                //set PVectors to vectors sent in
                 PVector leftHand = convertedLeftJoint;
                 PVector rightHand = convertedRightJoint;
-                // CHECK FOR MENUBACK BUTTON
-                //(leftHand.x > 10/2.5 && leftHand.x < 106/2.5 && leftHand.y/2.5 > 10/2.5 && leftHand.y < 57/2.5) || (
-                //rightHand.x > 10/2.5 && rightHand.x < 106/2.5 && rightHand.y > 10/2.5 && rightHand.y < 57/2.5
+
+                //If left hand x position is within the boundaries of the button
+                //Start is set to false initially, once left hand x is within these boundaries start will be set to true
+                //the timer will be set and loaderOn() is called, which changes the hand image to a loader gif
+            
                 if (leftHand.x > (10/2.5) && leftHand.x < (222/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
                 {
                         if (start == false) {
@@ -130,13 +137,15 @@ class ProgramsScreen {
                                 timer = millis();
                                 loaderOn();
                         }
-                        if (checkTimer() == 1) {
+                        if (checkTimer()) {
                                  println("Menu Back called");
                                 menuBack();
                         }
-                }//CHECK FOR EXERCISE ONE BUTTON
-                //(leftHand.x > 10/2.5 && leftHand.x < 232/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
-                //rightHand.x > 10/2.5 && rightHand.x < 232/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
+                }
+
+                //If left hand x position is within the boundaries of the button
+                //Start is set to false initially, once left hand x is within these boundaries start will be set to true
+                //the timer will be set and loaderOn() is called, which changes the hand image to a loader gif
                 else if (leftHand.x > (10/2.5) && leftHand.x < (236/2.5) && leftHand.y > (100/2.5) && leftHand.y < (331/2.5))
                 {
                         if (start == false) {
@@ -145,13 +154,15 @@ class ProgramsScreen {
                                 timer = millis();
                                 loaderOn();
                         }
-                        if (checkTimer() == 1) {
+                        if (checkTimer()) {
                                 println("Exercise One called");
                                 makeExerciseOne();
                         }
-                }//CHECK FOR EXCERCISE TWO BUTTON
-                //(leftHand.x > 242/2.5 && leftHand.x < 464/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
-                //rightHand.x > 242/2.5 && rightHand.x < 464/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
+                }
+
+                //If left hand x position is within the boundaries of the button
+                //Start is set to false initially, once left hand x is within these boundaries start will be set to true
+                //the timer will be set and loaderOn() is called, which changes the hand image to a loader gif
                 else if(leftHand.x > (262/2.5) && leftHand.x < (488/2.5) && leftHand.y > (100/2.5) && leftHand.y < (331/2.5))
                  {
                         if(start == false){
@@ -159,13 +170,15 @@ class ProgramsScreen {
                                 start = true;
                                 timer = millis();
                                 loaderOn();
-                        }if(checkTimer() == 1){
+                        }if(checkTimer()){
                                 println("Exercise Two called");
                                 makeExerciseTwo();
                         }
-                 }//CHECK FOR EXERCISE THREE BUTTON
-                 //(leftHand.x > 482/2.5 && leftHand.x < 504/2.5 && leftHand.y > 70/2.5 && leftHand.y < 288/2.5) || (
-                 //rightHand.x > 482/2.5 && rightHand.x < 504/2.5 && rightHand.y > 70/2.5 && rightHand.y < 288/2.5
+                 }
+
+                 //If left hand x position is within the boundaries of the button
+                //Start is set to false initially, once left hand x is within these boundaries start will be set to true
+                //the timer will be set and loaderOn() is called, which changes the hand image to a loader gif
                  else if(leftHand.x > (502/2.5) && leftHand.x < (728/2.5) && leftHand.y > (100/2.5) && leftHand.y < (331/2.5))
                  {
                         if(start == false){
@@ -173,13 +186,15 @@ class ProgramsScreen {
                                 start = true;
                                 timer = millis();
                                 loaderOn();
-                         }if(checkTimer() == 1){
+                         }if(checkTimer()){
                                 println("Exercise Three called");
                                 makeExerciseThree();
                         }
-                 }//CHECK FOR LOGOUT BUTTON
-                 //(leftHand.x > 1054/2.5 && leftHand.x < 1090/2.5 && leftHand.y > 10/2.5 && leftHand.y < 57/2.5) || (
-                 //rightHand.x > 1054/2.5 && rightHand.x < 1090/2.5 && rightHand.y > 10/2.5 && rightHand.y < 57/2.5
+                 }
+
+                 //If left hand x position is within the boundaries of the button
+                //Start is set to false initially, once left hand x is within these boundaries start will be set to true
+                //the timer will be set and loaderOn() is called, which changes the hand image to a loader gif
                  else if(leftHand.x > (978/2.5) && leftHand.x < (1190/2.5) && leftHand.y > (10/2.5) && leftHand.y < (85/2.5))
                  {
                         if(start == false){
@@ -187,29 +202,31 @@ class ProgramsScreen {
                                 start = true;
                                 timer = millis();
                                 loaderOn();
-                        }if(checkTimer() == 1){
+                        }if(checkTimer()){
                                 println("Logout called");
                                 makeLogout();
                         }
-                 }else {
+                 }
+                 //If left hand position goes outside the boundaries of the button set start to false again
+                //Turn off loading gif image, replace for hand image.
+                 else {
                         start = false;
                         loaderOff();
-                        //println("Over Nothing");
                 }
         }
 
-
-        public int checkTimer() {
+         //checkTimer will only return true if passed time is greater than the total time set.
+        public boolean checkTimer() {
                 println("timer called");
                 int totalTime = 5000;
-                int checkInt = 0;
+                boolean checkInt = false;
                 if (start) {
                         int passedTime = millis() - timer;
                         if (passedTime > totalTime) {
-                                checkInt = 1;
+                                checkInt = true;
                         }
                         else {
-                                checkInt = -1;
+                                checkInt = false;
                         }
                 }
                 return checkInt;

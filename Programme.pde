@@ -1,5 +1,7 @@
+//Programme object, used to store information for each programme
 class Programme {
 
+        //declare variable for values
         int programme_id = -1;
         int user_id = -1;
         String create_date = "";
@@ -10,16 +12,16 @@ class Programme {
         public Programme() {
         }
 
+        //constructor that takes all values and sets them    
         public Programme (int p_id, int u_id, String c_date, String e_date, int v) {
                 this.programme_id = p_id;
                 this.user_id = u_id;
                 this.create_date = c_date;
                 this.end_date = e_date;
                 this.version = v;
-
-                //load the exercises
         }
 
+         //getters and setters for the programme values
         public int getProgramme_id() {
                 return programme_id;
         }

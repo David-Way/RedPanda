@@ -1,13 +1,17 @@
+//Class to draw limbs of user
 public class Limb2 {
+        //Set color, points and scale variables
         color col = color(128, 128, 128);
         PVector point1, point2, midPoint, polar;
         float scaleFactorY, scaleFactorZ;
 
+         //Constructor takes in two pvectors and scale factors and color
         public Limb2(PVector p1, PVector p2, float _scaleFactorY, float _scaleFactorZ, color _col ) {
                 point1 = p1;
                 point2 = p2;
                 scaleFactorY = _scaleFactorY;
                 scaleFactorZ = _scaleFactorZ;
+                //Calculates the midpoint between point 1 and point 2 x, y and z values
                 midPoint = new PVector( (point1.x+point2.x)/2.f, (point1.y+point2.y)/2.f, (point1.z+point2.z)/2.f );
                 PVector fromOrigin = new PVector();
                 fromOrigin.set(point2);

@@ -250,12 +250,14 @@ void draw() {
                 checkForScreensToDelete(); //checks for screens to be deleted
                 background(backgroundImage2); //draws the faded background image for this scene
                 progressScreen.drawUI(); //draws the UI elements for this scene
+                trackUserNoHands();//Continues to tracks users hands with no visual representation
                 break;
 
         case 5: //comments screen
                 checkForScreensToDelete(); //checks for screens to be deleted
                 background(backgroundImage2); //draws the second faded background
                 commentsScreen.drawUI(); //draws the UI elements for this scene
+                trackUserNoHands();//Continues to tracks users hands with no visual representation
                 break;
 
         case 6: //exercise one
@@ -704,6 +706,26 @@ void trackUser() {
                                 //draw the hand tracking icons at these posistions
                                 drawLeftJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
                                 drawRightJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+                        }
+                }
+        }
+}
+
+void trackUserNoHands() {
+        // update the cam
+        //kinect.update();
+        if (kinect.enableUser() == true) { //if the kinect can track the user
+                kinect.update(); //update the current information from what the  camera is seeing
+
+                IntVector userList = new IntVector();
+                kinect.getUsers(userList); //get the user list from the data
+                if (userList.size() > 0) { //if there is a user
+                        int userId = userList.get(0); //get the first user
+
+                        if (kinect.isTrackingSkeleton(userId)) { //if the kinect is tracking the first user
+                                //get the points for the left and right hands
+                                kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
+                                kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
                         }
                 }
         }

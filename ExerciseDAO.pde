@@ -131,5 +131,6 @@ class ExerciseDAO {
                 //return the retrieved exercises
                 return exercises;
         }
+        
 }
 

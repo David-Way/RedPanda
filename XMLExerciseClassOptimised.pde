@@ -780,6 +780,6 @@ class XMLExerciseClassOptimised {
                 continueMessage.destroy();
                 //System.gc();
         }
-      
+    
 }
 

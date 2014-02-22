@@ -165,6 +165,7 @@ void setup() {
 
 //This function is called repeatedly by the application
 void draw() {
+
         //this switch statement is used to change the programs state
         //each screen is a different state that has its own scene number
         switch (currentScene) {

@@ -186,6 +186,5 @@ class ProfileScreen {
     }
     cp5.getGroup("profileGroup").remove(); //remove the UI group from the cp5 object for this screen
   }
-
 }
 

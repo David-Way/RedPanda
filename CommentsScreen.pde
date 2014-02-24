@@ -144,6 +144,8 @@ class CommentsScreen {
               .setColor(color(51, 196, 242))
                 .setColorBackground(color(255, 255, 255))
                   .setColorForeground(color(255, 100))
+                   .setScrollBackground(color(68, 142, 174))
+                   .setScrollForeground(color(51, 196, 242)) 
                     .setGroup(commentsGroup)
                       ;
     myTextarea.setText(commentsText);
